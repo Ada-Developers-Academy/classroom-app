@@ -1,0 +1,30 @@
+<table>
+  <thead>
+    <tr>
+      <th>Cohort Num</th>
+      <th>Repo URL</th>
+    </tr>
+    <% @repos.each do |r| %>
+      <tr>
+        <td><%= r.cohort_num %></td>
+        <td><%= link_to r.repo_url, r.repo_url %></td>
+      </tr>
+    <% end %>
+  </thead>
+</table>
+<table>
+  <thead>
+    <th>Student Name</th>
+    <th>GitHub Name</th>
+    <th>Submitted Assignment</th>
+  </thead>
+  <tbody>
+    <% @new_hash.each do |github_name, value| %>
+      <tr>
+        <td><%= value[:name].capitalize %></td>
+        <td><%= github_name %></td>
+        <td><%= value[:submitted] %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

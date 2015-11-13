@@ -1,0 +1,17 @@
+<h1><%= @repo.repo_url %></h1>
+<table>
+  <thead>
+    <th>Student Name</th>
+    <th>GitHub Name</th>
+    <th>Submitted Assignment</th>
+  </thead>
+  <tbody>
+    <% @new_hash.each do |github_name, value| %>
+      <tr>
+        <td><%= value[:name].capitalize %></td>
+        <td><%= github_name %></td>
+        <td><%= value[:submitted] %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

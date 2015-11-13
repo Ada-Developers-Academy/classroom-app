@@ -1,0 +1,11 @@
+<%= form_for @repo do |f| %>
+  <fieldset>
+    <legend>Repositiory Properties</legend>
+    <%= f.label :cohort_num %>
+    <%= f.text_field :cohort_num %>
+    <br>
+    <%= f.label :repo_url %>
+    <%= f.text_field :repo_url %>
+  </fieldset>
+  <%= f.submit %>
+<% end %>
