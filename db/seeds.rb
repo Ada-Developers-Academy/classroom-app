@@ -38,7 +38,8 @@ cohort_4.each do |stud|
 end
 
 repos = [
-  { cohort_num: 4, repo_url: "Ada-C4/TaskListRails"}
+  { cohort_num: 4, repo_url: "Ada-C4/TaskListRails"},
+  { cohort_num: 4, repo_url: "Ada-C4/SinatraSite"}
 ]
 
 repos.each do |repo|
