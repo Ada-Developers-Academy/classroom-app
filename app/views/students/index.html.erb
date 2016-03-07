@@ -1,0 +1,23 @@
+<%= button_to "New Student", new_student_path, method: :get %>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Student Name</th>
+      <th>Cohort Num</th>
+      <th>GitHub Name</th>
+      <th></th>
+    </tr>
+  </thead>
+  <% @students.each do |s| %>
+    <tr>
+      <td><%= s.name %></td>
+      <td><%= s.cohort_num %></td>
+      <td><%= s.github_name %></td>
+      <td>
+        <%= link_to icon('pencil'), { controller: "students", action: "edit", id: s.id } %>
+        <%= link_to icon('trash'), { controller: "students", action: "destroy", id: s.id }, method: :delete, data: { confirm: "Are you sure? "} %>
+      </td>
+    </tr>
+  <% end %>
+</table>

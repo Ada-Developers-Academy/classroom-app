@@ -25,6 +25,9 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 gem 'httparty'
 
+gem 'bootstrap-sass', '~> 3.3.6'
+gem 'font-awesome-sass', '~> 4.5.0'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
@@ -39,6 +42,9 @@ group :development, :test do
   gem 'byebug'
 
   gem 'pry'
+
+  gem 'binding_of_caller'
+  gem 'better_errors'
 end
 
 group :development do

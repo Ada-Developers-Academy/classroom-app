@@ -1,13 +1,27 @@
-<table>
+<%= button_to "Add New Repo", new_repo_path, method: :get %>
+
+<table class="table">
   <thead>
     <tr>
       <th>Cohort Num</th>
       <th>Repo URL</th>
+      <th></th>
+      <th></th>
     </tr>
     <% @repos.each do |r| %>
       <tr>
         <td><%= r.cohort_num %></td>
         <td><%= link_to r.repo_url, r.repo_url %></td>
+        <td>
+          <%= icon('user') %>
+          <% if !r.individual %>
+            <%= icon('user') %>
+          <% end %>
+        </td>
+        <td>
+          <%= link_to icon('pencil'), { controller: "repos", action: "edit", id: r.id } %>
+          <%= link_to icon('trash'), { controller: "repos", action: "destroy", id: r.id }, method: :delete, data: { confirm: "Are you sure? "} %>
+        </td>
       </tr>
     <% end %>
   </thead>

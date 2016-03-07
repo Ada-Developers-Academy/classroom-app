@@ -9,7 +9,7 @@
 
 # Create Cohort 4 students
 cohort_4 = [
-  { name: "Amy", cohort_num: 4, github_name: "lachuchilla"},
+  { name: "Amy", cohort_num: 4, github_name: "lacuchilla"},
   { name: "Annalee", cohort_num: 4, github_name: "annaleeherrera"},
   { name: "Audrey", cohort_num: 4, github_name: "dreedle"},
   { name: "Brittany", cohort_num: 4, github_name: "brittanykohler"},
@@ -37,9 +37,42 @@ cohort_4.each do |stud|
   Student.create(stud)
 end
 
+cohort_5 = [
+  { name: "Adriana", cohort_num: 5, github_name: "dri19tcc"},
+  { name: "Alysia", cohort_num: 5, github_name: "abrown152"},
+  { name: "Ania", cohort_num: 5, github_name: "aniagonzalez"},
+  { name: "Anna", cohort_num: 5, github_name: "annamw77"},
+  { name: "Cristal", cohort_num: 5, github_name: "bluecolorpencils"},
+  { name: "Deirdre", cohort_num: 5, github_name: "dstorck"},
+  { name: "Jade", cohort_num: 5, github_name: "jadevance"},
+  { name: "Jessica", cohort_num: 5, github_name: "jweeber"},
+  { name: "Jillian", cohort_num: 5, github_name: "jboshart"},
+  { name: "Justine", cohort_num: 5, github_name: "justinewinnie"},
+  { name: "Leah", cohort_num: 5, github_name: "leahnp"},
+  { name: "Lisa", cohort_num: 5, github_name: "lisa-sano"},
+  { name: "Melissa", cohort_num: 5, github_name: "melissajimison"},
+  { name: "Mindy", cohort_num: 5, github_name: "mcarson1111"},
+  { name: "Nadine", cohort_num: 5, github_name: "nlcurry"},
+  { name: "Nicole", cohort_num: 5, github_name: "nicosaki"},
+  { name: "Risha", cohort_num: 5, github_name: "rishallen"},
+  { name: "Rowan", cohort_num: 5, github_name: "cotarg"},
+  { name: "Sarah K", cohort_num: 5, github_name: "pottery123"},
+  { name: "Sarah R", cohort_num: 5, github_name: "nahmisa"},
+  { name: "Sophia", cohort_num: 5, github_name: "sophiabaldonado"},
+  { name: "Suzanne", cohort_num: 5, github_name: "suzharrison"},
+  { name: "Valerie", cohort_num: 5, github_name: "vconklin"},
+  { name: "Yordanos", cohort_num: 5, github_name: "yordanosd"}
+]
+
+cohort_5.each do |stud|
+  Student.create(stud)
+end
+
 repos = [
   { cohort_num: 4, repo_url: "Ada-C4/TaskListRails"},
-  { cohort_num: 4, repo_url: "Ada-C4/SinatraSite"}
+  { cohort_num: 4, repo_url: "Ada-C4/SinatraSite"},
+  { cohort_num: 5, repo_url: "Ada-C5/Scrabble"},
+  { cohort_num: 5, repo_url: "Ada-C5/BankAccounts"}
 ]
 
 repos.each do |repo|

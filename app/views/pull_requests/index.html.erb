@@ -1,7 +1,18 @@
-<ul>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Repo Name</th>
+      <th>Student Submissions</th>
+      <th>View on GitHub</th>
+      <th></th>
+    </tr>
+  </thead>
   <% @repos.each do |r| %>
-  <li><%= link_to r.repo_url, "/repos/#{ r.id }" %></li>
-  <% end %>
-</ul>
+    <tr>
+      <td><%= r.repo_url %></td>
+      <td><%= link_to "Students", "/repos/#{ r.id }" %></td>
+      <td><%= link_to "Github", "http://github.com/" + r.repo_url + "/pulls", :target => "_blank" %></td>
 
-<%= link_to "Add New Repo", "/repos/new" %>
+    </tr>
+  <% end %>
+</table>

@@ -11,13 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151113052556) do
+ActiveRecord::Schema.define(version: 20160307212943) do
 
   create_table "repos", force: :cascade do |t|
-    t.integer  "cohort_num", null: false
-    t.string   "repo_url",   null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer  "cohort_num",                null: false
+    t.string   "repo_url",                  null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.boolean  "individual", default: true
   end
 
   create_table "students", force: :cascade do |t|

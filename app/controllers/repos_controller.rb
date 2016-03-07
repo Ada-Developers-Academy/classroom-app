@@ -5,18 +5,36 @@ class ReposController < ApplicationController
 
   def show
     @repo = Repo.find(params[:id])
-    data = HTTParty.get("https://api.github.com/repos/#{ @repo.repo_url }/pulls")
-    students = Student.where(cohort_num: @repo.cohort_num)
+
+    # Get all PRS
+    request_url = "https://api.github.com/repos/#{ @repo.repo_url }/pulls"
+    pr_info = HTTParty.get(request_url)
+
+    # Get list of students in the cohort
+    cohort_students = Student.where(cohort_num: @repo.cohort_num).sort
+
+    # Catalog the list of students who have submitted
     pr_student_list = []
-    data.parsed_response.each do |d|
-      pr_student_list << d["user"]["login"].downcase
+    pr_info.parsed_response.each do |d|
+      pr_user = d["user"]["login"].downcase
+      pr_student_list << pr_user
+
+      # Must review committers for pair or group projects
+      if !@repo.individual
+        commit_info = HTTParty.get(d["commits_url"])
+        output = commit_info.parsed_response.uniq do |commit|
+          if commit["author"] != nil
+            commit["author"]["login"]
+          end
+        end
+        puts "HEYHEYHEYHEY #{output}"
+      end
     end
 
-    student_list = students.sort
     pr_list = pr_student_list.sort
 
     @new_hash = {}
-    student_list.each do |stud|
+    cohort_students.each do |stud|
       if pr_list.include?(stud.github_name.downcase)
         submitted = true
       else
@@ -35,9 +53,18 @@ class ReposController < ApplicationController
     redirect_to "/"
   end
 
+  def edit
+    @repo = Repo.find(params[:id])
+  end
+
+  def update
+    Repo.update(params[:id], repo_params)
+    redirect_to repos_path
+  end
+
   private
 
   def repo_params
-    params.permit(repo: [:cohort_num, :repo_url])
+    params.require(:repo).permit(:cohort_num, :repo_url, :individual)
   end
 end
