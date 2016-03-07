@@ -1,16 +1,1 @@
-<!-- <% if @student.errors.messages.length > 0 %>
-<p><%= @student.errors.messages %></p>
-<% end %> -->
-
-<%= form_for @student do |f| %>
-
-    <legend>Student Info</legend>
-    <%= f.label :name %>
-    <%= f.text_field :name %>
-    <%= f.label :cohort_num %>
-    <%= f.text_field :cohort_num %>
-    <%= f.label :github_name %>
-    <%= f.text_field :github_name %>
-
-  <%= f.submit %>
-<% end %>
+<%= render partial: "form" %>

@@ -40,8 +40,17 @@ class ReposController < ApplicationController
       else
         submitted = false
       end
-      @new_hash[stud.github_name] = {name: stud.name, submitted: submitted}
+      @new_hash[:github] = stud.github_name
+      @new_hash[:name] = stud.name
+      @new_hash[:submitted] = submitted
+      @new_hash[:email] = stud.name + "@gmail.com"
+      # @new_hash[stud.github_name] = {name: stud.name, submitted: submitted, email: }
     end
+
+    # DEFAULT FOR NOW
+    @new_hash[:instructor_cc] = "kari@adadevelopersacademy.org"
+    @new_hash[:subject_line] = @repo.repo_url + " PR submission"
+
   end
 
   def new

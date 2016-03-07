@@ -4,13 +4,16 @@
     <th>Student Name</th>
     <th>GitHub Name</th>
     <th>Submitted Assignment</th>
+    <th></th>
   </thead>
   <tbody>
-    <% @new_hash.each do |github_name, value| %>
+    <% @new_hash.each do |data| %>
       <tr>
-        <td><%= value[:name].capitalize %></td>
-        <td><%= github_name %></td>
-        <td><%= value[:submitted] %></td>
+        <td><%= data[:name].capitalize %></td>
+        <td><%= data[:github] %></td>
+        <td><%= data[:submitted] %></td>
+        <td><%= mail_to data[:email], "Send Notification", cc: data[:instructor_cc],
+           subject: data[:subject_line] %></td>
       </tr>
     <% end %>
   </tbody>
