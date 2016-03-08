@@ -1,19 +1,28 @@
 <h1><%= @repo.repo_url %></h1>
+<h4><%= link_to "Github", "http://github.com/" + @repo.repo_url + "/pulls", :target => "_blank" %></h4>
 <table class="table">
   <thead>
     <th>Student Name</th>
     <th>GitHub Name</th>
     <th>Submitted Assignment</th>
-    <th></th>
+    <!-- <th></th> -->
   </thead>
   <tbody>
-    <% @new_hash.each do |data| %>
-      <tr>
-        <td><%= data[:name].capitalize %></td>
-        <td><%= data[:github] %></td>
-        <td><%= data[:submitted] %></td>
-        <td><%= mail_to data[:email], "Send Notification", cc: data[:instructor_cc],
-           subject: data[:subject_line] %></td>
+    <% @all_data.each do |stud| %>
+      <% if !stud[:submitted] %>
+        <tr class="danger">
+      <% else %>
+        <tr class="success">
+      <% end %>
+        <td><%= stud[:name].capitalize %></td>
+        <td><%= stud[:github] %></td>
+        <!-- <td><%= stud[:submitted] %></td> -->
+        <% if !stud[:submitted] %>
+          <td><%= mail_to stud[:email], "Send Notification", cc: stud[:instructor_cc],
+           subject: stud[:subject_line] %></td>
+         <% else %>
+          <td></td>
+         <% end %>
       </tr>
     <% end %>
   </tbody>
