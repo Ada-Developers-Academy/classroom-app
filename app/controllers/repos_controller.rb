@@ -58,8 +58,8 @@ class ReposController < ApplicationController
   end
 
   def create
-    Repo.create(repo_params[:repo])
-    redirect_to "/"
+    Repo.create(repo_params)
+    redirect_to repos_path
   end
 
   def edit
@@ -68,6 +68,12 @@ class ReposController < ApplicationController
 
   def update
     Repo.update(params[:id], repo_params)
+    redirect_to repos_path
+  end
+
+  def destroy
+    repo = Repo.find(params[:id])
+    repo.destroy
     redirect_to repos_path
   end
 
