@@ -1,4 +1,3 @@
-require 'pry'
 class ReposController < ApplicationController
   AUTH = {:username => ENV["GITHUB"]}
 
