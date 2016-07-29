@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160307232119) do
+ActiveRecord::Schema.define(version: 20160727225038) do
 
   create_table "repos", force: :cascade do |t|
     t.integer  "cohort_num",                null: false
@@ -28,6 +28,22 @@ ActiveRecord::Schema.define(version: 20160307232119) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
     t.string   "email"
+  end
+
+  create_table "submissions", force: :cascade do |t|
+    t.integer  "student_id",   null: false
+    t.integer  "repo_id",      null: false
+    t.datetime "submitted_at", null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string   "name",       null: false
+    t.string   "uid",        null: false
+    t.string   "provider",   null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
 end

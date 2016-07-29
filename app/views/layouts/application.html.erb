@@ -18,6 +18,8 @@
       <li><%= link_to "Repos", repos_path %></li>
       <li><%= link_to "Students", students_path %></li>
       <li><a href="#"></a></li>
+      <li><%= link_to "Log In", "/auth/github" unless current_user %></li>
+      <li><%= link_to "Log Out", logout_path, method: :delete if current_user %></li>
     </ul>
   </div>
 </nav>

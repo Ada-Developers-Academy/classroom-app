@@ -4,25 +4,20 @@
   <thead>
     <th>Student Name</th>
     <th>GitHub Name</th>
-    <th>Submitted Assignment</th>
+    <th>Submitted</th>
     <!-- <th></th> -->
   </thead>
   <tbody>
     <% @all_data.each do |stud| %>
-      <% if !stud[:submitted] %>
-        <tr class="danger">
-      <% else %>
-        <tr class="success">
-      <% end %>
-        <td><%= stud[:name].capitalize %></td>
-        <td><%= stud[:github] %></td>
-        <!-- <td><%= stud[:submitted] %></td> -->
-        <% if !stud[:submitted] %>
-          <td><%= mail_to stud[:email], "Send Notification", cc: stud[:instructor_cc],
-           subject: stud[:subject_line] %></td>
-         <% else %>
-          <td></td>
-         <% end %>
+      <tr class='<%= !stud[:created_at] ? "danger" : "success" %>' >
+      <td><%= stud[:student].name.capitalize %></td>
+      <td><%= stud[:student].github_name %></td>
+      <% if !stud[:created_at] %>
+        <td><%= mail_to stud[:student][:email], "Send Notification", cc: "TMP",
+         subject: @repo.repo_url %></td>
+       <% else %>
+        <td><%= link_to localize(stud[:created_at], :format => :short), stud[:url], target: "_blank" if stud[:created_at] %></td>
+       <% end %>
       </tr>
     <% end %>
   </tbody>
