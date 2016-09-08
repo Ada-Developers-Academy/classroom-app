@@ -1,9 +1,9 @@
 Rails.application.routes.draw do
-  root 'pull_requests#index'
+  root 'pull_requests#home'
 
   resources :repos
   resources :students
-  get "/.well-known/acme-challenge/#{ENV['LE_AUTH_REQUEST']}", to: 'pull_requests#letsencrypt'
+  resources :pull_requests
 
   get "/auth/:provider/callback", to: "sessions#create"
   delete "/logout", to: "sessions#destroy"

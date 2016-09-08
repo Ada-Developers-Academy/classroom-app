@@ -1,6 +1,6 @@
 class ReposController < ApplicationController
   AUTH = {:username => ENV["GITHUB"]}
-
+  
   def index
     @repos = Repo.all
   end
@@ -33,12 +33,7 @@ class ReposController < ApplicationController
       end
     end
 
-    # pr_student_list.select!{ |p| p != nil }
-    # pr_student_list.uniq!
-    # pr_list = pr_student_list.sort
-
     ids = pr_student_list.compact.map { |s| s[:student].id }
-    puts "ALL STUDENT IDS #{ids}"
 
     # Map list of students against the students who have submitted
     missing_students = cohort_students.map { |s| !ids.include?(s.id)? s : nil }
@@ -123,7 +118,7 @@ class ReposController < ApplicationController
           output << commit["author"]["login"]
         end
       end
-      puts "COMMIT for #{repo_url} has users #{output.to_a.to_s}"
+
       result = []
       output.each do|stud|
         student = create_student(cohort_students, stud, repo_created, repo_url)
