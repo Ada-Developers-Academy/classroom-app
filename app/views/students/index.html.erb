@@ -4,7 +4,7 @@
   <thead>
     <tr>
       <th>Student Name</th>
-      <th>Cohort Num</th>
+      <th>Cohort</th>
       <th>GitHub Name</th>
       <th>Email</th>
       <th></th>
@@ -13,7 +13,7 @@
   <% @students.each do |s| %>
     <tr>
       <td><%= s.name %></td>
-      <td><%= s.cohort_num %></td>
+      <td><%= s.cohort.display_name %></td>
       <td><%= s.github_name %></td>
       <td><%= s.email %></td>
       <td>
