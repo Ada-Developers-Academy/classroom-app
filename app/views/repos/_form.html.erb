@@ -2,8 +2,8 @@
   <fieldset>
     <legend>Repositiory Properties</legend>
     <div class="control-group">
-      <%= f.label :cohort_num %>
-      <%= f.text_field :cohort_num, class: "form-control" %>
+      <%= f.label :cohort %>
+      <%= f.collection_select(:cohort_id, Cohort.all, :id, :display_name, class: "form-control") %>
     </div>
     <div class="control-group">
       <%= f.label :repo_url %>

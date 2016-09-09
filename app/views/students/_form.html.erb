@@ -9,8 +9,8 @@
     <%= f.text_field :name, class: "form-control" %>
   </div>
   <div class="control-group">
-    <%= f.label :cohort_num, class: "control-label"  %>
-    <%= f.text_field :cohort_num, class: "form-control" %>
+    <%= f.label :cohort, class: "control-label"  %>
+    <%= f.collection_select(:cohort_id, Cohort.all, :id, :display_name, class: "form-control") %>
   </div>
   <div class="control-group">
     <%= f.label :github_name, class: "control-label"  %>

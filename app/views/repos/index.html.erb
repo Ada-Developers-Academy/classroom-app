@@ -3,14 +3,14 @@
 <table class="table">
   <thead>
     <tr>
-      <th>Cohort Num</th>
+      <th>Cohort</th>
       <th>Repo URL</th>
       <th></th>
       <th></th>
     </tr>
     <% @repos.each do |r| %>
       <tr>
-        <td><%= r.cohort_num %></td>
+        <td><%= r.cohort.display_name %></td>
         <td><%= link_to r.repo_url, r.repo_url %></td>
         <td>
           <%= icon('user') %>
