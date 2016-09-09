@@ -1,17 +1,20 @@
 class ReposController < ApplicationController
   AUTH = {:username => ENV["GITHUB"]}
-  
+
   def index
     @repos = Repo.all
   end
 
   def show
-    @repo = Repo.find(params[:id])
+    @repo = Repo.find(params[:repo_id])
 
     if !@repo
       flash[:error] = "Repository not found"
       redirect_to :back
     end
+
+    @cohort = Cohort.find(params[:cohort_id])
+    puts @cohort
 
     # Get all PRS
     request_url = "https://api.github.com/repos/#{ @repo.repo_url }/pulls"
@@ -19,7 +22,7 @@ class ReposController < ApplicationController
     pr_info = HTTParty.get(request_url, headers: {"user-agent" => "rails"}, :basic_auth => AUTH)
 
     # Get list of students in the cohort
-    cohort_students = Student.where(cohort_num: @repo.cohort_num).sort
+    cohort_students = Student.where(cohort_id: @cohort.id).sort
 
     # Catalog the list of students who have submitted
     pr_student_list = []
@@ -29,6 +32,7 @@ class ReposController < ApplicationController
         student_hash = individual_student(cohort_students, data)
         pr_student_list << student_hash if student_hash != nil
       else # Group project
+        puts "GROUP GROUP GROUP GROUP"
         pr_student_list.concat(group_project(cohort_students, data, 3))
       end
     end
@@ -61,11 +65,18 @@ class ReposController < ApplicationController
 
   def edit
     @repo = Repo.find(params[:id])
+    @max_size = Cohort.all.length
   end
 
   def update
-    Repo.update(params[:id], repo_params)
-    redirect_to repos_path
+    updated = Repo.find(params[:id])
+    if updated.update_attributes(repo_params)
+      updated.cohorts.build
+      redirect_to repos_path
+    else
+      flash[:error] = "An error has occurred"
+      redirect_to :back
+    end
   end
 
   def destroy
@@ -77,7 +88,7 @@ class ReposController < ApplicationController
   private
 
   def repo_params
-    params.require(:repo).permit(:cohort_num, :repo_url, :individual)
+    params.require(:repo).permit(:repo_url, :individual, :cohort_ids => [] )
   end
 
   def create_student(cohort_students, user, created_at, repo_url)
@@ -113,7 +124,9 @@ class ReposController < ApplicationController
         if count == group_size
           break
         end
-        if commit["author"] != nil
+
+        # Ensure count is only incremented for unique authors
+        if commit["author"] != nil && !output.include?(commit["author"]["login"])
           count += 1
           output << commit["author"]["login"]
         end

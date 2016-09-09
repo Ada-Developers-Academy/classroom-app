@@ -10,9 +10,14 @@
   <% @repos.each do |r| %>
     <tr>
       <td><%= r.repo_url %></td>
-      <td><%= link_to "Students", "/repos/#{ r.id }" %></td>
+      <td>
+        <% r.cohorts.each do |c| %>
+          <%= link_to c.display_name, repo_cohort_path(r.id, c.id) %><br>
+        <% end %>
+      </td>
+      <!-- <td><%= link_to "Students", repo_path(r.id) %></td> -->
       <td><%= link_to "Github", "http://github.com/" + r.repo_url + "/pulls", :target => "_blank" %></td>
-      
+
     </tr>
   <% end %>
 </table>

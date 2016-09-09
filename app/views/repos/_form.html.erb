@@ -3,7 +3,7 @@
     <legend>Repositiory Properties</legend>
     <div class="control-group">
       <%= f.label :cohort %>
-      <%= f.collection_select(:cohort_id, Cohort.all, :id, :display_name, class: "form-control") %>
+      <%= f.collection_select(:cohort_ids, Cohort.all, :id, :display_name,{}, { class: "form-control", multiple: true, size: @max_size }) %>
     </div>
     <div class="control-group">
       <%= f.label :repo_url %>

@@ -19,17 +19,17 @@ end
 students = []
 students = CSV.read(Rails.root.join('lib', 'seeds', 'students.csv')).each do |stud|
   stud_hash = {}
-  stud_hash[:name] = stud[1]
+  stud_hash[:name] = stud[1].titleize
   c = Cohort.where("name LIKE :prefix", prefix: "#{stud[0]}%")
   stud_hash[:cohort_id] = c.first.id
-  stud_hash[:email] = stud[2]
-  stud_hash[:github_name] = stud[3]
+  stud_hash[:email] = stud[2].downcase
+  stud_hash[:github_name] = stud[3].downcase
 
   Student.create(stud_hash)
 end
 
 repos = [
-  { repo_url: "Ada-C6/Scrabble"},
+  { repo_url: "Ada-C6/Scrabble", individual: false},
   { repo_url: "Ada-C6/BankAccounts"}
 ]
 
