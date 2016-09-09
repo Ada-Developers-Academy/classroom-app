@@ -10,7 +10,10 @@
     </tr>
     <% @repos.each do |r| %>
       <tr>
-        <td><%= r.cohort.display_name %></td>
+        <td><% r.cohorts.each do |c| %>
+          <%= c.display_name %><br>
+          <% end %>
+        </td>
         <td><%= link_to r.repo_url, r.repo_url %></td>
         <td>
           <%= icon('user') %>
