@@ -11,13 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160909032041) do
+ActiveRecord::Schema.define(version: 20170103174143) do
 
   create_table "cohorts", force: :cascade do |t|
-    t.integer  "number",     null: false
-    t.string   "name",       null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer  "number",            null: false
+    t.string   "name",              null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.string   "instructor_emails"
   end
 
   create_table "cohorts_repos", force: :cascade do |t|

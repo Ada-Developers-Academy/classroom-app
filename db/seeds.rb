@@ -8,8 +8,8 @@
 
 # Create cohorts
 cohorts = [
-  { number: 6, name: "Brackets" },
-  { number: 6, name: "Parens" }
+  { number: 6, name: "Brackets", instructor_emails: "kari@adadevelopersacademy.org,dan@adadevelopersacademy.org" },
+  { number: 6, name: "Parens", instructor_emails: "kari@adadevelopersacademy.org" }
 ]
 
 cohorts.each do |c|
