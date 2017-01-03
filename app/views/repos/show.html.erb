@@ -14,8 +14,8 @@
       <td><%= stud[:student].name %></td>
       <td><%= stud[:student].github_name %></td>
       <% if !stud[:created_at] %>
-        <td><%= mail_to stud[:student].email, "Send Notification", cc: "TMP",
-         subject: @repo.repo_url %></td>
+        <td><%= mail_to stud[:student].email, "Send Notification", cc: stud[:student].cohort.instructor_emails,
+         subject: @repo.repo_url, target: "_blank" %></td>
        <% else %>
         <td><%= link_to localize(stud[:created_at], :format => :short), stud[:url], target: "_blank" if stud[:created_at] %></td>
        <% end %>
