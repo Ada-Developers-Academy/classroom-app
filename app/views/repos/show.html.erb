@@ -1,12 +1,11 @@
 <h1><%= @repo.repo_url %></h1>
 <h3><%= @cohort.display_name %></h3>
-<h4><%= link_to "Github", "http://github.com/" + @repo.repo_url + "/pulls", :target => "_blank" %></h4>
+<h4><%= link_to "Github", @repo.pulls_url, :target => "_blank" %></h4>
 <table class="table">
   <thead>
     <th>Student Name</th>
     <th>GitHub Name</th>
     <th>Submitted</th>
-    <!-- <th></th> -->
   </thead>
   <tbody>
     <% @all_data.each do |stud| %>
