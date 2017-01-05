@@ -8,15 +8,16 @@
     <th>Submitted</th>
   </thead>
   <tbody>
-    <% @all_data.each do |stud| %>
-      <tr class='<%= !stud[:created_at] ? "danger" : "success" %>' >
-      <td><%= stud[:student].name %></td>
-      <td><%= stud[:student].github_name %></td>
-      <% if !stud[:created_at] %>
-        <td><%= mail_to stud[:student].email, "Send Notification", cc: stud[:student].cohort.instructor_emails,
+    <% @all_data.each do |pr_student_data| %>
+      <% student = pr_student_data.student_model %>
+      <tr class='<%= !pr_student_data.pr_created ? "danger" : "success" %>' >
+      <td><%= student.name %></td>
+      <td><%= student.github_name %></td>
+      <% if !pr_student_data.pr_created %>
+        <td><%= mail_to student.email, "Send Notification", cc: student.cohort.instructor_emails,
          subject: @repo.repo_url, target: "_blank" %></td>
        <% else %>
-        <td><%= link_to localize(stud[:created_at], :format => :short), stud[:url], target: "_blank" if stud[:created_at] %></td>
+        <td><%= link_to localize(pr_student_data.pr_created, :format => :short), pr_student_data.pr_url, target: "_blank" if pr_student_data.pr_created %></td>
        <% end %>
       </tr>
     <% end %>
