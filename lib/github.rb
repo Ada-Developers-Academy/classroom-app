@@ -29,7 +29,7 @@ class GitHub
         student_hash = individual_student(students, pull_request)
         pr_student_list << student_hash if student_hash != nil
       else # Group project
-        pr_student_list.concat(group_project(students, pull_request, 3))
+        pr_student_list.concat(group_project(students, pull_request))
       end
     end
 
@@ -70,7 +70,7 @@ class GitHub
     return pr_info
   end
 
-  def self.group_project(cohort_students, data, group_size)
+  def self.group_project(cohort_students, data)
     url = data["head"]["repo"]["contributors_url"]
     repo_created = data["created_at"]
     repo_url = data["html_url"]
