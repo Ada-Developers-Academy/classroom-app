@@ -1,4 +1,4 @@
 class Submission < ActiveRecord::Base
-  has_one :person
-  has_one :repo
+  belongs_to :student
+  belongs_to :repo
 end
