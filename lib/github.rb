@@ -32,34 +32,29 @@ class GitHub
         pr_student_list.concat(group_project(students, pull_request))
       end
     end
-    p pr_student_list.count
+
     return pr_student_list
   end
 
   def self.add_missing_students(submissions, students, repo)
-    # student_list = []
     submitted_students = submissions.map{ |submit| submit.student.id }
     missing_students = students.reject { |stud| submitted_students.include?(stud.id) }
 
     missing_students.each do |stud|
-      submit = Submission.new(student: stud, repo: repo)
+      # Do we already have a submission for this student?
+      submit = Submission.find_by(student: stud, repo: repo)
 
-      if submit.save
+      if submit
         submissions << submit
+      else
+        submit = Submission.new(student: stud, repo: repo)
+
+        if submit.save
+          submissions << submit
+        end
       end
     end
 
-    # ids = pr_student_list.compact.map { |s| s.student_model.id }
-    #
-    # # Map list of students against the students who have submitted
-    # missing_students = students.map { |s| !ids.include?(s.id)? s : nil }
-    #
-    # missing_students.compact.each do |missing_student_model|
-    #   if missing_student_model
-    #     pr_student_list << PRStudent.new(missing_student_model)
-    #   end
-    # end
-    p submissions.count
     return submissions
   end
 
@@ -69,17 +64,26 @@ class GitHub
 
   def self.create_student(students, user, created_at, repo, pr_url)
     student_model = students.find{ |s| s.github_name == user }
-    if student_model
-      submit = Submission.new(student: student_model, submitted_at: created_at, repo: repo, pr_url: pr_url)
 
-      if submit.save
-        return submit
+    if student_model
+      # Do we already have a submission for this student?
+      prev = Submission.find_by(student: student_model, repo: repo)
+
+      if prev
+        # update
+        prev.submitted_at = created_at
+        prev.pr_url = pr_url
+        if prev.save
+          return prev
+        end
+      else
+        submit = Submission.new(student: student_model, submitted_at: created_at, repo: repo, pr_url: pr_url)
+
+        if submit.save
+          return submit
+        end
       end
     end
-    # if student_model
-    #     student = PRStudent.new(student_model, user.downcase, DateTime.parse(created_at), repo_url)
-    #     return student
-    # end
   end
 
   def self.get_prs(repo_url)
