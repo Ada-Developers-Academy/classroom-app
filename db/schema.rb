@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170110181722) do
+ActiveRecord::Schema.define(version: 20170111224725) do
 
   create_table "cohorts", force: :cascade do |t|
     t.integer  "number",            null: false
@@ -51,6 +51,7 @@ ActiveRecord::Schema.define(version: 20170110181722) do
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
     t.string   "pr_url"
+    t.string   "feedback_url"
   end
 
   create_table "users", force: :cascade do |t|
