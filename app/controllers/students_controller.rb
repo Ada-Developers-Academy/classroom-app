@@ -36,6 +36,6 @@ class StudentsController < ApplicationController
   private
 
   def stud_params
-   params.require(:student).permit(:name, :cohort_num, :github_name, :email)
+   params.require(:student).permit(:name, :cohort_id, :github_name, :email)
   end
 end
