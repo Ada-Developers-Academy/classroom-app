@@ -1,0 +1,33 @@
+<div class="row">
+  <div class="col-md-12">
+    <h3><%= @student.name %></h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Project</th>
+          <th>PR URL</th>
+          <th>Feedback URL</th>
+        </tr>
+        <% @student.submissions.each do |submit| %>
+          <tr>
+            <td><%= link_to submit.repo.repo_url, submit.repo.full_repo_url, :target => "blank" %></td>
+            <td>
+              <% if submit.pr_url %>
+                <%= link_to submit.pr_url, submit.pr_url, :target => "blank" %>
+              <% else %>
+                None
+              <% end %>
+            </td>
+            <td>
+              <% if submit.feedback_url %>
+                <%= link_to submit.feedback_url, submit.feedback_url, :target => "blank" %>
+              <% else %>
+                None
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </thead>
+    </table>
+  </div>
+</div>
