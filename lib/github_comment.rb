@@ -22,13 +22,13 @@ class GitHubComment
   def self.add_new(comment, repo_url, pr_id)
     url = "https://api.github.com/repos/#{ repo_url }/issues/#{ pr_id }/comments"
     # p "URLURLURL #{url} and the comment #{ comment }"
-    result = HTTParty.post(url,
+    response = HTTParty.post(url,
       :body => {:body => comment }.to_json,
       headers: {"user-agent" => "rails", "content-type" => "application/json"},
       :basic_auth => GitHubComment::AUTH)
     # p result
-    if result.response["status"].include("201")
-      feedback_url = result.parsed_response["html_url"]
+    if response.code == 201
+      feedback_url = response.parsed_response["html_url"]
       return feedback_url
     end # else return nil
   end
