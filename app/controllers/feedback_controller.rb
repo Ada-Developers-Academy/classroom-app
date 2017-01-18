@@ -38,17 +38,8 @@ class FeedbackController < ApplicationController
             submit.save
           end
         end
+        
         redirect_to repo_cohort_path(submit.repo, submit.student.cohort_id)
-
-        # submission_list.each do |submit|
-        #   submit.feedback_url = feedback_url
-        #   if submit.save
-        #
-        #   else
-        #     redirect_to :back
-        #   end
-        # end
-
     end
   end
 end
