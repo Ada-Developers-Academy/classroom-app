@@ -4,24 +4,50 @@ class FeedbackController < ApplicationController
   def new
     @repo = Repo.find(params[:repo_id])
     @feedback_template = GitHubComment.find_template(@repo)
-    @student_name = Student.find(params[:student_id]).name
     @submission = Submission.find_by(student: params[:student_id], repo: params[:repo_id])
+
+    # Group or individual?
+    if @repo.individual
+      @student_name = Student.find(params[:student_id]).name
+
+    else
+      submission_list = @submission.find_shared
+      @student_name = submission_list.map{ |sub| sub.student.name  }.join(' & ')
+    end
   end
 
   def create
-    submit = Submission.find_by(student: params[:student_id], repo: params[:repo_id])
-    if !submit
+    submission = Submission.find_by(student: params[:student_id], repo: params[:repo_id])
+    if !submission
       render :new
     else
-        feedback_url = GitHubComment.add_new(params[:Feedback], submit.repo.repo_url, submit.pr_id)
+        feedback_url = GitHubComment.add_new(params[:Feedback], submission.repo.repo_url, submission.pr_id)
 
-        # Update the submission
-        submit.feedback_url = feedback_url
-        if submit.save
-          redirect_to repo_cohort_path(submit.repo, submit.student.cohort_id)
+        # Check if group
+        if !Repo.find(params[:repo_id]).individual
+          submission_list = submission.find_shared
         else
-          redirect_to :back
+          submission_list = []
+          submission_list << submission
         end
+
+        # Update the submissions
+        Model.transaction do
+          submission_list.each do |submit|
+            submit.feedback_url = feedback_url
+            submit.save
+          end
+        end
+        redirect_to repo_cohort_path(submit.repo, submit.student.cohort_id)
+
+        # submission_list.each do |submit|
+        #   submit.feedback_url = feedback_url
+        #   if submit.save
+        #
+        #   else
+        #     redirect_to :back
+        #   end
+        # end
 
     end
   end

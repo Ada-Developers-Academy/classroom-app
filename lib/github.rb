@@ -29,7 +29,7 @@ class GitHub
         submission = individual_student(students, repo, pull_request)
         pr_student_list << submission if submission != nil
       else # Group project
-        pr_student_list.concat(group_project(students, pull_request))
+        pr_student_list.concat(group_project(students, pull_request, repo))
       end
     end
 
@@ -93,10 +93,10 @@ class GitHub
     return pr_info
   end
 
-  def self.group_project(cohort_students, data)
+  def self.group_project(cohort_students, data, repo)
     url = data["head"]["repo"]["contributors_url"]
     repo_created = data["created_at"]
-    repo_url = data["html_url"]
+    pr_url = data["html_url"]
 
     contributors = make_request(url)
     github_usernames = cohort_students.map{ |stud| stud.github_name.downcase }
@@ -107,7 +107,7 @@ class GitHub
 
       # If the contributor is in the student list, add it!
       if github_usernames.include?(curr_github_username)
-        student = create_student(cohort_students, curr_github_username, repo_created, repo_url)
+        student = create_student(cohort_students, curr_github_username, repo_created, repo, pr_url)
         result << student if student
       end
     end
