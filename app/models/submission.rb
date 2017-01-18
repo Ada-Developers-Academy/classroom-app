@@ -15,4 +15,8 @@ class Submission < ActiveRecord::Base
       return 'danger'
     end
   end
+
+  def find_shared
+    Submission.where(pr_url: self.pr_url)
+  end
 end
