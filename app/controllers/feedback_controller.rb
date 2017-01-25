@@ -21,17 +21,7 @@ class FeedbackController < ApplicationController
       render :new
     else
       feedback_url = GitHubComment.add_new(params[:Feedback], @repo.repo_url, @submission.pr_id)
-
-      # Check if group
-      if !@repo.individual
-        submission_list = @submission.find_shared
-      else
-        submission_list = []
-        submission_list << @submission
-      end
-
-      # Update the submissions
-      Submission.update_many(submission_list, feedback_url)
+      @submission.update_group(feedback_url: feedback_url)
 
       redirect_to repo_cohort_path(@repo, @submission.student.cohort)
     end
