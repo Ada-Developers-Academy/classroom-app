@@ -5,7 +5,7 @@ class Repo < ActiveRecord::Base
   BASE_GITHUB_URL = "http://github.com/"
 
   def pulls_url
-    BASE_GITHUB_URL + self.repo_url + "/pulls"
+    full_repo_url + "/pulls"
   end
 
   def full_repo_url
