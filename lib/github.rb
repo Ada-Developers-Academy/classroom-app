@@ -42,17 +42,8 @@ class GitHub
 
     missing_students.each do |stud|
       # Do we already have a submission for this student?
-      submit = Submission.find_by(student: stud, repo: repo)
-
-      if submit
-        submissions << submit
-      else
-        submit = Submission.new(student: stud, repo: repo)
-
-        if submit.save
-          submissions << submit
-        end
-      end
+      submit = Submission.find_or_create_by(stud, repo)
+      submissions << submit if submit.persisted?
     end
 
     return submissions
@@ -116,7 +107,7 @@ class GitHub
   end
 
   def self.make_request(url)
-    response = HTTParty.get(url, headers: {"user-agent" => "rails"}, :basic_auth => GitHub::AUTH)
+    response = HTTParty.get(url, query: { "page" => 1, "per_page" => 100 }, headers: {"user-agent" => "rails"}, :basic_auth => GitHub::AUTH)
     return response
   end
 end
