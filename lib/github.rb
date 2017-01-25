@@ -42,7 +42,7 @@ class GitHub
 
     missing_students.each do |stud|
       # Do we already have a submission for this student?
-      submit = Submission.find_or_create_by(stud, repo)
+      submit = Submission.find_or_create_by(student: stud, repo: repo)
       submissions << submit if submit.persisted?
     end
 
