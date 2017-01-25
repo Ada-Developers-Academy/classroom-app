@@ -35,7 +35,7 @@ class FeedbackController < ApplicationController
         # Update the submissions
         Submission.update_many(submission_list, feedback_url)
 
-        redirect_to repo_cohort_path(repo, repo.cohort)
+        redirect_to repo_cohort_path(repo, submission.student.cohort)
     end
   end
 end

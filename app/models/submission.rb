@@ -9,16 +9,16 @@ class Submission < ActiveRecord::Base
   def find_shared
     Submission.where(pr_url: self.pr_url)
   end
-
-  def self.find_or_create_by(student, repo)
-    submit = self.find_by(student: student, repo: repo)
-
-    if !submit
-      submit = Submission.create(student: stud, repo: repo)
-    end
-    
-    return submit
-  end
+  # 
+  # def self.find_or_create_by(student, repo)
+  #   submit = self.find_by(student: student, repo: repo)
+  #
+  #   if !submit
+  #     submit = Submission.create(student: stud, repo: repo)
+  #   end
+  #
+  #   return submit
+  # end
 
   def self.update_many(submissions, url)
     Submission.transaction do
