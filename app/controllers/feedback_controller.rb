@@ -24,7 +24,8 @@ class FeedbackController < ApplicationController
         feedback_url = GitHubComment.add_new(params[:Feedback], submission.repo.repo_url, submission.pr_id)
 
         # Check if group
-        if !Repo.find(params[:repo_id]).individual
+        repo = Repo.find(params[:repo_id])
+        if !repo.individual
           submission_list = submission.find_shared
         else
           submission_list = []
@@ -32,14 +33,9 @@ class FeedbackController < ApplicationController
         end
 
         # Update the submissions
-        Model.transaction do
-          submission_list.each do |submit|
-            submit.feedback_url = feedback_url
-            submit.save
-          end
-        end
-        
-        redirect_to repo_cohort_path(submit.repo, submit.student.cohort_id)
+        Submission.update_many(submission_list, feedback_url)
+
+        redirect_to repo_cohort_path(repo, repo.cohort)
     end
   end
 end

@@ -9,4 +9,13 @@ class Submission < ActiveRecord::Base
   def find_shared
     Submission.where(pr_url: self.pr_url)
   end
+
+  def self.update_many(submissions, url)
+    Submission.transaction do
+      submissions.each do |submit|
+        submit.feedback_url = url
+        submit.save
+      end
+    end
+  end
 end
