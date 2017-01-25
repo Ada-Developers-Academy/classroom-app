@@ -16,4 +16,14 @@ class Submission < ActiveRecord::Base
       Submission.grouped_with(self).update_all(attrs)
     end
   end
+
+  def student_names
+    if repo.individual?
+      student.name
+    else
+      Submission.grouped_with(self).map do |sub|
+        sub.student.name
+      end.join(' & ')
+    end
+  end
 end
