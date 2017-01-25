@@ -5,15 +5,7 @@ class FeedbackController < ApplicationController
 
   def new
     @feedback_template = GitHubComment.find_template(@repo)
-
-    # Group or individual?
-    if @repo.individual
-      @student_name = Student.find(params[:student_id]).name
-
-    else
-      submission_list = @submission.find_shared
-      @student_name = submission_list.map{ |sub| sub.student.name  }.join(' & ')
-    end
+    @student_name = @submission.student_names
   end
 
   def create
