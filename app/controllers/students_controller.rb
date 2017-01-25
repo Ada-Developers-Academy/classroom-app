@@ -27,6 +27,10 @@ class StudentsController < ApplicationController
     @students = Student.all
   end
 
+  def show
+    @student = Student.find(params[:id])
+  end
+
   def destroy
     student = Student.find(params[:id])
     student.destroy
@@ -36,6 +40,6 @@ class StudentsController < ApplicationController
   private
 
   def stud_params
-   params.require(:student).permit(:name, :cohort_num, :github_name, :email)
+   params.require(:student).permit(:name, :cohort_id, :github_name, :email)
   end
 end

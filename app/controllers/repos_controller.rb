@@ -1,4 +1,4 @@
-require 'Github'
+require 'github'
 
 class ReposController < ApplicationController
   def index
