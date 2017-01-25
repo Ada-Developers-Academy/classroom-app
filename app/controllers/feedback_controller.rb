@@ -21,21 +21,21 @@ class FeedbackController < ApplicationController
     if !submission
       render :new
     else
-        feedback_url = GitHubComment.add_new(params[:Feedback], submission.repo.repo_url, submission.pr_id)
+      feedback_url = GitHubComment.add_new(params[:Feedback], submission.repo.repo_url, submission.pr_id)
 
-        # Check if group
-        repo = Repo.find(params[:repo_id])
-        if !repo.individual
-          submission_list = submission.find_shared
-        else
-          submission_list = []
-          submission_list << submission
-        end
+      # Check if group
+      repo = Repo.find(params[:repo_id])
+      if !repo.individual
+        submission_list = submission.find_shared
+      else
+        submission_list = []
+        submission_list << submission
+      end
 
-        # Update the submissions
-        Submission.update_many(submission_list, feedback_url)
+      # Update the submissions
+      Submission.update_many(submission_list, feedback_url)
 
-        redirect_to repo_cohort_path(repo, submission.student.cohort)
+      redirect_to repo_cohort_path(repo, submission.student.cohort)
     end
   end
 end
