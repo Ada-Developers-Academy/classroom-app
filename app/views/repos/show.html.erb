@@ -24,7 +24,7 @@
         <% if submission.feedback_url %>
           <td><%= link_to "View Feedback", submission.feedback_url, :target => "_blank" %></td>
         <% else %>
-          <td><%= link_to "Submit Feedback", repo_new_feedback_path(@repo.id, student.id), data: submission.pr_url %></td>
+          <td><%= link_to "Submit Feedback", new_repo_student_feedback_path(@repo.id, student.id), data: submission.pr_url %></td>
         <% end %>
 
        <% end %>
