@@ -54,7 +54,7 @@ class GitHub
   end
 
   def self.create_student(students, user, created_at, repo, pr_url)
-    student_model = students.find{ |s| s.github_name == user }
+    student_model = students.find{ |s| s.github_name.downcase == user }
 
     if student_model
       # Do we already have a submission for this student?
