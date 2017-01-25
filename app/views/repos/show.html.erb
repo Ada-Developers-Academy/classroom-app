@@ -6,18 +6,27 @@
     <th>Student Name</th>
     <th>GitHub Name</th>
     <th>Submitted</th>
+    <th></th>
   </thead>
   <tbody>
-    <% @all_data.each do |pr_student_data| %>
-      <% student = pr_student_data.student_model %>
-      <tr class='<%= !pr_student_data.pr_created ? "danger" : "success" %>' >
+    <% @all_data.each do |submission| %>
+      <% student = submission.student %>
+      <tr class='<%= style_type(submission) %>' >
       <td><%= student.name %></td>
       <td><%= student.github_name %></td>
-      <% if !pr_student_data.pr_created %>
+      <% if !submission.submitted_at %>
         <td><%= mail_to student.email, "Send Notification", cc: student.cohort.instructor_emails,
          subject: @repo.repo_url, target: "_blank" %></td>
+         <td></td>
        <% else %>
-        <td><%= link_to localize(pr_student_data.pr_created, :format => :short), pr_student_data.pr_url, target: "_blank" if pr_student_data.pr_created %></td>
+        <td><%= link_to localize(submission.submitted_at, :format => :short), submission.pr_url, target: "_blank" if submission.submitted_at %></td>
+
+        <% if submission.feedback_url %>
+          <td><%= link_to "View Feedback", submission.feedback_url, :target => "_blank" %></td>
+        <% else %>
+          <td><%= link_to "Submit Feedback", new_repo_student_feedback_path(@repo.id, student.id), data: submission.pr_url %></td>
+        <% end %>
+
        <% end %>
       </tr>
     <% end %>

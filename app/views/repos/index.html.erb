@@ -14,7 +14,7 @@
           <%= c.display_name %><br>
           <% end %>
         </td>
-        <td><%= link_to r.repo_url, r.repo_url %></td>
+        <td><%= link_to r.repo_url, r.full_repo_url, :target => "blank" %></td>
         <td>
           <%= icon('user') %>
           <% if !r.individual %>
