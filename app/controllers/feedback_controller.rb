@@ -1,41 +1,28 @@
 require 'github_comment'
 
 class FeedbackController < ApplicationController
+  before_action :find_objects
+
   def new
-    @repo = Repo.find(params[:repo_id])
     @feedback_template = GitHubComment.find_template(@repo)
-    @submission = Submission.find_by(student: params[:student_id], repo: params[:repo_id])
-
-    # Group or individual?
-    if @repo.individual
-      @student_name = Student.find(params[:student_id]).name
-
-    else
-      submission_list = @submission.find_shared
-      @student_name = submission_list.map{ |sub| sub.student.name  }.join(' & ')
-    end
+    @student_name = @submission.student_names
   end
 
   def create
-    submission = Submission.find_by(student: params[:student_id], repo: params[:repo_id])
-    if !submission
+    if !@submission
       render :new
     else
-        feedback_url = GitHubComment.add_new(params[:Feedback], submission.repo.repo_url, submission.pr_id)
+      feedback_url = GitHubComment.add_new(params[:Feedback], @repo.repo_url, @submission.pr_id)
+      @submission.update_group(feedback_url: feedback_url)
 
-        # Check if group
-        repo = Repo.find(params[:repo_id])
-        if !repo.individual
-          submission_list = submission.find_shared
-        else
-          submission_list = []
-          submission_list << submission
-        end
-
-        # Update the submissions
-        Submission.update_many(submission_list, feedback_url)
-
-        redirect_to repo_cohort_path(repo, submission.student.cohort)
+      redirect_to repo_cohort_path(@repo, @submission.student.cohort)
     end
+  end
+
+  private
+
+  def find_objects
+    @repo = Repo.find(params[:repo_id])
+    @submission = Submission.find_by(student: params[:student_id], repo: @repo)
   end
 end
