@@ -11,7 +11,7 @@
   <tbody>
     <% @all_data.each do |submission| %>
       <% student = submission.student %>
-      <tr class='<%= submission.type %>' >
+      <tr class='<%= style_type(submission) %>' >
       <td><%= student.name %></td>
       <td><%= student.github_name %></td>
       <% if !submission.submitted_at %>

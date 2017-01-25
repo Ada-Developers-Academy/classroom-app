@@ -6,16 +6,6 @@ class Submission < ActiveRecord::Base
     self.pr_url.split('/').last
   end
 
-  def type
-    if self.pr_url && !self.feedback_url
-      return 'warning'
-    elsif self.pr_url && self.feedback_url
-      return 'success'
-    else
-      return 'danger'
-    end
-  end
-
   def find_shared
     Submission.where(pr_url: self.pr_url)
   end
