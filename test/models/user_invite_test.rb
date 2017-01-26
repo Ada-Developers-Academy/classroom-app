@@ -26,5 +26,19 @@ class UserInviteTest < ActiveSupport::TestCase
       valid_invite.inviter = nil
       refute valid_invite.valid?
     end
+
+    test 'validates inviter is an instructor' do
+      # Instructors CAN invite
+      valid_invite.inviter = users(:instructor)
+      assert valid_invite.valid?
+
+      # Students CANNOT invite
+      valid_invite.inviter = users(:student)
+      refute valid_invite.valid?
+
+      # Unknowns CANNOT invite
+      valid_invite.inviter = users(:unknown)
+      refute valid_invite.valid?
+    end
   end
 end

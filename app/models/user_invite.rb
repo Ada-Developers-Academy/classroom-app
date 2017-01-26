@@ -3,4 +3,14 @@ class UserInvite < ActiveRecord::Base
 
   validates_with UserRoleValidator
   validates :inviter, presence: true
+  validate :inviter_must_be_instructor
+
+  private
+
+  # Validations
+  def inviter_must_be_instructor
+    if inviter && inviter.role != 'instructor'
+      errors.add(:inviter, "must be an instructor")
+    end
+  end
 end
