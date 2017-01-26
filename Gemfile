@@ -30,14 +30,8 @@ gem 'font-awesome-sass', '~> 4.5.0'
 gem "omniauth"
 gem "omniauth-github"
 
-# Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
-
-# Use Unicorn as the app server
-# gem 'unicorn'
-
-# Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
+# Authorization framework
+gem "cancancan"
 
 group :production do
   gem 'pg'
