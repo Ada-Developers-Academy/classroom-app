@@ -40,5 +40,15 @@ class UserTest < ActiveSupport::TestCase
 
       assert_equal invite.role, invitee.role
     end
+
+    test 'marks invite as accepted' do
+      invite = user_invites(:student)
+      # sanity check
+      refute invite.accepted?
+
+      invitee.accept_invite(invite)
+
+      assert invite.accepted?
+    end
   end
 end
