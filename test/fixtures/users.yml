@@ -3,3 +3,9 @@ valid:
   uid: 12345
   provider: github
   role: unknown
+
+instructor:
+  name: Instructor User
+  uid: 12346
+  provider: github
+  role: instructor
