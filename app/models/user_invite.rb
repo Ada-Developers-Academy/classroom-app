@@ -4,7 +4,7 @@ class UserInvite < ActiveRecord::Base
   validates_with UserRoleValidator
   validates :inviter, presence: true
   validate :inviter_must_be_instructor
-  validates :github_name, presence: true
+  validates :github_name, presence: true, uniqueness: true
 
   private
 

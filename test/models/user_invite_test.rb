@@ -48,5 +48,13 @@ class UserInviteTest < ActiveSupport::TestCase
       valid_invite.github_name = ''
       refute valid_invite.valid?
     end
+
+    test 'validates GitHub account cannot be invited multiple times' do
+      valid_attrs = valid_invite.attributes.except("id", "created_at", "updated_at")
+
+      # Create a duplicate invite
+      invalid_invite = UserInvite.new(valid_attrs)
+      refute invalid_invite.valid?
+    end
   end
 end
