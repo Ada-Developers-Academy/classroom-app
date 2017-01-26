@@ -1,0 +1,11 @@
+instructor:
+  github_name: adainstructor
+  role: instructor
+  inviter: instructor
+  accepted: true
+
+student:
+  github_name: adastudent
+  role: student
+  inviter: instructor
+  accepted: false
