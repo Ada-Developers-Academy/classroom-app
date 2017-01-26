@@ -21,5 +21,10 @@ class UserInviteTest < ActiveSupport::TestCase
       valid_invite.role = invalid_role
       refute valid_invite.valid?
     end
+
+    test 'validates inviter exists' do
+      valid_invite.inviter = nil
+      refute valid_invite.valid?
+    end
   end
 end
