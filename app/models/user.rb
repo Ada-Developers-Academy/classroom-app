@@ -1,11 +1,8 @@
 class User < ActiveRecord::Base
   validates :name, :uid, :provider, presence: true
+  validates_with UserRoleValidator
 
   ROLES = %w( instructor student unknown )
-  validates :role, inclusion: {
-                     in: ROLES,
-                     message: "must be one of #{ROLES.map(&:humanize).join(', ')}"
-                   }
 
   def self.find_or_create_from_omniauth(auth_hash)
     user = self.find_by(uid: auth_hash["uid"], provider: auth_hash["provider"])
