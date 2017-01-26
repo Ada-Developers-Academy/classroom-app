@@ -9,3 +9,9 @@ student:
   role: student
   inviter: instructor
   accepted: false
+
+invalid:
+  github_name: adauser
+  role: student
+  inviter: student
+  accepted: false

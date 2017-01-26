@@ -17,4 +17,18 @@ class UserTest < ActiveSupport::TestCase
       refute valid_user.valid?
     end
   end
+
+  class AcceptInvite < UserTest
+    def invitee
+      users(:unknown)
+    end
+
+    test 'raises ArgumentError for invalid invites' do
+      invite = user_invites(:invalid)
+
+      assert_raises(ArgumentError) do
+        invitee.accept_invite(invite)
+      end
+    end
+  end
 end

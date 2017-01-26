@@ -23,4 +23,8 @@ class User < ActiveRecord::Base
       end
     end
   end
+
+  def accept_invite(invite)
+    raise ArgumentError.new("Invite is not valid") unless invite.valid?
+  end
 end
