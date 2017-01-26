@@ -3,7 +3,7 @@ require 'test_helper'
 class UserTest < ActiveSupport::TestCase
   class Validations < UserTest
     test 'validates role is in predefined set' do
-      valid_user = users(:valid)
+      valid_user = users(:unknown)
       # sanity check
       assert valid_user.valid?
 
