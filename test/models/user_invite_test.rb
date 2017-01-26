@@ -40,5 +40,13 @@ class UserInviteTest < ActiveSupport::TestCase
       valid_invite.inviter = users(:unknown)
       refute valid_invite.valid?
     end
+
+    test 'validates GitHub name is set' do
+      valid_invite.github_name = nil
+      refute valid_invite.valid?
+
+      valid_invite.github_name = ''
+      refute valid_invite.valid?
+    end
   end
 end
