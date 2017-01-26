@@ -1,6 +1,8 @@
 class User < ActiveRecord::Base
   validates :name, :uid, :provider, presence: true
 
+  ROLES = %w( instructor student unknown )
+
   def self.find_or_create_from_omniauth(auth_hash)
     user = self.find_by(uid: auth_hash["uid"], provider: auth_hash["provider"])
     if !user.nil?
