@@ -29,6 +29,7 @@ class User < ActiveRecord::Base
 
     transaction do
       update!(role: invite.role)
+      invite.update!(accepted: true)
     end
   end
 end
