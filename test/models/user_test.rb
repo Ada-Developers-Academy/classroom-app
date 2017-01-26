@@ -30,5 +30,15 @@ class UserTest < ActiveSupport::TestCase
         invitee.accept_invite(invite)
       end
     end
+
+    test 'sets role based on invite' do
+      invite = user_invites(:student)
+      # sanity check
+      refute_equal invite.role, invitee.role
+
+      invitee.accept_invite(invite)
+
+      assert_equal invite.role, invitee.role
+    end
   end
 end
