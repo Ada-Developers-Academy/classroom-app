@@ -15,3 +15,9 @@ invalid:
   role: student
   inviter: student
   accepted: false
+
+accepted:
+  github_name: adaaccepted
+  role: instructor
+  inviter: instructor
+  accepted: true

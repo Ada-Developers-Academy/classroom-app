@@ -26,6 +26,7 @@ class User < ActiveRecord::Base
 
   def accept_invite(invite)
     raise ArgumentError.new("Invite is not valid") unless invite.valid?
+    raise ArgumentError.new("Invite already used") if invite.accepted?
 
     transaction do
       update!(role: invite.role)

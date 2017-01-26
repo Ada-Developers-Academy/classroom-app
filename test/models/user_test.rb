@@ -50,5 +50,15 @@ class UserTest < ActiveSupport::TestCase
 
       assert invite.accepted?
     end
+
+    test 'raises ArgumentError for already accepted invites' do
+      invite = user_invites(:accepted)
+      # sanity check
+      assert invite.accepted?
+
+      assert_raises(ArgumentError) do
+        invitee.accept_invite(invite)
+      end
+    end
   end
 end
