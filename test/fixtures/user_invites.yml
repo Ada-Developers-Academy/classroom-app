@@ -2,7 +2,7 @@ instructor:
   github_name: adainstructor
   role: instructor
   inviter: instructor
-  accepted: true
+  accepted: false
 
 student:
   github_name: adastudent

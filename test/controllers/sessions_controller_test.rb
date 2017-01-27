@@ -39,5 +39,50 @@ class SessionsControllerTest < ActionController::TestCase
         get :create, provider: :github
       end
     end
+
+    test 'uninvited users have unknown role' do
+      set_auth_mock :uninvited
+
+      get :create, provider: :github
+
+      assert_equal 'unknown', User.last.role
+    end
+
+    test 'invited instructors have role from invite' do
+      # This matches up with the `instructor` UserInvite fixture
+      set_auth_mock :invited_instructor
+
+      get :create, provider: :github
+
+      assert_equal 'instructor', User.last.role
+    end
+
+    test 'invited students have role from invite' do
+      # This matches up with the `student` UserInvite fixture
+      set_auth_mock :invited_student
+
+      get :create, provider: :github
+
+      assert_equal 'student', User.last.role
+    end
+
+    test 'existing users accept invites' do
+      get :create, provider: :github
+
+      user = User.last
+      # sanity check
+      assert_equal 'unknown', user.role
+
+      UserInvite.create({
+        github_name: 'adatest',
+        role: 'student',
+        inviter: User.where(role: 'instructor').first
+      })
+
+      get :create, provider: :github
+
+      user.reload
+      assert_equal 'student', user.role
+    end
   end
 end

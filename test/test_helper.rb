@@ -34,7 +34,10 @@ class ActiveSupport::TestCase
   end
 
   AUTH_MOCKS = {
-    github: auth_mock('Test User', 'adatest')
+    github: auth_mock('Test User', 'adatest'),
+    uninvited: auth_mock('Uninvited User', 'adauninvited'),
+    invited_instructor: auth_mock('Invited Instructor', 'adainstructor'),
+    invited_student: auth_mock('Invited Student', 'adastudent')
   }
 
   AUTH_MOCKS.each do |provider, auth_hash|

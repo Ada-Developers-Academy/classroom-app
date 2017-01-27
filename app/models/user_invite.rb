@@ -6,6 +6,8 @@ class UserInvite < ActiveRecord::Base
   validate :inviter_must_be_instructor
   validates :github_name, presence: true, uniqueness: true
 
+  scope :acceptable, -> { where(accepted: false) }
+
   private
 
   # Validations
