@@ -3,7 +3,8 @@ require 'test_helper'
 class UserInvitesControllerTest < ActionController::TestCase
   class Unauthenticated < UserInvitesControllerTest
     ACTIONS = {
-      index: :get
+      index: :get,
+      new: :get
     }
 
     ACTIONS.each do |action, method|
@@ -32,6 +33,20 @@ class UserInvitesControllerTest < ActionController::TestCase
         get :index
 
         assert_template 'index'
+      end
+    end
+
+    class New < Authenticated
+      test 'responds with success' do
+        get :new
+
+        assert_response :ok
+      end
+
+      test 'renders appropriate template' do
+        get :new
+
+        assert_template 'new'
       end
     end
   end
