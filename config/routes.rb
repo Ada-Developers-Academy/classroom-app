@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   end
   resources :students
   resources :pull_requests
+  resources :user_invites, only: [:index]
 
   get "/auth/:provider/callback", to: "sessions#create"
   delete "/logout", to: "sessions#destroy"

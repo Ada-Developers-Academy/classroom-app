@@ -1,0 +1,18 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th>Invited GitHub Account</th>
+      <th>Role</th>
+      <th>Inviter</th>
+      <th>Invitation Date</th>
+    </tr>
+  </thead>
+  <% @invites.each do |i| %>
+    <tr>
+      <td><%= link_to i.github_name, github_link(i.github_name), target: "_blank" %></td>
+      <td><%= i.role.humanize %></th>
+      <td><%= i.inviter.name %></td>
+      <td><%= i.created_at.to_formatted_s(:long) %></td>
+    </tr>
+  <% end %>
+</table>
