@@ -4,7 +4,8 @@ class UserInvitesControllerTest < ActionController::TestCase
   class Unauthenticated < UserInvitesControllerTest
     ACTIONS = {
       index: :get,
-      new: :get
+      new: :get,
+      create: :get
     }
 
     ACTIONS.each do |action, method|
@@ -59,6 +60,64 @@ class UserInvitesControllerTest < ActionController::TestCase
         get :new, role: 'unknown'
 
         assert_response :not_found
+      end
+    end
+
+    class Create < Authenticated
+      class Unknown < Create
+        test 'responds 404 with invalid role' do
+          post :create, role: 'unknown'
+
+          assert_response :not_found
+        end
+      end
+
+      class Student < Create
+        def github_names
+          %w( adatest1 adatest2 adatest3 )
+        end
+
+        def create_params
+          {
+            role: 'student',
+            github_names: github_names.join("\n")
+          }
+        end
+
+        test 'redirects to invites index' do
+          post :create, create_params
+
+          assert_response :redirect
+          assert_redirected_to user_invites_path
+        end
+
+        test 'lists invited users and errors in flash notice' do
+          post :create, create_params
+
+          assert_equal github_names.length, (flash[:notice].length + flash[:alert].length),
+            'Flash messages must have a number of entries that matches the number of GitHub names submitted'
+        end
+
+        test 'creates invites for each GitHub name' do
+          assert_difference(lambda{ UserInvite.count }, github_names.length) do
+            post :create, create_params
+          end
+        end
+
+        test 'does not create duplicate invites' do
+          UserInvite.create!({
+            inviter: users(:instructor),
+            role: 'student',
+            github_name: 'adatest1'
+          })
+
+          assert_difference(lambda{ UserInvite.count }, github_names.length - 1) do
+            post :create, create_params
+
+            assert_equal github_names.length, (flash[:notice].length + flash[:alert].length)
+              'Flash messages must have a number of entries that matches the number of GitHub names submitted'
+          end
+        end
       end
     end
   end
