@@ -1,5 +1,8 @@
 class User < ActiveRecord::Base
   validates :name, :uid, :provider, presence: true
+  validates_with UserRoleValidator
+
+  ROLES = %w( instructor student unknown )
 
   def self.find_or_create_from_omniauth(auth_hash)
     user = self.find_by(uid: auth_hash["uid"], provider: auth_hash["provider"])
@@ -18,6 +21,16 @@ class User < ActiveRecord::Base
       else
         return nil
       end
+    end
+  end
+
+  def accept_invite(invite)
+    raise ArgumentError.new("Invite is not valid") unless invite.valid?
+    raise ArgumentError.new("Invite already used") if invite.accepted?
+
+    transaction do
+      update!(role: invite.role)
+      invite.update!(accepted: true)
     end
   end
 end
