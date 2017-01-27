@@ -3,8 +3,12 @@ require 'test_helper'
 class SessionsControllerTest < ActionController::TestCase
 
   class Create < SessionsControllerTest
+    def set_auth_mock(provider)
+      request.env['omniauth.auth'] = OmniAuth.config.mock_auth[provider].dup
+    end
+
     setup do
-      request.env['omniauth.auth'] = OmniAuth.config.mock_auth[:github].dup
+      set_auth_mock :github
     end
 
     test 'with no OAuth data redirects to root' do

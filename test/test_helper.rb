@@ -11,20 +11,33 @@ class ActiveSupport::TestCase
   # Use OmniAuth's mock responses
   OmniAuth.config.test_mode = true
 
-  OmniAuth.config.mock_auth[:github] = OmniAuth::AuthHash.new({
+  OmniAuth.config.mock_auth[:default] = OmniAuth::AuthHash.new({
     provider: 'github',
     uid: 123456,
-    info: {
-      name: 'Test User'
-    },
-    extra: {
-      raw_info: {
-        login: 'adatest'
-      }
-    },
-    credentials: {
-      token: '7ca3303893156b8c45185b61d0fc8ec3153ee33f',
-      expires: false
-    }
   })
+
+  def self.auth_mock(name, login)
+    {
+      info: {
+        name: name
+      },
+      extra: {
+        raw_info: {
+          login: login
+        }
+      },
+      credentials: {
+        token: '7ca3303893156b8c45185b61d0fc8ec3153ee33f',
+        expires: false
+      }
+    }
+  end
+
+  AUTH_MOCKS = {
+    github: auth_mock('Test User', 'adatest')
+  }
+
+  AUTH_MOCKS.each do |provider, auth_hash|
+    OmniAuth.config.send(:add_mock, provider, auth_hash)
+  end
 end
