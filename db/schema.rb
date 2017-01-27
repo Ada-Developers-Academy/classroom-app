@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170117233209) do
+ActiveRecord::Schema.define(version: 20170126202251) do
 
   create_table "cohorts", force: :cascade do |t|
     t.integer  "number",            null: false
@@ -21,12 +21,14 @@ ActiveRecord::Schema.define(version: 20170117233209) do
     t.string   "instructor_emails"
   end
 
+  add_index "cohorts", ["number", "name"], name: "index_cohorts_on_number_and_name", unique: true
+
   create_table "cohorts_repos", force: :cascade do |t|
-    t.integer  "cohort_id",  null: false
-    t.string   "repo_id",    null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer "cohort_id", null: false
+    t.string  "repo_id",   null: false
   end
+
+  add_index "cohorts_repos", ["cohort_id", "repo_id"], name: "index_cohorts_repos_on_cohort_id_and_repo_id", unique: true
 
   create_table "repos", force: :cascade do |t|
     t.string   "repo_url",                  null: false
@@ -44,6 +46,8 @@ ActiveRecord::Schema.define(version: 20170117233209) do
     t.string   "email"
   end
 
+  add_index "students", ["cohort_id", "github_name"], name: "index_students_on_cohort_id_and_github_name", unique: true
+
   create_table "submissions", force: :cascade do |t|
     t.integer  "student_id",   null: false
     t.integer  "repo_id",      null: false
@@ -56,12 +60,26 @@ ActiveRecord::Schema.define(version: 20170117233209) do
 
   add_index "submissions", ["student_id", "repo_id"], name: "index_submissions_on_student_id_and_repo_id", unique: true
 
-  create_table "users", force: :cascade do |t|
-    t.string   "name",       null: false
-    t.string   "uid",        null: false
-    t.string   "provider",   null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+  create_table "user_invites", force: :cascade do |t|
+    t.integer  "inviter_id",                      null: false
+    t.string   "github_name",                     null: false
+    t.string   "role",        default: "unknown", null: false
+    t.boolean  "accepted",    default: false,     null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
   end
+
+  add_index "user_invites", ["github_name"], name: "index_user_invites_on_github_name", unique: true
+
+  create_table "users", force: :cascade do |t|
+    t.string   "name",                           null: false
+    t.string   "uid",                            null: false
+    t.string   "provider",                       null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.string   "role",       default: "unknown", null: false
+  end
+
+  add_index "users", ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
 
 end
