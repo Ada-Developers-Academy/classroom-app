@@ -10,7 +10,11 @@ Rails.application.routes.draw do
   end
   resources :students
   resources :pull_requests
-  resources :user_invites, only: [:index, :new]
+  resources :user_invites, only: [:index, :new] do
+    collection do
+      get "/new/student", action: :new, as: "new_student", role: "student"
+    end
+  end
 
   get "/auth/:provider/callback", to: "sessions#create"
   delete "/logout", to: "sessions#destroy"

@@ -44,9 +44,21 @@ class UserInvitesControllerTest < ActionController::TestCase
       end
 
       test 'renders appropriate template' do
+        # Initial page with options for student/instructor
         get :new
 
         assert_template 'new'
+
+        # Student form
+        get :new, role: 'student'
+
+        assert_template 'new_student'
+      end
+
+      test 'responds 404 with invalid role' do
+        get :new, role: 'unknown'
+
+        assert_response :not_found
       end
     end
   end

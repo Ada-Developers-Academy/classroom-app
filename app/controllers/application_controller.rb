@@ -15,4 +15,8 @@ class ApplicationController < ActionController::Base
       redirect_to root_path
     end
   end
+
+  def not_found
+    { file: Rails.root.join('public', '404.html'), status: 404 }
+  end
 end
