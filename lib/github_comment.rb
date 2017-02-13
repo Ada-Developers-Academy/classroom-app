@@ -16,7 +16,7 @@ class GitHubComment
 
   def find_template(repo)
     url = "https://raw.githubusercontent.com/#{ repo.repo_url }/master/feedback.md"
-    response = HTTParty.get(url, headers: {"user-agent" => "rails", "Authorization" => "token #{ @token }"})
+    response = HTTParty.get(url, headers: {"user-agent" => "rails", "Authorization" => "token #{ token }"})
     if response.code == 404
       return nil
     else
@@ -29,10 +29,8 @@ class GitHubComment
 
     response = HTTParty.post(url,
       :body => {:body => comment }.to_json,
-      headers: {"user-agent" => "rails", "content-type" => "application/json", "Authorization" => "token #{ @token }"})
-    puts "<" * 40
-    puts response
-    puts response.code
+      headers: {"user-agent" => "rails", "content-type" => "application/json", "Authorization" => "token #{ token }"})
+
     if response.code == 201
       feedback_url = response.parsed_response["html_url"]
       return feedback_url
