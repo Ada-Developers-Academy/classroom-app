@@ -19,7 +19,8 @@ class ReposController < ApplicationController
       redirect_to :back
     end
 
-    @all_data = GitHub.retrieve_student_info(@repo, @cohort)
+    gh = GitHub.new(session[:token])
+    @all_data = gh.retrieve_student_info(@repo, @cohort)
   end
 
   def new
