@@ -112,7 +112,7 @@ class GitHub
 
   def make_request(url)
     response = HTTParty.get(url, query: { "page" => 1, "per_page" => 100 },
-      headers: {"user-agent" => "rails", "Authorization" => "token #{ @token }"})
+      headers: {"user-agent" => "rails", "Authorization" => "token #{ token }"})
     return response
   end
 end
