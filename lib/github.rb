@@ -2,10 +2,14 @@ require 'httparty'
 require 'pr_student'
 
 class GitHub
-  AUTH = { :username => ENV["GITHUB"] }
+  attr_reader :token
+
+  def initialize(token)
+    @token = token
+  end
 
   # Overall method that will pull together all pieces
-  def self.retrieve_student_info(repo, cohort)
+  def retrieve_student_info(repo, cohort)
     # First, call the API to get the PR data
     pr_info = get_prs(repo.repo_url)
 
@@ -17,10 +21,10 @@ class GitHub
 
     # Add te student info for those who haven't submitted
     pr_students = add_missing_students(pr_students, cohort_students, repo)
-    @all_data = pr_students
+    return pr_students
   end
 
-  def self.pr_student_submissions(repo, pr_data, students)
+  def pr_student_submissions(repo, pr_data, students)
     # Catalog the list of students who have submitted
     pr_student_list = []
     pr_data.parsed_response.each do |pull_request|
@@ -36,7 +40,7 @@ class GitHub
     return pr_student_list
   end
 
-  def self.add_missing_students(submissions, students, repo)
+  def add_missing_students(submissions, students, repo)
     submitted_students = submissions.map{ |submit| submit.student.id }
     missing_students = students.reject { |stud| submitted_students.include?(stud.id) }
 
@@ -49,11 +53,11 @@ class GitHub
     return submissions
   end
 
-  def self.individual_student(students, repo, data)
+  def individual_student(students, repo, data)
     return create_student(students, data["user"]["login"].downcase, data["created_at"], repo, data["html_url"])
   end
 
-  def self.create_student(students, user, created_at, repo, pr_url)
+  def create_student(students, user, created_at, repo, pr_url)
     student_model = students.find{ |s| s.github_name.downcase == user }
 
     if student_model
@@ -77,14 +81,14 @@ class GitHub
     end
   end
 
-  def self.get_prs(repo_url)
+  def get_prs(repo_url)
     request_url = "https://api.github.com/repos/#{ repo_url }/pulls"
 
     pr_info = make_request(request_url)
     return pr_info
   end
 
-  def self.group_project(cohort_students, data, repo)
+  def group_project(cohort_students, data, repo)
     url = data["head"]["repo"]["contributors_url"]
     repo_created = data["created_at"]
     pr_url = data["html_url"]
@@ -106,8 +110,9 @@ class GitHub
     return result
   end
 
-  def self.make_request(url)
-    response = HTTParty.get(url, query: { "page" => 1, "per_page" => 100 }, headers: {"user-agent" => "rails"}, :basic_auth => GitHub::AUTH)
+  def make_request(url)
+    response = HTTParty.get(url, query: { "page" => 1, "per_page" => 100 },
+      headers: {"user-agent" => "rails", "Authorization" => "token #{ token }"})
     return response
   end
 end
