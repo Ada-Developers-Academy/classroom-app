@@ -14,7 +14,7 @@ class FeedbackController < ApplicationController
     else
       feedback_url = @github.add_new(params[:Feedback], @repo.repo_url, @submission.pr_id)
       if feedback_url
-        @submission.update_group(feedback_url: feedback_url)
+        @submission.update_group(feedback_url: feedback_url, user_id: session[:user_id])
         flash[:notice] = "Feedback successfully posted"
       else
         flash[:error] = "Feedback not successfully posted"
