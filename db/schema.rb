@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170126202251) do
+ActiveRecord::Schema.define(version: 20170216220512) do
 
   create_table "cohorts", force: :cascade do |t|
     t.integer  "number",            null: false
@@ -56,9 +56,11 @@ ActiveRecord::Schema.define(version: 20170126202251) do
     t.datetime "updated_at",   null: false
     t.string   "pr_url"
     t.string   "feedback_url"
+    t.integer  "user_id"
   end
 
   add_index "submissions", ["student_id", "repo_id"], name: "index_submissions_on_student_id_and_repo_id", unique: true
+  add_index "submissions", ["user_id"], name: "index_submissions_on_user_id"
 
   create_table "user_invites", force: :cascade do |t|
     t.integer  "inviter_id",                      null: false
