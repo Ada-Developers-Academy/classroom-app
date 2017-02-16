@@ -1,6 +1,7 @@
 class Submission < ActiveRecord::Base
   belongs_to :student
   belongs_to :repo
+  belongs_to :user
 
   scope :with_pr, ->(url) { where(pr_url: url) }
   scope :grouped_with, ->(sub) { with_pr(sub.pr_url) }
@@ -24,6 +25,14 @@ class Submission < ActiveRecord::Base
       Submission.grouped_with(self).map do |sub|
         sub.student.name
       end.join(' & ')
+    end
+  end
+
+  def feedback_provider
+    if user
+      user.name
+    elsif feedback_url
+      "Unknown"
     end
   end
 end
