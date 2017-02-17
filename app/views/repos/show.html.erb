@@ -40,7 +40,7 @@
             <td><%= link_to "Submit Feedback", new_repo_student_feedback_path(@repo.id, student.id), data: submission.pr_url %></td>
           <% end %>
         <% end %>
-        <td><%= submission.feedback_provider %></td>
+        <td><%= feedback_provider(submission) %></td>
       </tr>
     <% end %>
   </tbody>
