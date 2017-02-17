@@ -17,7 +17,7 @@ Ideally this application has configuration for two different roles, **Instructor
 1. `rvm install ruby-2.2.1`
 1. `gem install bundle`
 1. `bundle install`
-1. Email Charles to get the `lib/seeds/students.csv` file
+1. Email Charles to get the `lib/seeds/students.csv` file, and add it to the project. It will be ignored by git.
 1. `bin/rake db:migrate`
 1. [Register a new app on github](https://github.com/settings/developers), with a callback URL of `http://localhost:3000/auth/github/callback`
 1. `touch .env`
