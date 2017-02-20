@@ -27,6 +27,13 @@ class StudentsControllerTest < ActionController::TestCase
     assert_redirected_to students_path
   end
 
+  test "should redirect when attempting to edit student that doesn't exist" do
+    get :edit, { id: 9999 }
+
+    assert_redirected_to students_path
+  end
+
+
   test "should get the edit form" do
     get :edit, { id: @student.id }
 
