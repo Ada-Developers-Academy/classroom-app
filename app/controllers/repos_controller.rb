@@ -57,8 +57,12 @@ class ReposController < ApplicationController
   end
 
   def destroy
-    repo = Repo.find(params[:id])
-    repo.destroy
+    repo = Repo.find_by_id(params[:id])
+    if repo
+      repo.destroy
+    else
+      flash[:error] = "Repo not found."
+    end
     redirect_to repos_path
   end
 

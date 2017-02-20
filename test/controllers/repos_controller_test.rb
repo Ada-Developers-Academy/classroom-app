@@ -59,4 +59,17 @@ class ReposControllerTest < ActionController::TestCase
 
     assert_redirected_to repos_path
   end
+
+  test "delete should add a flash error when repo not found" do
+    delete :destroy, { id: 9999 }
+
+    assert_not_empty flash[:error]
+    assert_redirected_to repos_path
+  end
+
+  test "delete should redirect to index on success" do
+    delete :destroy, { id: @repo.id }
+
+    assert_redirected_to repos_path
+  end
 end
