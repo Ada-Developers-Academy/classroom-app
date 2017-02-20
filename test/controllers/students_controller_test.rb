@@ -73,4 +73,11 @@ class StudentsControllerTest < ActionController::TestCase
 
     assert_redirected_to students_path
   end
+
+  test "index should load list of students" do
+    get :index
+
+    assert_template :index
+    assert_response :success
+  end
 end
