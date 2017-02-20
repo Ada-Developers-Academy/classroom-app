@@ -4,13 +4,12 @@ class StudentsController < ApplicationController
   end
 
   def create
-    #raise
     @student = Student.new(stud_params)
 
     if @student.save
       redirect_to students_path
     else
-      render :new
+      render :new, :status => :bad_request
     end
   end
 
