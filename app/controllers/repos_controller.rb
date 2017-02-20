@@ -47,13 +47,12 @@ class ReposController < ApplicationController
   end
 
   def update
-    updated = Repo.find(params[:id])
-    if updated.update_attributes(repo_params)
-      updated.cohorts.build
+    @repo = Repo.find(params[:id])
+    if @repo.update_attributes(repo_params)
+      @repo.cohorts.build
       redirect_to repos_path
     else
-      flash[:error] = "An error has occurred"
-      redirect_to :back
+      render :edit, :status => :bad_request
     end
   end
 

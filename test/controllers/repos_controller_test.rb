@@ -46,4 +46,17 @@ class ReposControllerTest < ActionController::TestCase
     assert_response :success
     assert_template :edit
   end
+
+  test "should not update a repo without required fields" do
+    patch :update, { id: @repo.id , repo: { repo_url: nil }}
+
+    assert_response :bad_request
+    assert_template :edit
+  end
+
+  test "should redirect when updated successfully" do
+    patch :update, { id: @repo.id, repo: { repo_url: "other_repo_url" }}
+
+    assert_redirected_to repos_path
+  end
 end
