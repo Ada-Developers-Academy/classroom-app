@@ -40,8 +40,12 @@ class StudentsController < ApplicationController
   end
 
   def destroy
-    student = Student.find(params[:id])
-    student.destroy
+    student = Student.find_by_id(params[:id])
+    if student
+      student.destroy
+    else
+      flash[:error] = "Student not found."
+    end
     redirect_to students_path
   end
 
