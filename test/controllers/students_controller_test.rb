@@ -50,6 +50,7 @@ class StudentsControllerTest < ActionController::TestCase
   test "show should redirect to index when student not found" do
     get :show, { id: 9999 }
 
+    assert_not_empty flash[:error]
     assert_redirected_to students_path
   end
 
@@ -58,5 +59,18 @@ class StudentsControllerTest < ActionController::TestCase
 
     assert_response :success
     assert_template :show
+  end
+
+  test "delete should add a flash error when student not found" do
+    delete :destroy, { id: 9999 }
+
+    assert_not_empty flash[:error]
+    assert_redirected_to students_path
+  end
+
+  test "delete should redirect to index on success" do
+    delete :destroy, { id: @student.id }
+
+    assert_redirected_to students_path
   end
 end
