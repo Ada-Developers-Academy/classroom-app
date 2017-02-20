@@ -31,7 +31,12 @@ class StudentsController < ApplicationController
   end
 
   def show
-    @student = Student.find(params[:id])
+    @student = Student.find_by_id(params[:id])
+
+    if !@student
+      flash[:error] = "Student not found."
+      redirect_to students_path
+    end
   end
 
   def destroy
