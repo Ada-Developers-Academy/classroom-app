@@ -28,8 +28,13 @@ class ReposController < ApplicationController
   end
 
   def create
-    Repo.create(repo_params)
-    redirect_to repos_path
+    @repo = Repo.new(repo_params)
+
+    if @repo.save
+      redirect_to repos_path
+    else
+      render :new, :status => :bad_request
+    end
   end
 
   def edit

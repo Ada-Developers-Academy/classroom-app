@@ -18,4 +18,17 @@ class ReposControllerTest < ActionController::TestCase
     assert_response :success
     assert_template :new
   end
+
+  test "should not create a repo without required fields" do
+    post :create, { repo: { repo_url: nil }}
+
+    assert_response :bad_request
+    assert_template :new
+  end
+
+  test "should redirect when created successfully with required fields" do
+    post :create, { repo: { repo_url: "test" }}
+
+    assert_redirected_to repos_path
+  end
 end
