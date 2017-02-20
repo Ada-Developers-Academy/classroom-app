@@ -1,15 +1,4 @@
-<% if flash.keys.length > 0 %>
-  <% if flash[:error] %>
-    <div class="bg-danger">
-      <%= flash[:error] %>
-    </div>
-  <% end %>
-  <% if flash[:notice] %>
-    <div class="bg-success">
-      <%= flash[:notice] %>
-    </div>
-  <% end %>
-<% end %>
+<%= render partial: "errors" %>
 
 <h1><%= @repo.repo_url %></h1>
 <h3><%= @cohort.display_name %></h3>
