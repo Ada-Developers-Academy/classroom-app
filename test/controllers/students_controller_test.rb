@@ -46,4 +46,17 @@ class StudentsControllerTest < ActionController::TestCase
 
     assert_redirected_to students_path
   end
+
+  test "show should redirect to index when student not found" do
+    get :show, { id: 9999 }
+
+    assert_redirected_to students_path
+  end
+
+  test "should load show template for an individual student" do
+    get :show, { id: @student.id }
+
+    assert_response :success
+    assert_template :show
+  end
 end
