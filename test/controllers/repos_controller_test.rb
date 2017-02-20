@@ -3,6 +3,7 @@ require 'test_helper'
 class ReposControllerTest < ActionController::TestCase
   setup do
     session[:user_id] = users(:instructor).id
+    @repo = repos(:word_guess)
   end
 
   test "index should load list of repos" do
@@ -30,5 +31,19 @@ class ReposControllerTest < ActionController::TestCase
     post :create, { repo: { repo_url: "test" }}
 
     assert_redirected_to repos_path
+  end
+
+  test "should redirect when attempting to edit repo that doesn't exist" do
+    get :edit, { id: 9999 }
+
+    assert_redirected_to repos_path
+  end
+
+
+  test "should get the edit form" do
+    get :edit, { id: @repo.id }
+
+    assert_response :success
+    assert_template :edit
   end
 end

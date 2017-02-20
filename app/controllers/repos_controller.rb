@@ -38,7 +38,11 @@ class ReposController < ApplicationController
   end
 
   def edit
-    @repo = Repo.find(params[:id])
+    @repo = Repo.find_by_id(params[:id])
+    if !@repo
+      flash[:error] = "Repo not found."
+      redirect_to repos_path
+    end
     @max_size = Cohort.all.length
   end
 
