@@ -18,8 +18,12 @@ class StudentsController < ApplicationController
   end
 
   def update
-    Student.update(params[:id], stud_params)
-    redirect_to students_path
+    @student = Student.update(params[:id], stud_params)
+    if @student.errors.any?
+      render :edit, :status => :bad_request
+    else
+      redirect_to students_path
+    end
   end
 
   def index
