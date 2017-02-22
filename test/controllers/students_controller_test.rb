@@ -22,7 +22,7 @@ class StudentsControllerTest < ActionController::TestCase
 
   test "should redirect when created successfully with required fields" do
     post :create, { student: { name: "test", github_name: "test_github",
-      email: "test@github.com", cohort_id: Cohort.first.id }}
+      email: "test@github.com", cohort_id: cohorts(:jets).id }}
 
     assert_redirected_to students_path
   end
