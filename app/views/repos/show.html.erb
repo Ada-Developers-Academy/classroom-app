@@ -14,7 +14,7 @@
 <h1><%= @repo.repo_url %></h1>
 <h3><%= @cohort.display_name %></h3>
 <h4><%= link_to "Github", @repo.pulls_url, :target => "_blank" %></h4>
-<table class="table">
+<table class="table" id="submission-table">
   <thead>
     <th>Student Name</th>
     <th>GitHub Name</th>
