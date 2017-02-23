@@ -1,0 +1,12 @@
+<% if flash.keys.length > 0 %>
+  <% if flash[:error] %>
+    <div class="bg-danger">
+      <%= flash[:error] %>
+    </div>
+  <% end %>
+  <% if flash[:notice] %>
+    <div class="bg-success">
+      <%= flash[:notice] %>
+    </div>
+  <% end %>
+<% end %>

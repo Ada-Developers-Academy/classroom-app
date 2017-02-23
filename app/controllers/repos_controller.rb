@@ -28,29 +28,41 @@ class ReposController < ApplicationController
   end
 
   def create
-    Repo.create(repo_params)
-    redirect_to repos_path
+    @repo = Repo.new(repo_params)
+
+    if @repo.save
+      redirect_to repos_path
+    else
+      render :new, :status => :bad_request
+    end
   end
 
   def edit
-    @repo = Repo.find(params[:id])
+    @repo = Repo.find_by_id(params[:id])
+    if !@repo
+      flash[:error] = "Repo not found."
+      redirect_to repos_path
+    end
     @max_size = Cohort.all.length
   end
 
   def update
-    updated = Repo.find(params[:id])
-    if updated.update_attributes(repo_params)
-      updated.cohorts.build
+    @repo = Repo.find(params[:id])
+    if @repo.update_attributes(repo_params)
+      @repo.cohorts.build
       redirect_to repos_path
     else
-      flash[:error] = "An error has occurred"
-      redirect_to :back
+      render :edit, :status => :bad_request
     end
   end
 
   def destroy
-    repo = Repo.find(params[:id])
-    repo.destroy
+    repo = Repo.find_by_id(params[:id])
+    if repo
+      repo.destroy
+    else
+      flash[:error] = "Repo not found."
+    end
     redirect_to repos_path
   end
 
