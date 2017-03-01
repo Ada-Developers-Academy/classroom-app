@@ -1,0 +1,13 @@
+// Place all the behaviors and hooks related to the matching controller here.
+// All this logic will automatically be available in application.js.
+
+$(document).ready(function() {
+  new EpicEditor({
+    theme: {
+      editor: '<%= asset_path 'editor/epic-light.css' %>'
+    },
+    autogrow: {
+      minHeight: 500
+    }
+  }).load();
+});
