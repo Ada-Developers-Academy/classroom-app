@@ -1,8 +1,8 @@
 class Repo < ActiveRecord::Base
   has_and_belongs_to_many :cohorts
-  has_many :submissions
+  has_many :submissions, dependent: :destroy
   validates :repo_url, presence: true
-  
+
   BASE_GITHUB_URL = "http://github.com/"
 
   def pulls_url
