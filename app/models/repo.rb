@@ -5,6 +5,10 @@ class Repo < ActiveRecord::Base
 
   BASE_GITHUB_URL = "http://github.com/"
 
+  def self.default_sort
+    self.order(created_at: :desc)
+  end
+
   def pulls_url
     full_repo_url + "/pulls"
   end

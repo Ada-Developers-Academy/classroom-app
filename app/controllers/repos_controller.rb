@@ -2,7 +2,7 @@ require 'github'
 
 class ReposController < ApplicationController
   def index
-    @repos = Repo.all
+    @repos = Repo.default_sort
   end
 
   def show
