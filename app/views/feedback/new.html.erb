@@ -5,7 +5,9 @@
     <%= link_to @repo.repo_url, @submission.pr_url, :target => "blank" %>
   </legend>
   <div class="control-group">
-    <%= text_area_tag "Feedback", @feedback_template, size: "100x15" %>
+    <div id="epiceditor">
+      <%= text_area_tag "Feedback", @feedback_template, size: "100x15" %>
+    </div>
   </div>
 </fieldset>
 <div class="control-group">

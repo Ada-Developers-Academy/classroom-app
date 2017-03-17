@@ -38,6 +38,9 @@ gem "omniauth-github"
 # Authorization framework
 gem "cancancan"
 
+# Epic Editor for markdown previewing
+gem "epic-editor-rails"
+
 group :production do
   gem 'pg'
   gem 'rails_12factor'

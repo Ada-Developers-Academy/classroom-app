@@ -17,4 +17,5 @@
 //= require dataTables.bootstrap
 //= require turbolinks
 //= require bootstrap-sprockets
+//= require epiceditor
 //= require_tree .
