@@ -7,10 +7,6 @@ class Repo < ActiveRecord::Base
 
   default_scope { order(created_at: :desc) }
 
-  # def self.default_sort
-  #   self.order(created_at: :desc)
-  # end
-
   def pulls_url
     full_repo_url + "/pulls"
   end
