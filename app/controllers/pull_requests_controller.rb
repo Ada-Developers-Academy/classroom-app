@@ -10,7 +10,7 @@ class PullRequestsController < ApplicationController
   end
 
   def index
-    @repos = Repo.default_sort
+    @repos = Repo.all
   end
 
 end
