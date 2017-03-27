@@ -2,13 +2,16 @@
 // All this logic will automatically be available in application.js.
 
 $(document).ready(function() {
-  new EpicEditor({
-    clientSideStorage: false,
-    theme: {
-      editor: '<%= asset_path 'editor/epic-light.css' %>'
-    },
-    autogrow: {
-      minHeight: 500
-    }
-  }).load();
+  // Don't load epicediotr unless there's an editor on this page.
+  if ($('#epiceditor').length) {
+    new EpicEditor({
+      clientSideStorage: false,
+      theme: {
+        editor: '<%= asset_path 'editor/epic-light.css' %>'
+      },
+      autogrow: {
+        minHeight: 500
+      }
+    }).load();
+  }
 });
