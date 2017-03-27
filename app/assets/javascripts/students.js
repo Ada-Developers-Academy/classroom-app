@@ -5,6 +5,6 @@ $(document).ready(function() {
   // Make table of students sortable
   $('#student-table').DataTable({
     paging: false,
-    "order": [[ 0, "asc" ]]
+    "order": [[ 1, "desc" ], [2, "asc"], [0, "asc"]]
   });
 });
