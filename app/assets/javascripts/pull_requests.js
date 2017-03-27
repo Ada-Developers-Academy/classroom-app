@@ -3,8 +3,8 @@
 
 $(document).ready(function() {
   // Make table of students sortable
-  $('#student-table').DataTable({
+  $('#homepage-table').DataTable({
     paging: false,
-    "order": [[ 0, "asc" ]]
+    "order": [[ 3, "desc" ]]
   });
 });

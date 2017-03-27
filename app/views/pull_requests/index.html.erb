@@ -1,10 +1,10 @@
-<table class="table">
+<table class="table" id="homepage-table">
   <thead>
     <tr>
       <th>Repo Name</th>
       <th>Student Submissions</th>
       <th>View on GitHub</th>
-      <th></th>
+      <th>Created</th>
     </tr>
   </thead>
   <% @repos.each do |r| %>
@@ -17,6 +17,7 @@
       </td>
       <!-- <td><%= link_to "Students", repo_path(r.id) %></td> -->
       <td><%= link_to "Github", "http://github.com/" + r.repo_url + "/pulls", :target => "_blank" %></td>
+      <td><%= r.created_at.strftime("%Y-%m-%d") %></td>
 
     </tr>
   <% end %>
