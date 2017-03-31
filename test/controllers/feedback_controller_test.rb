@@ -3,7 +3,7 @@ require 'test_helper'
 class FeedbackControllerTest < ActionController::TestCase
   setup do
     session[:user_id] = users(:instructor).id
-    @student = students(:shark)
+    @student = students(:jet)
     @repo = repos(:farmar)
     submissions(:jet_farmar)
   end
