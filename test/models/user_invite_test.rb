@@ -58,5 +58,20 @@ class UserInviteTest < ActiveSupport::TestCase
       invalid_invite = UserInvite.new(valid_attrs)
       refute invalid_invite.valid?
     end
+
+    test 'validates cohort must be specified when role is student' do
+      valid_invite.cohort = nil
+      valid_invite.role = 'student'
+      refute valid_invite.valid?
+    end
+
+    test 'validates cohort must not be specified when role is not student' do
+      valid_invite.cohort = cohorts(:sharks)
+
+      (User::ROLES - ['student']).each do |role|
+        valid_invite.role = role
+        refute valid_invite.valid?
+      end
+    end
   end
 end
