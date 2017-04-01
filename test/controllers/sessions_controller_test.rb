@@ -73,16 +73,14 @@ class SessionsControllerTest < ActionController::TestCase
       # sanity check
       assert_equal 'unknown', user.role
 
-      UserInvite.create({
-        github_name: 'adatest',
-        role: 'student',
-        inviter: User.where(role: 'instructor').first
-      })
+      # Create a new invite by copying from an existing
+      # valid invite and making it work for this user
+      user_invites(:valid_instructor).dup.update(github_name: 'adatest')
 
       get :create, provider: :github
 
       user.reload
-      assert_equal 'student', user.role
+      assert_equal user_invites(:valid_instructor).role, user.role
     end
   end
 end
