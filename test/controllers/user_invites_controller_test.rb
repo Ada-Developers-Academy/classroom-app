@@ -80,7 +80,8 @@ class UserInvitesControllerTest < ActionController::TestCase
         def create_params
           {
             role: 'student',
-            github_names: github_names.join("\n")
+            github_names: github_names.join("\n"),
+            cohort_id: cohorts(:sharks)
           }
         end
 
@@ -112,6 +113,14 @@ class UserInvitesControllerTest < ActionController::TestCase
 
             assert_equal github_names.length, (flash[:notice].length + flash[:alert].length)
               'Flash messages must have a number of entries that matches the number of GitHub names submitted'
+          end
+        end
+
+        test 'does not create invites for non-existent cohort' do
+          assert_difference(lambda{ UserInvite.count }, 0) do
+            post :create, create_params.merge(cohort_id: -1)
+
+            refute_nil flash[:alert]
           end
         end
       end

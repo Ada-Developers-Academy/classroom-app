@@ -23,12 +23,18 @@ class UserInvitesController < ApplicationController
 
   def create_student
     github_names = params[:github_names].split(/[ \t\r\n]+/).map(&:strip)
+    cohort = Cohort.find_by(id: params[:cohort_id])
+    if !cohort.present?
+      return redirect_to user_invites_path,
+                         alert: "Could not find cohort with ID #{params[:cohort_id]}"
+    end
 
     msgs = github_names.map do |name|
       invite = UserInvite.create({
         inviter: current_user,
         github_name: name,
         role: 'student',
+        cohort: cohort
       })
 
       if invite.persisted?
