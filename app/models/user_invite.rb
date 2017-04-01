@@ -10,6 +10,8 @@ class UserInvite < ActiveRecord::Base
 
   scope :acceptable, -> { where(accepted: false) }
 
+  default_scope { order(created_at: :desc) }
+
   def cohort?
     cohort.present?
   end
