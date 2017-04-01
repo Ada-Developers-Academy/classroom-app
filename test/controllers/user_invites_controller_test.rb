@@ -105,11 +105,7 @@ class UserInvitesControllerTest < ActionController::TestCase
         end
 
         test 'does not create duplicate invites' do
-          UserInvite.create!({
-            inviter: users(:instructor),
-            role: 'student',
-            github_name: 'adatest1'
-          })
+          user_invites(:valid_student).dup.update(github_name: 'adatest1')
 
           assert_difference(lambda{ UserInvite.count }, github_names.length - 1) do
             post :create, create_params
