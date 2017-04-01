@@ -123,6 +123,14 @@ class UserInvitesControllerTest < ActionController::TestCase
             refute_nil flash[:alert]
           end
         end
+
+        test 'ignores duplicate names' do
+          assert_difference(lambda{ UserInvite.count }, github_names.length) do
+            post :create, create_params.merge({
+              github_names: (github_names + [github_names.last]).join("\n")
+            })
+          end
+        end
       end
     end
   end

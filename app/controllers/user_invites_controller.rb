@@ -22,7 +22,7 @@ class UserInvitesController < ApplicationController
   private
 
   def create_student
-    github_names = params[:github_names].split(/[ \t\r\n]+/).map(&:strip)
+    github_names = params[:github_names].split(/[ \t\r\n]+/).map(&:strip).uniq
     cohort = Cohort.find_by(id: params[:cohort_id])
     if !cohort.present?
       return redirect_to user_invites_path,
