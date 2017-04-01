@@ -7,6 +7,7 @@
     <tr>
       <th>Invited GitHub Account</th>
       <th>Role</th>
+      <th>Cohort</th>
       <th>Inviter</th>
       <th>Invitation Date</th>
     </tr>
@@ -15,6 +16,7 @@
     <tr>
       <td><%= link_to i.github_name, github_link(i.github_name), target: "_blank" %></td>
       <td><%= i.role.humanize %></th>
+      <td><%= i.cohort.display_name if i.cohort %></th>
       <td><%= i.inviter.name %></td>
       <td><%= i.created_at.to_formatted_s(:long) %></td>
     </tr>
