@@ -3,7 +3,7 @@ require 'test_helper'
 class UserInviteTest < ActiveSupport::TestCase
   class Validations < UserInviteTest
     def valid_invite
-      user_invites(:instructor)
+      user_invites(:valid_instructor)
     end
 
     setup do
@@ -13,8 +13,10 @@ class UserInviteTest < ActiveSupport::TestCase
 
     test 'validates role is in predefined set' do
       User::ROLES.each do |role|
-        valid_invite.role = role
-        assert valid_invite.valid?
+        invite = user_invites(:"valid_#{role}")
+        refute_nil invite
+        assert_equal role, invite.role
+        assert invite.valid?
       end
 
       invalid_role = User::ROLES.sum

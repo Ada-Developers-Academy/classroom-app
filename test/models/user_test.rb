@@ -32,7 +32,7 @@ class UserTest < ActiveSupport::TestCase
     end
 
     test 'sets role based on invite' do
-      invite = user_invites(:student)
+      invite = user_invites(:valid_student)
       # sanity check
       refute_equal invite.role, invitee.role
 
@@ -42,7 +42,7 @@ class UserTest < ActiveSupport::TestCase
     end
 
     test 'marks invite as accepted' do
-      invite = user_invites(:student)
+      invite = user_invites(:valid_student)
       # sanity check
       refute invite.accepted?
 
