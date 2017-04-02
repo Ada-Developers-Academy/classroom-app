@@ -203,7 +203,6 @@ DEPENDENCIES
   bootstrap-sass (~> 3.3.6)
   byebug
   cancancan
-  coffee-rails (~> 4.1.0)
   dotenv-rails
   epic-editor-rails
   font-awesome-sass (~> 4.5.0)

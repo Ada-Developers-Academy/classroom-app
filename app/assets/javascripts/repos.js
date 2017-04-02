@@ -3,9 +3,15 @@
 // You can use CoffeeScript in this file: http://coffeescript.org/
 
 $(document).ready(function() {
-  // Make table of students sortable
+  // Make table of student submissions on the repo show page sortable
   $('#submission-table').DataTable({
     paging: false,
     "order": [[ 0, "asc" ]]
+  });
+
+  // Make the master table of repos on the index page sortable
+  $('#repo-table').DataTable({
+    paging: false,
+    "order": [[ 4, "desc" ]]
   });
 });
