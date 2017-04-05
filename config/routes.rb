@@ -12,7 +12,9 @@ Rails.application.routes.draw do
   resources :pull_requests
   resources :user_invites, only: [:index, :new, :create] do
     collection do
-      get "/new/student", action: :new, as: "new_student", role: "student"
+      %w(student instructor).each do |role|
+        get "/new/#{role}", action: :new, as: "new_#{role}", role: role
+      end
     end
   end
 
