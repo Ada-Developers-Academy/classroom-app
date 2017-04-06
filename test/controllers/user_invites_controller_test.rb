@@ -110,6 +110,12 @@ class UserInvitesControllerTest < ActionController::TestCase
           end
         end
 
+        test 'creates invites with student role' do
+          assert_difference(lambda{ UserInvite.where(role: 'student').count }, github_names.length) do
+            post :create, create_params
+          end
+        end
+
         test 'does not create duplicate invites' do
           user_invites(:valid_student).dup.update(github_name: 'adatest1')
 
@@ -168,6 +174,12 @@ class UserInvitesControllerTest < ActionController::TestCase
 
         test 'creates a new invite' do
           assert_difference(lambda{ UserInvite.count }, 1) do
+            post :create, create_params
+          end
+        end
+
+        test 'creates invite with instructor role' do
+          assert_difference(lambda{ UserInvite.where(role: 'instructor').count }, 1) do
             post :create, create_params
           end
         end
