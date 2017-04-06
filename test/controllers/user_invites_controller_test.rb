@@ -137,6 +137,65 @@ class UserInvitesControllerTest < ActionController::TestCase
           end
         end
       end
+
+      class Instructor < Create
+        def github_name
+          'adatest1'
+        end
+
+        def create_params
+          {
+            role: 'instructor',
+            github_name: 'adatest1'
+          }
+        end
+
+        test 'redirects to invites index on success' do
+          post :create, create_params
+
+          assert_response :redirect
+          assert_redirected_to user_invites_path
+        end
+
+        test 're-renders form on failure' do
+          # I'd like to find a more generic way to force an error
+          # when creating the invite
+          post :create, create_params.merge(github_name: nil)
+
+          assert_response :ok
+          assert_template 'new_instructor'
+        end
+
+        test 'creates a new invite' do
+          assert_difference(lambda{ UserInvite.count }, 1) do
+            post :create, create_params
+          end
+        end
+
+        test 'does not create duplicate invites' do
+          user_invites(:valid_instructor).dup.update(github_name: github_name)
+
+          assert_difference(lambda{ UserInvite.count }, 0) do
+            post :create, create_params
+
+            assert_not_nil flash[:alert]
+          end
+        end
+
+        test 'does not create invites for empty Github username' do
+          assert_difference(lambda{ UserInvite.count }, 0) do
+            post :create, create_params.merge(github_name: '')
+
+            assert_not_nil flash[:alert]
+          end
+
+          assert_difference(lambda{ UserInvite.count }, 0) do
+            post :create, create_params.merge(github_name: nil)
+
+            assert_not_nil flash[:alert]
+          end
+        end
+      end
     end
   end
 end

@@ -49,4 +49,20 @@ class UserInvitesController < ApplicationController
       alert:  msgs.reject(&:first).map(&:second),
     }
   end
+
+  def create_instructor
+    name = params[:github_name]
+    invite = UserInvite.create({
+      inviter: current_user,
+      github_name: name,
+      role: 'instructor'
+    })
+
+    if invite.persisted?
+      redirect_to user_invites_path, notice: "Successfully invited Github account #{name}"
+    else
+     flash[:alert] = "Could not invite #{name} because #{invite.errors.full_messages.first}"
+     render "new_instructor"
+    end
+  end
 end
