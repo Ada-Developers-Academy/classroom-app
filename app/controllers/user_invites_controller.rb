@@ -3,14 +3,8 @@ class UserInvitesController < ApplicationController
     @invites = UserInvite.acceptable
   end
 
-  def new
-    role = params[:role]
-    return unless role.present?
-
-    render "new_#{role}"
-  rescue ActionView::MissingTemplate
-    render not_found
-  end
+  def new_student; end
+  def new_instructor; end
 
   def create
     action = :"create_#{params[:role]}"

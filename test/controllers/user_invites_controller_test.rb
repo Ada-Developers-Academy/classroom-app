@@ -4,7 +4,8 @@ class UserInvitesControllerTest < ActionController::TestCase
   class Unauthenticated < UserInvitesControllerTest
     ACTIONS = {
       index: :get,
-      new: :get,
+      new_student: :get,
+      new_instructor: :get,
       create: :get
     }
 
@@ -37,34 +38,31 @@ class UserInvitesControllerTest < ActionController::TestCase
       end
     end
 
-    class New < Authenticated
+    class NewStudent < Authenticated
       test 'responds with success' do
-        get :new
+        get :new_student
 
         assert_response :ok
       end
 
       test 'renders appropriate template' do
-        # Initial page with options for student/instructor
-        get :new
-
-        assert_template 'new'
-
-        # Student form
-        get :new, role: 'student'
+        get :new_student
 
         assert_template 'new_student'
+      end
+    end
 
-        # Instructor form
-        get :new, role: 'instructor'
+    class NewInstructor < Authenticated
+      test 'responds with success' do
+        get :new_instructor
 
-        assert_template 'new_instructor'
+        assert_response :ok
       end
 
-      test 'responds 404 with invalid role' do
-        get :new, role: 'unknown'
+      test 'renders appropriate template' do
+        get :new_instructor
 
-        assert_response :not_found
+        assert_template 'new_instructor'
       end
     end
 
