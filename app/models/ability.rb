@@ -10,5 +10,6 @@ class Ability
     can :read, Repo
     can :read, Student
     can :read, Submission
+    can :read, User
   end
 end
