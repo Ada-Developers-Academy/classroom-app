@@ -9,5 +9,6 @@ class Ability
     can :read, Cohort
     can :read, Repo
     can :read, Student
+    can :read, Submission
   end
 end

@@ -27,5 +27,11 @@ class AbilityTest < ActiveSupport::TestCase
         assert ability.can? :read, students(student)
       end
     end
+
+    test 'instructors can read all submissions' do
+      [:shark_word_guess, :jet_farmar].each do |submission|
+        assert ability.can? :read, submissions(submission)
+      end
+    end
   end
 end
