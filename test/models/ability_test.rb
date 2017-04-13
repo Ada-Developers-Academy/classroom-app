@@ -15,5 +15,11 @@ class AbilityTest < ActiveSupport::TestCase
         assert ability.can? :read, cohorts(cohort)
       end
     end
+
+    test 'instructors can read all repos' do
+      [:word_guess, :farmar].each do |repo|
+        assert ability.can? :read, repos(repo)
+      end
+    end
   end
 end

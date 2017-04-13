@@ -7,5 +7,6 @@ class Ability
 
   def instructor_rules
     can :read, Cohort
+    can :read, Repo
   end
 end
