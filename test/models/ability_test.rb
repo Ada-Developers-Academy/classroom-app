@@ -21,5 +21,11 @@ class AbilityTest < ActiveSupport::TestCase
         assert ability.can? :read, repos(repo)
       end
     end
+
+    test 'instructors can read all students' do
+      [:shark, :jet].each do |student|
+        assert ability.can? :read, students(student)
+      end
+    end
   end
 end
