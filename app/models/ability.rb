@@ -2,7 +2,12 @@ class Ability
   include CanCan::Ability
 
   def initialize(user)
+    return guest_rules unless user
+
     instructor_rules if user.instructor?
+  end
+
+  def guest_rules
   end
 
   def instructor_rules

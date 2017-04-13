@@ -39,6 +39,23 @@ class AbilityTest < ActiveSupport::TestCase
     users(self.class.role)
   end
 
+  class GuestRules < AbilityTest
+    def self.role
+      "guest"
+    end
+
+    def user
+      nil
+    end
+
+    test_cannot_all :read, Cohort, %i{sharks jets}
+    test_cannot_all :read, Repo, %i{word_guess farmar}
+    test_cannot_all :read, Student, %i{shark jet}
+    test_cannot_all :read, Submission, %i{shark_word_guess jet_farmar}
+    test_cannot_all :read, User, %i{unknown instructor student}
+    test_cannot_all :read, UserInvite, %i{valid_instructor valid_student valid_unknown accepted}
+  end
+
   class InstructorRules < AbilityTest
     def self.role
       :instructor
