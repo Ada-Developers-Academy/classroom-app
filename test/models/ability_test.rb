@@ -39,5 +39,11 @@ class AbilityTest < ActiveSupport::TestCase
         assert ability.can? :read, users(user)
       end
     end
+
+    test 'instructors can read all user invites' do
+      [:valid_instructor, :valid_student, :valid_unknown, :accepted].each do |invite|
+        assert ability.can? :read, user_invites(invite)
+      end
+    end
   end
 end

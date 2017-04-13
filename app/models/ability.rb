@@ -11,5 +11,6 @@ class Ability
     can :read, Student
     can :read, Submission
     can :read, User
+    can :read, UserInvite
   end
 end
