@@ -38,6 +38,10 @@ class User < ActiveRecord::Base
     role == 'instructor'
   end
 
+  def student?
+    role == 'student'
+  end
+
   def authorized?
     role != 'unknown'
   end

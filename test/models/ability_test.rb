@@ -81,4 +81,15 @@ class AbilityTest < ActiveSupport::TestCase
     test_can_all :read, User, %i{unknown instructor student}
     test_can_all :read, UserInvite, %i{valid_instructor valid_student valid_unknown accepted}
   end
+
+  class StudentRules < AbilityTest
+    def self.role
+      :student
+    end
+
+    test_cannot_all :read, Cohort, %i{sharks jets}
+    test_cannot_all :read, Student, %i{shark jet}
+    test_cannot_all :read, User, %i{unknown instructor student}
+    test_cannot_all :read, UserInvite, %i{valid_instructor valid_student valid_unknown accepted}
+  end
 end

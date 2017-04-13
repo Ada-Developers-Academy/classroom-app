@@ -6,6 +6,7 @@ class Ability
     unauthorized_rules unless user.authorized?
 
     instructor_rules if user.instructor?
+    student_rules if user.student?
   end
 
   def guest_rules
@@ -18,5 +19,8 @@ class Ability
     [Cohort, Repo, Student, Submission, User, UserInvite].each do |model|
       can :read, model
     end
+  end
+
+  def student_rules
   end
 end
