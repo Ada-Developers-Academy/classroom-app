@@ -1,49 +1,54 @@
 require 'test_helper'
 
 class AbilityTest < ActiveSupport::TestCase
+  def self.test_ability(verb, action, desc, objects)
+    test "#{role.to_s.pluralize} #{verb} #{action} #{desc}" do
+      Array(instance_eval(&objects)).each do |obj|
+        assert ability.send(:"#{verb}?", action, obj)
+      end
+    end
+  end
+
+  def self.test_can(action, desc, objects)
+    test_ability(:can, action, desc, objects)
+  end
+
+  def self.test_cannot(action, desc, objects)
+    test_ability(:cannot, action, desc, objects)
+  end
+
+  def self.test_can_all(action, model, fixtures)
+    table = model.table_name
+    test_can(action, "all #{table}", proc do
+      fixtures.map{ |f| send(:"#{table}", f) }
+    end)
+  end
+
+  def self.test_cannot_all(action, model, fixtures)
+    table = model.table_name
+    test_cannot(action, "all #{table}", proc do
+      fixtures.map{ |f| send(:"#{table}", f) }
+    end)
+  end
+
+  def ability
+    Ability.new(user)
+  end
+
+  def user
+    users(self.class.role)
+  end
+
   class InstructorRules < AbilityTest
-    def user
-      users(:instructor)
+    def self.role
+      :instructor
     end
 
-    def ability
-      Ability.new(user)
-    end
-
-    test 'instructors can read all cohorts' do
-      [:sharks, :jets].each do |cohort|
-        assert ability.can? :read, cohorts(cohort)
-      end
-    end
-
-    test 'instructors can read all repos' do
-      [:word_guess, :farmar].each do |repo|
-        assert ability.can? :read, repos(repo)
-      end
-    end
-
-    test 'instructors can read all students' do
-      [:shark, :jet].each do |student|
-        assert ability.can? :read, students(student)
-      end
-    end
-
-    test 'instructors can read all submissions' do
-      [:shark_word_guess, :jet_farmar].each do |submission|
-        assert ability.can? :read, submissions(submission)
-      end
-    end
-
-    test 'instructors can read all users' do
-      [:unknown, :instructor, :student].each do |user|
-        assert ability.can? :read, users(user)
-      end
-    end
-
-    test 'instructors can read all user invites' do
-      [:valid_instructor, :valid_student, :valid_unknown, :accepted].each do |invite|
-        assert ability.can? :read, user_invites(invite)
-      end
-    end
+    test_can_all :read, Cohort, %i{sharks jets}
+    test_can_all :read, Repo, %i{word_guess farmar}
+    test_can_all :read, Student, %i{shark jet}
+    test_can_all :read, Submission, %i{shark_word_guess jet_farmar}
+    test_can_all :read, User, %i{unknown instructor student}
+    test_can_all :read, UserInvite, %i{valid_instructor valid_student valid_unknown accepted}
   end
 end
