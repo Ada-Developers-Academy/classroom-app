@@ -6,11 +6,8 @@ class Ability
   end
 
   def instructor_rules
-    can :read, Cohort
-    can :read, Repo
-    can :read, Student
-    can :read, Submission
-    can :read, User
-    can :read, UserInvite
+    [Cohort, Repo, Student, Submission, User, UserInvite].each do |model|
+      can :read, model
+    end
   end
 end
