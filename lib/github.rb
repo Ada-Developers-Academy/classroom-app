@@ -89,30 +89,40 @@ class GitHub
   end
 
   def group_project(cohort_students, data, repo)
-    url = data["head"]["repo"]["contributors_url"]
+    students = []
+    url = contributors_url(data)
+    return students unless url
+
     repo_created = data["created_at"]
     pr_url = data["html_url"]
 
     contributors = make_request(url)
     github_usernames = cohort_students.map{ |stud| stud.github_name.downcase }
 
-    result = []
     contributors.each do |contributor|
       curr_github_username = contributor["login"].downcase
 
       # If the contributor is in the student list, add it!
       if github_usernames.include?(curr_github_username)
         student = create_student(cohort_students, curr_github_username, repo_created, repo, pr_url)
-        result << student if student
+        students << student if student
       end
     end
 
-    return result
+    return students
   end
 
   def make_request(url)
     response = HTTParty.get(url, query: { "page" => 1, "per_page" => 100 },
       headers: {"user-agent" => "rails", "Authorization" => "token #{ token }"})
     return response
+  end
+
+  def contributors_url(pr_data)
+    return nil if pr_data.nil? ||
+                  pr_data["head"].nil? ||
+                  pr_data["head"]["repo"].nil?
+
+    pr_data["head"]["repo"]["contributors_url"]
   end
 end
