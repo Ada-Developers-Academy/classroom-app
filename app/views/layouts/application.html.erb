@@ -8,22 +8,23 @@
   <%= favicon_link_tag 'favicon.ico' %>
 </head>
 <body>
-  <nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="#">Ada PRs</a>
-    </div>
-    <ul class="nav navbar-nav">
+  <header class="navigation">
 
-      <li class= <%= 'active' if current_page?(pull_requests_path) %>><%= link_to "Home", root_path %></li>
-      <li class= <%= 'active' if current_page?(repos_path) %>><%= link_to "Repos", repos_path %></li>
-      <li class= <%= 'active' if current_page?(students_path) %>><%= link_to "Students", students_path %></li>
-      <li><a href="#"></a></li>
-      <li><%= link_to "Log In", "/auth/github" unless current_user %></li>
-      <li><%= link_to "Log Out", logout_path, method: :delete if current_user %></li>
-    </ul>
-  </div>
-</nav>
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <ul class="nav navbar-nav">
+          <li><a href="#" class="logo"></a></li>
+          <li class= <%= 'active' if current_page?(pull_requests_path) %>><%= link_to "Home", root_path %></li>
+          <li class= <%= 'active' if current_page?(repos_path) %>><%= link_to "Repos", repos_path %></li>
+          <li class= <%= 'active' if current_page?(students_path) %>><%= link_to "Students", students_path %></li>
+          <li><a href="#"></a></li>
+          <li><%= link_to "Log In", "/auth/github" unless current_user %></li>
+          <li><%= link_to "Log Out", logout_path, method: :delete if current_user %></li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
   <div class="container">
     <div class="row">
       <%= render partial: "errors" %>
