@@ -1,27 +1,36 @@
-<% if @repo.errors.any? %>
-  <div class="bg-danger">
-    <ul>
-      <% @repo.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-    </ul>
-  </div>
-<% end %>
+<%= form_for(@repo) do |f| %>
+  <legend>Repositiory Properties</legend>
 
-<%= form_for(@repo, html: { class: "form-horizontal" }) do |f| %>
+  <!-- Errors -->
+  <% if @repo.errors.any? %>
+    <div class="bg-danger">
+      <ul>
+        <% @repo.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
   <fieldset>
-    <legend>Repositiory Properties</legend>
-    <div class="control-group">
-      <%= f.label :cohort %>
-      <%= f.collection_select(:cohort_ids, Cohort.all, :id, :display_name,{}, { class: "form-control", multiple: true, size: @max_size }) %>
+    <div class="form-group row">
+      <%= f.label :cohort, class: "col-form-label col-sm-2" %>
+      <div class="col-sm-10">
+        <%= f.collection_select(:cohort_ids, Cohort.all, :id, :display_name,{}, { class: "form-control", multiple: true, size: @max_size }) %>
+        <small class="form-text text-muted">Select all that apply.</small>
+      </div>
     </div>
-    <div class="control-group">
-      <%= f.label :repo_url %>
-      <%= f.text_field :repo_url, class: "form-control" %>
+    <div class="form-group row">
+      <%= f.label :repo_url, class: "col-form-label col-sm-2" %>
+      <div class="col-sm-10">
+        <%= f.text_field :repo_url, class: "form-control", type: "text", placeholder: "Ada-CX/Name" %>
+      </div>
     </div>
-    <div class="control-group">
-      <%= f.label :indiviudal %>
-      <%= f.check_box :individual, class: "form-control" %>
+    <div class="form-group row">
+      <%= f.label "Individual Project", class: "col-form-label col-sm-2" %>
+      <div class="col-sm-10">
+        <%= f.check_box :individual %>
+      </div>
     </div>
   </fieldset>
   <div class="control-group">
