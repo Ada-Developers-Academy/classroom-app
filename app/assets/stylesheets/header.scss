@@ -1,0 +1,42 @@
+@import "variables";
+
+.navigation {
+  $horizontal-bar-mode: $large-screen;
+  $navigation-height: 3rem;
+
+  min-height: $navigation-height;
+  z-index: 999;
+
+  .logo {
+    background: url(image_path("logo.svg")) no-repeat center left;
+    float: left;
+    margin-right: $navigation-height;
+    margin-top: 0.75rem;
+    width: 20rem;
+
+    text-indent: -9999em;
+  }
+
+  nav {
+    float: none;
+    min-height: $navigation-height;
+    z-index: 9999999;
+  }
+
+  .navbar {
+    border-bottom: 2px solid darken($ada-light-green, 10%);
+    background-color: lighten($ada-light-green, 45%);
+  }
+
+  .navbar-nav .active > a {
+    background-color: lighten($ada-light-green, 25%);
+
+    &:hover { background-color: lighten($ada-light-green, 15%); }
+  }
+
+  .navbar-nav li > a:hover {
+    background-color: lighten($ada-light-green, 40%);
+  }
+
+
+}
