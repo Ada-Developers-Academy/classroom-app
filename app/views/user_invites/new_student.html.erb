@@ -1,0 +1,20 @@
+<h1>Invite New Students</h1>
+<%= form_tag user_invites_path do -%>
+  <%= hidden_field_tag 'role', 'student' %>
+
+  <div class="control-group">
+    <%= label_tag :cohort_id, 'Cohort', class: 'control-label' %>
+    <%= select_tag :cohort_id, options_from_collection_for_select(Cohort.all, :id, :display_name),
+                               class: 'form-control' %>
+  </div>
+
+  <fieldset class="form-group">
+    <%= label_tag do -%>
+      <h3>GitHub Account Names</h3>
+      <small id="github-names-help" class="form-text text-muted">Enter one GitHub account name per line</small>
+      <%= text_area_tag 'github_names', nil, size: '30x10', escape: false, class: 'form-control' %>
+    <% end -%>
+  </fieldset>
+
+  <%= submit_tag 'Invite', class: 'btn btn-primary' %>
+<% end -%>

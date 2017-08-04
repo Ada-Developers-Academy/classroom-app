@@ -1,12 +1,19 @@
-instructor:
+valid_instructor:
   github_name: adainstructor
   role: instructor
   inviter: instructor
-  accepted: true
+  accepted: false
 
-student:
+valid_student:
   github_name: adastudent
   role: student
+  cohort: sharks
+  inviter: instructor
+  accepted: false
+
+valid_unknown:
+  github_name: adaunknown
+  role: unknown
   inviter: instructor
   accepted: false
 

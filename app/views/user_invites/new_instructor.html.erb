@@ -1,0 +1,11 @@
+<h1>Invite New Instructor</h1>
+<%= form_tag user_invites_path do -%>
+  <%= hidden_field_tag 'role', 'instructor' %>
+
+  <div class="control-group">
+    <%= label_tag :github_name, 'Github name', class: 'control-label' %>
+    <%= text_field_tag :github_name, nil, class: 'form-control' %>
+  </div>
+
+  <%= submit_tag 'Invite', class: 'btn btn-primary' %>
+<% end -%>

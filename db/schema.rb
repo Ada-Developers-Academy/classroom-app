@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170216220512) do
+ActiveRecord::Schema.define(version: 20170331232617) do
 
   create_table "cohorts", force: :cascade do |t|
     t.integer  "number",            null: false
@@ -69,6 +69,7 @@ ActiveRecord::Schema.define(version: 20170216220512) do
     t.boolean  "accepted",    default: false,     null: false
     t.datetime "created_at",                      null: false
     t.datetime "updated_at",                      null: false
+    t.integer  "cohort_id"
   end
 
   add_index "user_invites", ["github_name"], name: "index_user_invites_on_github_name", unique: true

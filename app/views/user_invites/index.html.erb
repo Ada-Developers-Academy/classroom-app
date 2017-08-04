@@ -1,0 +1,25 @@
+<div class="invite-btns">
+  <%= link_to "Invite students", new_student_user_invites_path, class: "btn btn-large btn-success" %>
+  <%= link_to "Invite instructor", new_instructor_user_invites_path, class: "btn btn-large btn-success" %>
+</div>
+
+<table class="table" id="invites-table">
+  <thead>
+    <tr>
+      <th>Invited GitHub Account</th>
+      <th>Role</th>
+      <th>Cohort</th>
+      <th>Inviter</th>
+      <th>Invitation Date</th>
+    </tr>
+  </thead>
+  <% @invites.each do |i| %>
+    <tr>
+      <td><%= link_to i.github_name, github_link(i.github_name), target: "_blank" %></td>
+      <td><%= i.role.humanize %></th>
+      <td><%= i.cohort.display_name if i.cohort %></th>
+      <td><%= i.inviter.name %></td>
+      <td><%= i.created_at.strftime("%Y-%m-%d") %></td>
+    </tr>
+  <% end %>
+</table>

@@ -4,11 +4,23 @@ class SessionsController < ApplicationController
   def create
     auth_hash = request.env['omniauth.auth']
 
-    if auth_hash["uid"]
+    if auth_hash && auth_hash["uid"]
       @user = User.find_or_create_from_omniauth(auth_hash)
       if @user
         session[:user_id] = @user.id
         session[:token] = auth_hash['credentials'].token
+
+        # If they've been invited, accept it automatically
+        github_name = auth_hash["extra"]["raw_info"]["login"]
+        invite = UserInvite.acceptable.find_by(github_name: github_name)
+        if invite
+          begin
+            @user.accept_invite(invite)
+          rescue
+            return redirect_to root_path, notice: "Unable to accept invitation"
+          end
+        end
+
         redirect_to pull_requests_path
       else
         redirect_to root_path, notice: "Failed to save the user"
