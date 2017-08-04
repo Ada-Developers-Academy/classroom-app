@@ -44,6 +44,7 @@ gem "epic-editor-rails"
 group :production do
   gem 'pg'
   gem 'rails_12factor'
+  gem 'rdoc', '~> 4.3'
 end
 
 group :development, :test do
