@@ -1,0 +1,32 @@
+@import "variables";
+
+table {
+  font-weight: 100;
+}
+
+th {
+  border-bottom: 1px solid shade($base-border-color, 25%);
+  font-weight: 600;
+  padding: $small-spacing 0;
+  text-align: left;
+}
+
+td {
+  border-bottom: $base-border;
+  padding: $small-spacing 0;
+
+}
+
+tr,
+td,
+th {
+  vertical-align: middle;
+}
+
+div.dataTables_wrapper div.dataTables_filter label {
+  border: 0;
+  border-radius: $base-border-radius;
+  font-family: $serif;
+  font-size: $base-font-size;
+  text-align: right;
+}

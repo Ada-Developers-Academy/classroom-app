@@ -1,35 +1,46 @@
-<% if @student.errors.any? %>
-  <div class="bg-danger">
-    <ul>
-      <% @student.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-    </ul>
-  </div>
-<% end %>
-
-<%= form_for(@student, html: { class: "form-horizontal" } ) do |f| %>
+<%= form_for(@student) do |f| %>
   <legend>Student Info</legend>
-  <div class="control-group">
-    <%= f.label :name, class: "control-label" %>
-    <%= f.text_field :name, class: "form-control" %>
-  </div>
-  <div class="control-group">
-    <%= f.label :cohort, class: "control-label"  %>
-    <%= f.collection_select(:cohort_id, Cohort.all, :id, :display_name, class: "form-control") %>
-  </div>
-  <div class="control-group">
-    <%= f.label :github_name, class: "control-label"  %>
-    <%= f.text_field :github_name, class: "form-control" %>
-  </div>
-  <div class="control-group">
-    <%= f.label :email, class: "control-label"  %>
-    <%= f.email_field :email, class: "form-control" %>
-  </div>
-  <br>
-  <div class="control-group">
-    <div class="controls">
-    <%= f.submit %>
-  </div>
+
+  <!-- Errors -->
+  <% if @student.errors.any? %>
+    <div class="bg-danger">
+      <ul>
+        <% @student.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <fieldset>
+    <div class="form-group row">
+      <%= f.label :name, class: "col-form-label col-sm-2" %>
+      <div class="col-sm-10">
+        <%= f.text_field :name, class: "form-control" %>
+      </div>
+    </div>
+    <div class="form-group row">
+      <%= f.label :cohort, class: "col-form-label col-sm-2"  %>
+      <div class="col-sm-10">
+          <%= f.collection_select(:cohort_id, Cohort.all, :id, :display_name, class: "form-control") %>
+      </div>
+    </div>
+    <div class="form-group row">
+      <%= f.label :github_name, class: "col-form-label col-sm-2"  %>
+      <div class="col-sm-10">
+        <%= f.text_field :github_name, class: "form-control" %>
+      </div>
+    </div>
+    <div class="form-group row">
+      <%= f.label :email, class: "col-form-label col-sm-2"  %>
+      <div class="col-sm-10">
+        <%= f.email_field :email, class: "form-control" %>
+      </div>
+    </div>
+  </fieldset>
+  <div class="form-group row">
+    <div class="col-sm-10">
+      <%= f.submit %>
+    </div>
   </div>
 <% end %>

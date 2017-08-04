@@ -1,0 +1,15 @@
+@import "variables";
+
+body {
+  -webkit-font-smoothing: antialiased;
+  margin: 0;
+}
+
+pre {
+  padding: 0;
+  line-height: 1.25;
+  white-space: pre;
+  word-break: inherit;
+  word-wrap: inherit;
+  overflow-y: scroll;
+}
