@@ -1,30 +1,12 @@
 require 'test_helper'
 
 class UserInvitesControllerTest < ActionController::TestCase
-  class Unauthenticated < UserInvitesControllerTest
-    ACTIONS = {
-      index: :get,
-      new_student: :get,
-      new_instructor: :get,
-      create: :get
-    }
-
-    ACTIONS.each do |action, method|
-      test "#{action} responds with redirect to root" do
-        send(method, action)
-
-        assert_response :redirect
-        assert_redirected_to root_path
-      end
-    end
-  end
-
-  class Authenticated < UserInvitesControllerTest
+  class Functionality < UserInvitesControllerTest
     setup do
       session[:user_id] = users(:instructor).id
     end
 
-    class Index < Authenticated
+    class Index < Functionality
       test 'responds with success' do
         get :index
 
@@ -38,7 +20,7 @@ class UserInvitesControllerTest < ActionController::TestCase
       end
     end
 
-    class NewStudent < Authenticated
+    class NewStudent < Functionality
       test 'responds with success' do
         get :new_student
 
@@ -52,7 +34,7 @@ class UserInvitesControllerTest < ActionController::TestCase
       end
     end
 
-    class NewInstructor < Authenticated
+    class NewInstructor < Functionality
       test 'responds with success' do
         get :new_instructor
 
@@ -66,7 +48,7 @@ class UserInvitesControllerTest < ActionController::TestCase
       end
     end
 
-    class Create < Authenticated
+    class Create < Functionality
       class Unknown < Create
         test 'responds 404 with invalid role' do
           post :create, role: 'unknown'
