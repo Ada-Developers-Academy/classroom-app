@@ -2,6 +2,7 @@ require 'github_comment'
 
 class FeedbackController < ApplicationController
   before_action :find_objects
+  before_action :authorize!
 
   def new
     @feedback_template = @github.find_template(@repo)
@@ -30,5 +31,9 @@ class FeedbackController < ApplicationController
     @repo = Repo.find(params[:repo_id])
     @submission = Submission.find_by(student: params[:student_id], repo: @repo)
     @github = GitHubComment.new(session[:token])
+  end
+
+  def authorize!
+    super :create, @submission
   end
 end
