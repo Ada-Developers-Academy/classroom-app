@@ -48,12 +48,14 @@ class AbilityTest < ActiveSupport::TestCase
       nil
     end
 
-    test_cannot_all :read, Cohort, %i{sharks jets}
-    test_cannot_all :read, Repo, %i{word_guess farmar}
-    test_cannot_all :read, Student, %i{shark jet}
-    test_cannot_all :read, Submission, %i{shark_word_guess jet_farmar}
-    test_cannot_all :read, User, %i{unknown instructor student}
-    test_cannot_all :read, UserInvite, %i{valid_instructor valid_student valid_unknown accepted}
+    [:create, :read, :update, :destroy].each do |action|
+      test_cannot_all action, Cohort, %i{sharks jets}
+      test_cannot_all action, Repo, %i{word_guess farmar}
+      test_cannot_all action, Student, %i{shark jet}
+      test_cannot_all action, Submission, %i{shark_word_guess jet_farmar}
+      test_cannot_all action, User, %i{unknown instructor student}
+      test_cannot_all action, UserInvite, %i{valid_instructor valid_student valid_unknown accepted}
+    end
   end
 
   class UnauthorizedRules < AbilityTest
@@ -61,12 +63,14 @@ class AbilityTest < ActiveSupport::TestCase
       :unknown
     end
 
-    test_cannot_all :read, Cohort, %i{sharks jets}
-    test_cannot_all :read, Repo, %i{word_guess farmar}
-    test_cannot_all :read, Student, %i{shark jet}
-    test_cannot_all :read, Submission, %i{shark_word_guess jet_farmar}
-    test_cannot_all :read, User, %i{unknown instructor student}
-    test_cannot_all :read, UserInvite, %i{valid_instructor valid_student valid_unknown accepted}
+    [:create, :read, :update, :destroy].each do |action|
+      test_cannot_all action, Cohort, %i{sharks jets}
+      test_cannot_all action, Repo, %i{word_guess farmar}
+      test_cannot_all action, Student, %i{shark jet}
+      test_cannot_all action, Submission, %i{shark_word_guess jet_farmar}
+      test_cannot_all action, User, %i{unknown instructor student}
+      test_cannot_all action, UserInvite, %i{valid_instructor valid_student valid_unknown accepted}
+    end
   end
 
   class InstructorRules < AbilityTest
@@ -74,12 +78,14 @@ class AbilityTest < ActiveSupport::TestCase
       :instructor
     end
 
-    test_can_all :read, Cohort, %i{sharks jets}
-    test_can_all :read, Repo, %i{word_guess farmar}
-    test_can_all :read, Student, %i{shark jet}
-    test_can_all :read, Submission, %i{shark_word_guess jet_farmar}
-    test_can_all :read, User, %i{unknown instructor student}
-    test_can_all :read, UserInvite, %i{valid_instructor valid_student valid_unknown accepted}
+    [:create, :read, :update, :destroy].each do |action|
+      test_can_all action, Cohort, %i{sharks jets}
+      test_can_all action, Repo, %i{word_guess farmar}
+      test_can_all action, Student, %i{shark jet}
+      test_can_all action, Submission, %i{shark_word_guess jet_farmar}
+      test_can_all action, User, %i{unknown instructor student}
+      test_can_all action, UserInvite, %i{valid_instructor valid_student valid_unknown accepted}
+    end
   end
 
   class StudentRules < AbilityTest
@@ -87,9 +93,13 @@ class AbilityTest < ActiveSupport::TestCase
       :student
     end
 
-    test_cannot_all :read, Cohort, %i{sharks jets}
-    test_cannot_all :read, Student, %i{shark jet}
-    test_cannot_all :read, User, %i{unknown instructor student}
-    test_cannot_all :read, UserInvite, %i{valid_instructor valid_student valid_unknown accepted}
+    [:create, :read, :update, :destroy].each do |action|
+      test_cannot_all action, Cohort, %i{sharks jets}
+      test_cannot_all action, Repo, %i{word_guess farmar}
+      test_cannot_all action, Student, %i{shark jet}
+      test_cannot_all action, Submission, %i{shark_word_guess jet_farmar}
+      test_cannot_all action, User, %i{unknown instructor student}
+      test_cannot_all action, UserInvite, %i{valid_instructor valid_student valid_unknown accepted}
+    end
   end
 end

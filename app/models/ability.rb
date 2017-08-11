@@ -17,7 +17,10 @@ class Ability
 
   def instructor_rules
     [Cohort, Repo, Student, Submission, User, UserInvite].each do |model|
+      can :create, model
       can :read, model
+      can :update, model
+      can :destroy, model
     end
   end
 
