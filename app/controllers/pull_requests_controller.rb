@@ -2,6 +2,8 @@
 
 class PullRequestsController < ApplicationController
   skip_before_action :require_login, only: [:home]
+  skip_authorization_check only: [:home]
+  load_and_authorize_resource class: Repo, instance_name: :repo, except: [:home]
 
   def home
     if current_user
@@ -10,7 +12,6 @@ class PullRequestsController < ApplicationController
   end
 
   def index
-    @repos = Repo.all
   end
 
 end
