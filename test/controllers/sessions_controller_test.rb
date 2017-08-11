@@ -84,4 +84,58 @@ class SessionsControllerTest < ActionController::TestCase
       end
     end
   end
+
+  class Authorization < SessionsControllerTest
+    class Instructor < Authorization
+      setup do
+        session[:user_id] = users(:instructor).id
+      end
+
+      test 'should be able to log out' do
+        delete :destroy
+
+        assert_response :redirect
+        assert_redirected_to root_path
+      end
+    end
+
+    class Student < Authorization
+      setup do
+        session[:user_id] = users(:student).id
+      end
+
+      test 'should be able to log out' do
+        delete :destroy
+
+        assert_response :redirect
+        assert_redirected_to root_path
+      end
+    end
+
+    class Unauthorized < Authorization
+      setup do
+        session[:user_id] = users(:unknown).id
+      end
+
+      test 'should be able to log out' do
+        delete :destroy
+
+        assert_response :redirect
+        assert_redirected_to root_path
+      end
+    end
+
+    class Guest < Authorization
+      setup do
+        session[:user_id] = nil
+      end
+
+      test 'should be able to log out' do
+        delete :destroy
+
+        assert_response :redirect
+        assert_redirected_to root_path
+      end
+    end
+  end
 end
