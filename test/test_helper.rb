@@ -1,6 +1,7 @@
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
+require 'minitest/mock'
 
 # Uncomment these lines to automatically start pry
 # when a test fails or an exception is unhandled.
