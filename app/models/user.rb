@@ -33,4 +33,16 @@ class User < ActiveRecord::Base
       invite.update!(accepted: true)
     end
   end
+
+  def instructor?
+    role == 'instructor'
+  end
+
+  def student?
+    role == 'student'
+  end
+
+  def authorized?
+    role != 'unknown'
+  end
 end
