@@ -14,7 +14,11 @@ class ReposControllerTest < ActionController::TestCase
   end
 
   def create_params_invalid
-    create_params.deep_merge(repo: { repo_url: nil })
+    {
+      repo: {
+        repo_url: nil
+      }
+    }
   end
 
   def update_params
