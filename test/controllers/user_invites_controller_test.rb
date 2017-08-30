@@ -1,30 +1,12 @@
 require 'test_helper'
 
 class UserInvitesControllerTest < ActionController::TestCase
-  class Unauthenticated < UserInvitesControllerTest
-    ACTIONS = {
-      index: :get,
-      new_student: :get,
-      new_instructor: :get,
-      create: :get
-    }
-
-    ACTIONS.each do |action, method|
-      test "#{action} responds with redirect to root" do
-        send(method, action)
-
-        assert_response :redirect
-        assert_redirected_to root_path
-      end
-    end
-  end
-
-  class Authenticated < UserInvitesControllerTest
+  class Functionality < UserInvitesControllerTest
     setup do
       session[:user_id] = users(:instructor).id
     end
 
-    class Index < Authenticated
+    class Index < Functionality
       test 'responds with success' do
         get :index
 
@@ -38,7 +20,7 @@ class UserInvitesControllerTest < ActionController::TestCase
       end
     end
 
-    class NewStudent < Authenticated
+    class NewStudent < Functionality
       test 'responds with success' do
         get :new_student
 
@@ -52,7 +34,7 @@ class UserInvitesControllerTest < ActionController::TestCase
       end
     end
 
-    class NewInstructor < Authenticated
+    class NewInstructor < Functionality
       test 'responds with success' do
         get :new_instructor
 
@@ -66,7 +48,7 @@ class UserInvitesControllerTest < ActionController::TestCase
       end
     end
 
-    class Create < Authenticated
+    class Create < Functionality
       class Unknown < Create
         test 'responds 404 with invalid role' do
           post :create, role: 'unknown'
@@ -205,6 +187,111 @@ class UserInvitesControllerTest < ActionController::TestCase
             assert_not_nil flash[:alert]
           end
         end
+      end
+    end
+  end
+
+  class Authorization < UserInvitesControllerTest
+    GET_ACTIONS = %w( index new_student new_instructor )
+
+    def create_params
+      {
+        role: 'instructor',
+        github_name: 'adatest1'
+      }
+    end
+
+    class Instructor < Authorization
+      setup do
+        session[:user_id] = users(:instructor).id
+      end
+
+      GET_ACTIONS.each do |action|
+        test "#{action} responds with success" do
+          get action
+
+          assert_response :success
+        end
+      end
+
+      test "create responds with redirect to invites index" do
+        post :create, create_params
+
+        assert_response :redirect
+        assert_redirected_to user_invites_path
+        assert_not_empty flash[:notice]
+      end
+    end
+
+    class Student < Authorization
+      setup do
+        session[:user_id] = users(:student).id
+      end
+
+      GET_ACTIONS.each do |action|
+        test "#{action} fails with redirect to root" do
+          get action
+
+          assert_response :redirect
+          assert_redirected_to root_path
+          assert_not_empty flash[:error]
+        end
+      end
+
+      test "create fails with redirect to root" do
+        post :create, create_params
+
+        assert_response :redirect
+        assert_redirected_to root_path
+        assert_not_empty flash[:error]
+      end
+    end
+
+    class Unauthorized < Authorization
+      setup do
+        session[:user_id] = users(:unknown).id
+      end
+
+      GET_ACTIONS.each do |action|
+        test "#{action} fails with redirect to root" do
+          get action
+
+          assert_response :redirect
+          assert_redirected_to root_path
+          assert_not_empty flash[:error]
+        end
+      end
+
+      test "create fails with redirect to root" do
+        post :create, create_params
+
+        assert_response :redirect
+        assert_redirected_to root_path
+        assert_not_empty flash[:error]
+      end
+    end
+
+    class Guest < Authorization
+      setup do
+        session[:user_id] = nil
+      end
+
+      GET_ACTIONS.each do |action|
+        test "#{action} fails with redirect to root" do
+          get action
+
+          assert_response :redirect
+          assert_redirected_to root_path
+          assert_not_empty flash[:error]
+        end
+      end
+
+      test "create fails with redirect to root" do
+        post :create, create_params
+
+        assert_response :redirect
+        assert_redirected_to root_path
+        assert_not_empty flash[:error]
       end
     end
   end

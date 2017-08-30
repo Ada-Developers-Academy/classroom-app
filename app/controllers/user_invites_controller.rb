@@ -1,6 +1,8 @@
 class UserInvitesController < ApplicationController
+  load_and_authorize_resource instance_name: :invite
+
   def index
-    @invites = UserInvite.acceptable
+    @invites = @invites.acceptable
   end
 
   def new_student; end
