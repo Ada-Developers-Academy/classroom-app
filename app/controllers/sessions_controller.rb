@@ -22,7 +22,7 @@ class SessionsController < ApplicationController
           end
         end
 
-        redirect_to pull_requests_path
+        redirect_to root_path
       else
         redirect_to root_path, notice: "Failed to save the user"
       end
