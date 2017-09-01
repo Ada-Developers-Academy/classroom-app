@@ -1,7 +1,7 @@
 require 'github'
 
 class ReposController < ApplicationController
-  load_and_authorize_resource
+  load_and_authorize_resource id_param: :repo_id
 
   def index
   end
