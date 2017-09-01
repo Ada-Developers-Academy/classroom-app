@@ -21,11 +21,11 @@ class SessionsControllerTest < ActionController::TestCase
         refute_nil flash[:notice]
       end
 
-      test 'OAuth login redirects to pull requests page' do
+      test 'OAuth login redirects to root' do
         get :create, provider: :github
 
         assert_response :redirect
-        assert_redirected_to pull_requests_path
+        assert_redirected_to root_path
         assert_nil flash[:notice]
       end
 

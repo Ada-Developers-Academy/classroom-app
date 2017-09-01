@@ -6,7 +6,7 @@ class PullRequestsController < ApplicationController
   load_and_authorize_resource class: Repo, instance_name: :repo, except: [:home]
 
   def home
-    if current_user
+    if can? :read, Repo
       redirect_to pull_requests_path
     end
   end
