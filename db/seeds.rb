@@ -1,36 +1,25 @@
-# # Create users
-# staff = ["kariabancroft"]
-#
-# staff.each do |s|
-#   u = { name: "Kari", }
-#   User.create()
-# end
+# Create instructor
+User.create(name: "Test Instructor 1", provider: :github, uid: "30710012", role: "instructor")
 
 # Create cohorts
 cohorts = [
-  { number: 6, name: "Brackets", instructor_emails: "kari@adadevelopersacademy.org,dan@adadevelopersacademy.org" },
-  { number: 6, name: "Parens", instructor_emails: "kari@adadevelopersacademy.org" }
+  { number: 0, name: "Peanut Butter", instructor_emails: "charles+classroom-local-pb-instructor@adadev.org" },
+  { number: 0, name: "Jelly", instructor_emails: "charles+classroom-local-jelly-instructor@adadev.org" }
 ]
 
 cohorts.each do |c|
   Cohort.create(c)
 end
 
-students = []
-students = CSV.read(Rails.root.join('lib', 'seeds', 'students.csv')).each do |stud|
-  stud_hash = {}
-  stud_hash[:name] = stud[1].titleize
-  c = Cohort.where("name LIKE :prefix", prefix: "#{stud[0]}%")
-  stud_hash[:cohort_id] = c.first.id
-  stud_hash[:email] = stud[2].downcase
-  stud_hash[:github_name] = stud[3].downcase
-
-  Student.create(stud_hash)
-end
+# Create students
+Student.create(name: "Test Student 1", cohort: Cohort.first,
+               github_name: "ada-student-1", email: "charles+classroom-local-student-1@adadev.org")
+Student.create(name: "Test Student 2", cohort: Cohort.last,
+               github_name: "ada-student-2", email: "charles+classroom-local-student-2@adadev.org")
 
 repos = [
-  { repo_url: "Ada-C6/Scrabble", individual: false},
-  { repo_url: "Ada-C6/BankAccounts"}
+  { repo_url: "Ada-Test/PR-App-test-group", individual: false},
+  { repo_url: "Ada-Test/PR-App-test-individual"}
 ]
 
 repos.each do |repo|
