@@ -123,6 +123,18 @@ class ReposControllerTest < ActionController::TestCase
         assert_template :show
       end
     end
+
+    test "should redirect when cohort ID is invalid" do
+      invalid_cohort_id = 0
+      # Sanity check
+      assert_nil Cohort.find_by(id: invalid_cohort_id)
+
+      get :show, { repo_id: @repo.id, id: invalid_cohort_id }
+
+      assert_response :redirect
+      assert_redirected_to repos_path
+      assert_not_empty flash[:error]
+    end
   end
 
   class Authorization < ReposControllerTest
