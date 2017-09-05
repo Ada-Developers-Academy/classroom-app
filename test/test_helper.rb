@@ -1,10 +1,10 @@
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
+require 'minitest/autorun'
 
 # Uncomment these lines to automatically start pry
 # when a test fails or an exception is unhandled.
-#require 'minitest/autorun'
 #require 'pry-rescue/minitest'
 
 class ActiveSupport::TestCase
