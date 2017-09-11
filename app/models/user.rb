@@ -13,7 +13,8 @@ class User < ActiveRecord::Base
       user = User.new
       user.uid = auth_hash["uid"]
       user.provider = auth_hash["provider"]
-      user.name = auth_hash["info"]["name"] || auth_hash["info"]["nickname"]
+      user.github_name = auth_hash["extra"]["raw_info"]["login"]
+      user.name = auth_hash["info"]["name"] || auth_hash["extra"]["raw_info"]["login"]
       # user.email = auth_hash["info"]["email"]
 
       if user.save

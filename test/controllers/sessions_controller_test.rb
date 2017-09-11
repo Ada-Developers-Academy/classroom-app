@@ -40,6 +40,17 @@ class SessionsControllerTest < ActionController::TestCase
         end
       end
 
+      test 'first-time OAuth login sets appropriate fields on User record' do
+        get :create, provider: :github
+
+        user = User.last
+        auth_hash = request.env['omniauth.auth']
+        assert_equal user.uid, auth_hash['uid'].to_s
+        assert_equal user.provider, auth_hash['provider']
+        assert_equal user.github_name, auth_hash['extra']['raw_info']['login']
+        assert_equal user.name, auth_hash['info']['name']
+      end
+
       test 'uninvited users have unknown role' do
         set_auth_mock :uninvited
 
