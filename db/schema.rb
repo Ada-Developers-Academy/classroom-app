@@ -13,6 +13,9 @@
 
 ActiveRecord::Schema.define(version: 20170331232617) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "cohorts", force: :cascade do |t|
     t.integer  "number",            null: false
     t.string   "name",              null: false
@@ -21,14 +24,14 @@ ActiveRecord::Schema.define(version: 20170331232617) do
     t.string   "instructor_emails"
   end
 
-  add_index "cohorts", ["number", "name"], name: "index_cohorts_on_number_and_name", unique: true
+  add_index "cohorts", ["number", "name"], name: "index_cohorts_on_number_and_name", unique: true, using: :btree
 
   create_table "cohorts_repos", force: :cascade do |t|
     t.integer "cohort_id", null: false
     t.string  "repo_id",   null: false
   end
 
-  add_index "cohorts_repos", ["cohort_id", "repo_id"], name: "index_cohorts_repos_on_cohort_id_and_repo_id", unique: true
+  add_index "cohorts_repos", ["cohort_id", "repo_id"], name: "index_cohorts_repos_on_cohort_id_and_repo_id", unique: true, using: :btree
 
   create_table "repos", force: :cascade do |t|
     t.string   "repo_url",                  null: false
@@ -46,7 +49,7 @@ ActiveRecord::Schema.define(version: 20170331232617) do
     t.string   "email"
   end
 
-  add_index "students", ["cohort_id", "github_name"], name: "index_students_on_cohort_id_and_github_name", unique: true
+  add_index "students", ["cohort_id", "github_name"], name: "index_students_on_cohort_id_and_github_name", unique: true, using: :btree
 
   create_table "submissions", force: :cascade do |t|
     t.integer  "student_id",   null: false
@@ -59,8 +62,8 @@ ActiveRecord::Schema.define(version: 20170331232617) do
     t.integer  "user_id"
   end
 
-  add_index "submissions", ["student_id", "repo_id"], name: "index_submissions_on_student_id_and_repo_id", unique: true
-  add_index "submissions", ["user_id"], name: "index_submissions_on_user_id"
+  add_index "submissions", ["student_id", "repo_id"], name: "index_submissions_on_student_id_and_repo_id", unique: true, using: :btree
+  add_index "submissions", ["user_id"], name: "index_submissions_on_user_id", using: :btree
 
   create_table "user_invites", force: :cascade do |t|
     t.integer  "inviter_id",                      null: false
@@ -72,7 +75,7 @@ ActiveRecord::Schema.define(version: 20170331232617) do
     t.integer  "cohort_id"
   end
 
-  add_index "user_invites", ["github_name"], name: "index_user_invites_on_github_name", unique: true
+  add_index "user_invites", ["github_name"], name: "index_user_invites_on_github_name", unique: true, using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "name",                           null: false
@@ -83,6 +86,9 @@ ActiveRecord::Schema.define(version: 20170331232617) do
     t.string   "role",       default: "unknown", null: false
   end
 
-  add_index "users", ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
+  add_index "users", ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true, using: :btree
 
+  add_foreign_key "submissions", "users"
+  add_foreign_key "user_invites", "cohorts", on_delete: :cascade
+  add_foreign_key "user_invites", "users", column: "inviter_id", on_delete: :cascade
 end
