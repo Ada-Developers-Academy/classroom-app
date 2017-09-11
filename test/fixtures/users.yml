@@ -18,3 +18,10 @@ student:
   provider: github
   role: student
   github_name: ada-test-student-1
+
+student_shark:
+  name: Shark Student
+  uid: 12348
+  provider: github
+  role: student
+  github_name: ada-student-shark
