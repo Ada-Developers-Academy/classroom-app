@@ -5,7 +5,7 @@ class UserInvite < ActiveRecord::Base
   validates_with UserRoleValidator
   validates :inviter, presence: true
   validate :inviter_must_be_instructor
-  validates :github_name, presence: true, uniqueness: true
+  validates :github_name, presence: true, uniqueness: { conditions: -> { acceptable } }
   validate :only_students_have_cohort
 
   scope :acceptable, -> { where(accepted: false) }
