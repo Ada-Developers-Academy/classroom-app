@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170901182734) do
+ActiveRecord::Schema.define(version: 20170911220716) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -78,14 +78,16 @@ ActiveRecord::Schema.define(version: 20170901182734) do
   add_index "user_invites", ["github_name"], name: "index_user_invites_on_github_name", unique: true, where: "(accepted = false)", using: :btree
 
   create_table "users", force: :cascade do |t|
-    t.string   "name",                           null: false
-    t.string   "uid",                            null: false
-    t.string   "provider",                       null: false
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
-    t.string   "role",       default: "unknown", null: false
+    t.string   "name",                            null: false
+    t.string   "uid",                             null: false
+    t.string   "provider",                        null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.string   "role",        default: "unknown", null: false
+    t.text     "github_name"
   end
 
+  add_index "users", ["github_name"], name: "index_users_on_github_name", unique: true, using: :btree
   add_index "users", ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true, using: :btree
 
   add_foreign_key "submissions", "users"

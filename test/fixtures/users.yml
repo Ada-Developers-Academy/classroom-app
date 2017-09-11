@@ -3,15 +3,18 @@ unknown:
   uid: 12345
   provider: github
   role: unknown
+  github_name: adatest
 
 instructor:
   name: Instructor User
   uid: 12346
   provider: github
   role: instructor
+  github_name: adainstructor
 
 student:
   name: Student User
   uid: 12347
   provider: github
   role: student
+  github_name: adastudent
