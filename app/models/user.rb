@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  validates :name, :uid, :provider, presence: true
+  validates :name, :uid, :provider, :github_name, presence: true
   validates_with UserRoleValidator
 
   ROLES = %w( instructor student unknown )

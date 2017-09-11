@@ -18,6 +18,11 @@ class UserTest < ActiveSupport::TestCase
       @valid_user.role = invalid_role
       refute @valid_user.valid?
     end
+
+    test 'validates presence of github_name' do
+      @valid_user.github_name = nil
+      refute @valid_user.valid?
+    end
   end
 
   class AcceptInvite < UserTest
