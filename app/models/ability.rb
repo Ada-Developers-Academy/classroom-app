@@ -6,7 +6,7 @@ class Ability
     unauthorized_rules unless user.authorized?
 
     instructor_rules if user.instructor?
-    student_rules if user.student?
+    student_rules(user) if user.student?
   end
 
   def guest_rules
@@ -22,6 +22,7 @@ class Ability
     end
   end
 
-  def student_rules
+  def student_rules(user)
+    can :read, Submission, student: { github_name: user.github_name }
   end
 end
