@@ -89,17 +89,19 @@ class AbilityTest < ActiveSupport::TestCase
   end
 
   class StudentRules < AbilityTest
-    def self.role
-      :student
-    end
+    class General < StudentRules
+      def self.role
+        :student
+      end
 
-    [:create, :read, :update, :destroy].each do |action|
-      test_cannot_all action, Cohort, %i{sharks jets}
-      test_cannot_all action, Repo, %i{word_guess farmar}
-      test_cannot_all action, Student, %i{shark jet}
-      test_cannot_all action, Submission, %i{shark_word_guess jet_farmar}
-      test_cannot_all action, User, %i{unknown instructor student}
-      test_cannot_all action, UserInvite, %i{valid_instructor valid_student valid_unknown accepted}
+      [:create, :read, :update, :destroy].each do |action|
+        test_cannot_all action, Cohort, %i{sharks jets}
+        test_cannot_all action, Repo, %i{word_guess farmar}
+        test_cannot_all action, Student, %i{shark jet}
+        test_cannot_all action, Submission, %i{shark_word_guess jet_farmar}
+        test_cannot_all action, User, %i{unknown instructor student}
+        test_cannot_all action, UserInvite, %i{valid_instructor valid_student valid_unknown accepted}
+      end
     end
   end
 end
