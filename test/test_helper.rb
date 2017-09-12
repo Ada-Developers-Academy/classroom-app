@@ -42,7 +42,8 @@ class ActiveSupport::TestCase
     github: auth_mock('Test User', 'adatest'),
     uninvited: auth_mock('Uninvited User', 'adauninvited'),
     invited_instructor: auth_mock('Invited Instructor', 'adainstructor'),
-    invited_student: auth_mock('Invited Student', 'adastudent')
+    invited_student: auth_mock('Invited Student', 'adastudent'),
+    github_changed_info: auth_mock('Changed User', 'adachanged')
   }
 
   AUTH_MOCKS.each do |provider, auth_hash|

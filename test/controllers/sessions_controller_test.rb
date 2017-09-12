@@ -55,6 +55,28 @@ class SessionsControllerTest < ActionController::TestCase
         assert_equal user.name, auth_hash['info']['name']
       end
 
+      test 'existing users update info on login' do
+        # Simulate an account which was created before storing github_name
+        user = users(:unknown)
+        user.github_name = nil
+        user.save!(validate: false)
+
+        user_info = {
+          github_name: user.github_name,
+          name: user.name
+        }
+
+        set_auth_mock :github_changed_info
+        request.env['omniauth.auth']['uid'] = user.uid
+
+        get :create, provider: :github
+
+        user.reload
+        user_info.each do |attr, old_value|
+          assert_not_equal user.send(attr), old_value, "Expected User##{attr} to not be #{old_value.inspect}"
+        end
+      end
+
       test 'uninvited users have unknown role' do
         set_auth_mock :uninvited
 

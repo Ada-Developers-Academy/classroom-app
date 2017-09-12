@@ -4,11 +4,11 @@ class User < ActiveRecord::Base
 
   ROLES = %w( instructor student unknown )
 
-  def self.find_or_create_from_omniauth(auth_hash)
+  def self.update_or_create_from_omniauth(auth_hash)
     gh_info = github_info(auth_hash)
     user = self.find_by(uid: gh_info[:uid], provider: gh_info[:provider])
     if !user.nil?
-      return user
+      return user if user.update(gh_info)
     else
       # no user found, do something here
       user = User.new(gh_info)
