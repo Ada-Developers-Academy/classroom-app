@@ -97,12 +97,12 @@ class AbilityTest < ActiveSupport::TestCase
       [:create, :read, :update, :destroy].each do |action|
         test_cannot_all action, Cohort, %i{sharks jets}
         test_cannot_all action, Repo, %i{word_guess farmar}
-        test_cannot_all action, Student, %i{shark jet}
         test_cannot_all action, User, %i{unknown instructor student}
         test_cannot_all action, UserInvite, %i{valid_instructor valid_student valid_unknown accepted}
       end
 
       [:create, :update, :destroy].each do |action|
+        test_cannot_all action, Student, %i{shark jet}
         test_cannot_all action, Submission, %i{shark_word_guess jet_farmar}
       end
     end
@@ -117,6 +117,12 @@ class AbilityTest < ActiveSupport::TestCase
 
       # But not other students' submissions
       test_cannot :read, "other submissions", proc { submissions(:jet_farmar) }
+
+      # Student users can view themselves
+      test_can :read, "own Student record", proc { students(:shark) }
+
+      # But not other students
+      test_cannot :read, "other Student records", proc { students(:jet) }
     end
   end
 end

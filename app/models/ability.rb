@@ -24,5 +24,6 @@ class Ability
 
   def student_rules(user)
     can :read, Submission, student: { github_name: user.github_name }
+    can :read, Student, github_name: user.github_name
   end
 end
