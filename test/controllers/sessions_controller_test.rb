@@ -4,7 +4,11 @@ class SessionsControllerTest < ActionController::TestCase
   class Functionality < SessionsControllerTest
     class Create < Functionality
       def set_auth_mock(provider)
-        request.env['omniauth.auth'] = OmniAuth.config.mock_auth[provider].dup
+        mock = OmniAuth.config.mock_auth[provider].dup
+        # This is necessary because OmniAuth only allows us to have one mock per provider
+        mock['provider'] = OmniAuth.config.mock_auth[:default]['provider']
+
+        request.env['omniauth.auth'] = mock
       end
 
       setup do
