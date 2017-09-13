@@ -1,20 +1,17 @@
 class User < ActiveRecord::Base
-  validates :name, :uid, :provider, presence: true
+  validates :name, :uid, :provider, :github_name, presence: true
   validates_with UserRoleValidator
 
   ROLES = %w( instructor student unknown )
 
-  def self.find_or_create_from_omniauth(auth_hash)
-    user = self.find_by(uid: auth_hash["uid"], provider: auth_hash["provider"])
+  def self.update_or_create_from_omniauth(auth_hash)
+    gh_info = github_info(auth_hash)
+    user = self.find_by(uid: gh_info[:uid], provider: gh_info[:provider])
     if !user.nil?
-      return user
+      return user if user.update(gh_info)
     else
       # no user found, do something here
-      user = User.new
-      user.uid = auth_hash["uid"]
-      user.provider = auth_hash["provider"]
-      user.name = auth_hash["info"]["name"] || auth_hash["info"]["nickname"]
-      # user.email = auth_hash["info"]["email"]
+      user = User.new(gh_info)
 
       if user.save
         return user
@@ -44,5 +41,16 @@ class User < ActiveRecord::Base
 
   def authorized?
     role != 'unknown'
+  end
+
+  private
+
+  def self.github_info(auth_hash)
+    {
+      uid: auth_hash["uid"],
+      provider: auth_hash["provider"],
+      github_name: auth_hash["extra"]["raw_info"]["login"],
+      name: auth_hash["info"]["name"] || auth_hash["extra"]["raw_info"]["login"]
+    }
   end
 end

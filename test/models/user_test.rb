@@ -2,19 +2,26 @@ require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
   class Validations < UserTest
-    test 'validates role is in predefined set' do
-      valid_user = users(:unknown)
+    setup do
+      @valid_user = users(:unknown)
       # sanity check
-      assert valid_user.valid?
+      assert @valid_user.valid?
+    end
 
+    test 'validates role is in predefined set' do
       User::ROLES.each do |role|
-        valid_user.role = role
-        assert valid_user.valid?
+        @valid_user.role = role
+        assert @valid_user.valid?
       end
 
       invalid_role = User::ROLES.sum
-      valid_user.role = invalid_role
-      refute valid_user.valid?
+      @valid_user.role = invalid_role
+      refute @valid_user.valid?
+    end
+
+    test 'validates presence of github_name' do
+      @valid_user.github_name = nil
+      refute @valid_user.valid?
     end
   end
 

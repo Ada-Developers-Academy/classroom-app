@@ -6,7 +6,7 @@ class SessionsController < ApplicationController
     auth_hash = request.env['omniauth.auth']
 
     if auth_hash && auth_hash["uid"]
-      @user = User.find_or_create_from_omniauth(auth_hash)
+      @user = User.update_or_create_from_omniauth(auth_hash)
       if @user
         session[:user_id] = @user.id
         session[:token] = auth_hash['credentials'].token

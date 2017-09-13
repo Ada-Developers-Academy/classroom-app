@@ -4,7 +4,11 @@ class SessionsControllerTest < ActionController::TestCase
   class Functionality < SessionsControllerTest
     class Create < Functionality
       def set_auth_mock(provider)
-        request.env['omniauth.auth'] = OmniAuth.config.mock_auth[provider].dup
+        mock = OmniAuth.config.mock_auth[provider].dup
+        # This is necessary because OmniAuth only allows us to have one mock per provider
+        mock['provider'] = OmniAuth.config.mock_auth[:default]['provider']
+
+        request.env['omniauth.auth'] = mock
       end
 
       setup do
@@ -37,6 +41,39 @@ class SessionsControllerTest < ActionController::TestCase
         # Additional logins do not create new users
         assert_no_difference(lambda{ User.count }) do
           get :create, provider: :github
+        end
+      end
+
+      test 'first-time OAuth login sets appropriate fields on User record' do
+        get :create, provider: :github
+
+        user = User.last
+        auth_hash = request.env['omniauth.auth']
+        assert_equal user.uid, auth_hash['uid'].to_s
+        assert_equal user.provider, auth_hash['provider']
+        assert_equal user.github_name, auth_hash['extra']['raw_info']['login']
+        assert_equal user.name, auth_hash['info']['name']
+      end
+
+      test 'existing users update info on login' do
+        # Simulate an account which was created before storing github_name
+        user = users(:unknown)
+        user.github_name = nil
+        user.save!(validate: false)
+
+        user_info = {
+          github_name: user.github_name,
+          name: user.name
+        }
+
+        set_auth_mock :github_changed_info
+        request.env['omniauth.auth']['uid'] = user.uid
+
+        get :create, provider: :github
+
+        user.reload
+        user_info.each do |attr, old_value|
+          assert_not_equal user.send(attr), old_value, "Expected User##{attr} to not be #{old_value.inspect}"
         end
       end
 
