@@ -89,17 +89,40 @@ class AbilityTest < ActiveSupport::TestCase
   end
 
   class StudentRules < AbilityTest
-    def self.role
-      :student
+    class General < StudentRules
+      def self.role
+        :student
+      end
+
+      [:create, :read, :update, :destroy].each do |action|
+        test_cannot_all action, Cohort, %i{sharks jets}
+        test_cannot_all action, Repo, %i{word_guess farmar}
+        test_cannot_all action, User, %i{unknown instructor student}
+        test_cannot_all action, UserInvite, %i{valid_instructor valid_student valid_unknown accepted}
+      end
+
+      [:create, :update, :destroy].each do |action|
+        test_cannot_all action, Student, %i{shark jet}
+        test_cannot_all action, Submission, %i{shark_word_guess jet_farmar}
+      end
     end
 
-    [:create, :read, :update, :destroy].each do |action|
-      test_cannot_all action, Cohort, %i{sharks jets}
-      test_cannot_all action, Repo, %i{word_guess farmar}
-      test_cannot_all action, Student, %i{shark jet}
-      test_cannot_all action, Submission, %i{shark_word_guess jet_farmar}
-      test_cannot_all action, User, %i{unknown instructor student}
-      test_cannot_all action, UserInvite, %i{valid_instructor valid_student valid_unknown accepted}
+    class Ownership < StudentRules
+      def self.role
+        :student_shark
+      end
+
+      # Student users can view their own submissions
+      test_can :read, "own submissions", proc { submissions(:shark_word_guess) }
+
+      # But not other students' submissions
+      test_cannot :read, "other submissions", proc { submissions(:jet_farmar) }
+
+      # Student users can view themselves
+      test_can :read, "own Student record", proc { students(:shark) }
+
+      # But not other students
+      test_cannot :read, "other Student records", proc { students(:jet) }
     end
   end
 end

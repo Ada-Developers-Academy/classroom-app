@@ -173,19 +173,26 @@ class StudentsControllerTest < ActionController::TestCase
 
     class Student < Authorization
       setup do
-        session[:user_id] = users(:student).id
+        session[:user_id] = users(:student_shark).id
       end
 
-      test "should not get index of students" do
+      test "should get index of students" do
         get :index
 
-        assert_response :redirect
-        assert_redirected_to root_path
-        assert_not_empty flash[:error]
+        assert_response :success
+        assert_template :index
       end
 
-      test "should not get show page of student" do
+      test "should get show page of own student" do
         get :show, id: @student.id
+
+        assert_response :success
+        assert_template :show
+      end
+
+      test "should not get show page of other student" do
+        student = students(:jet)
+        get :show, id: student.id
 
         assert_response :redirect
         assert_redirected_to root_path
