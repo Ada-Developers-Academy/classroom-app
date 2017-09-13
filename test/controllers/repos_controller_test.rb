@@ -3,6 +3,7 @@ require 'test_helper'
 class ReposControllerTest < ActionController::TestCase
   setup do
     @repo = repos(:word_guess)
+    @cohort = cohorts(:sharks)
   end
 
   def create_params
@@ -72,7 +73,6 @@ class ReposControllerTest < ActionController::TestCase
       assert_redirected_to repos_path
     end
 
-
     test "should get the edit form" do
       get :edit, { id: @repo.id }
 
@@ -104,6 +104,36 @@ class ReposControllerTest < ActionController::TestCase
       delete :destroy, { id: @repo.id }
 
       assert_redirected_to repos_path
+    end
+
+    def with_github_mock(&block)
+      github_mock = Minitest::Mock.new
+      def github_mock.retrieve_student_info(repo, cohort)
+        Submission.where(repo: repo)
+      end
+
+      GitHub.stub :new, github_mock, &block
+    end
+
+    test "should get the show page for a particular repo and cohort" do
+      with_github_mock do
+        get :show, { repo_id: @repo.id, id: @cohort.id }
+
+        assert_response :success
+        assert_template :show
+      end
+    end
+
+    test "should redirect when cohort ID is invalid" do
+      invalid_cohort_id = 0
+      # Sanity check
+      assert_nil Cohort.find_by(id: invalid_cohort_id)
+
+      get :show, { repo_id: @repo.id, id: invalid_cohort_id }
+
+      assert_response :redirect
+      assert_redirected_to repos_path
+      assert_not_empty flash[:error]
     end
   end
 

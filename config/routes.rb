@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   root 'pull_requests#home'
 
   resources :repos do
-    get "/cohort/:cohort_id", to: "repos#show", as: :cohort
+    resources :cohort, only: [:show], controller: 'repos'
 
     resources :students, only: [] do
       resources :feedback, only: [:new, :create]

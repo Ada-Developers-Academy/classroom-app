@@ -1,18 +1,15 @@
 require 'github'
 
 class ReposController < ApplicationController
-  load_and_authorize_resource id_param: :repo_id
+  load_and_authorize_resource except: [:show]
+
+  load_and_authorize_resource :repo, parent: true, only: [:show]
+  load_and_authorize_resource :cohort, parent: false, only: [:show]
 
   def index
   end
 
   def show
-    @cohort = Cohort.find_by_id(params[:cohort_id])
-    if !@cohort
-      flash[:error] = "Cohort not found"
-      redirect_to :back
-    end
-
     gh = GitHub.new(session[:token])
     @all_data = gh.retrieve_student_info(@repo, @cohort)
   end
@@ -49,7 +46,7 @@ class ReposController < ApplicationController
   private
 
   rescue_from ActiveRecord::RecordNotFound do |ex|
-    flash[:error] = "Repo not found."
+    flash[:error] = "Resource not found."
     redirect_to repos_path
   end
 
