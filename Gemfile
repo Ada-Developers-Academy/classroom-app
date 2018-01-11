@@ -44,6 +44,9 @@ gem "cancancan"
 # Epic Editor for markdown previewing
 gem "epic-editor-rails"
 
+# For using Postgres-specific DB features
+gem "schema_plus_enums"
+
 group :production do
   gem 'rails_12factor'
   gem 'rdoc', '~> 4.3'
