@@ -1,5 +1,9 @@
 # Create instructor
-User.create!(name: "Test Instructor 1", provider: :github, uid: "30710012", role: "instructor")
+User.create!(name: "Test Instructor 1",
+             provider: :github,
+             uid: "30710012",
+             github_name: "ada-instructor-1",
+             role: "instructor")
 
 # Create cohorts
 cohorts = [
