@@ -191,9 +191,8 @@ GEM
     schema_monkey (2.1.5)
       activerecord (>= 4.2)
       modware (~> 0.1)
-    schema_plus_core (1.0.2)
+    schema_plus_core (0.6.2)
       activerecord (~> 4.2)
-      its-it (~> 1.2)
       schema_monkey (~> 2.1)
     schema_plus_enums (0.1.7)
       activerecord (>= 4.2, < 5.2)
@@ -251,6 +250,7 @@ DEPENDENCIES
   rails_12factor
   rdoc (~> 4.3)
   sass-rails (~> 5.0)
+  schema_plus_core (~> 0.6.2)
   schema_plus_enums
   sdoc (~> 0.4.0)
   spring

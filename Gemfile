@@ -45,6 +45,7 @@ gem "cancancan"
 gem "epic-editor-rails"
 
 # For using Postgres-specific DB features
+gem "schema_plus_core", "~> 0.6.2"
 gem "schema_plus_enums"
 
 group :production do
