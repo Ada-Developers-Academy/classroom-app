@@ -3,6 +3,14 @@ class Submission < ActiveRecord::Base
   belongs_to :repo
   belongs_to :feedback_provider, class_name: 'User', foreign_key: 'user_id'
 
+  GRADES = [
+    :meet_standard,
+    :approach_standard,
+    :not_standard
+  ]
+
+  enum grade: GRADES
+
   scope :with_pr, ->(url) { where(pr_url: url) }
   scope :grouped_with, ->(sub) { with_pr(sub.pr_url) }
 
