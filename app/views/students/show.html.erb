@@ -7,9 +7,7 @@
           <th>Project</th>
           <th>PR URL</th>
           <th>Feedback URL</th>
-          <% if current_user.instructor? -%>
-            <th>Grade</th>
-          <% end -%>
+          <th>Grade</th>
         </tr>
         <% @student.submissions.each do |submit| %>
           <tr>
@@ -28,11 +26,9 @@
                 None
               <% end %>
             </td>
-            <% if current_user.instructor? -%>
-              <td class="<%= class_for_grade(submit.grade) %>">
-                <%= name_for_grade(submit.grade) %>
-              </td>
-            <% end -%>
+            <td class="<%= class_for_grade(submit.grade) %>">
+              <%= name_for_grade(submit.grade) %>
+            </td>
           </tr>
         <% end %>
       </thead>
