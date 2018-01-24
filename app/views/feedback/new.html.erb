@@ -9,6 +9,18 @@
       <%= text_area_tag "feedback[comments]", @feedback_template, size: "100x15" %>
     </div>
   </div>
+  <div class="control-group">
+    <div class="btn-group btn-group-lg btn-grades"
+         data-toggle="buttons"
+         role="group"
+         aria-label="Assign a grade for the project submission">
+      <% Submission::GRADES.each do |grade| -%>
+        <label class="btn <%= btn_class_for_grade(grade) %>">
+          <input type="radio" name="feedback[grade]" value="<%= grade %>"><%= name_for_grade(grade) %></input>
+        </label>
+      <% end -%>
+    </div>
+  </div>
 </fieldset>
 <div class="control-group">
   <%= submit_tag "Submit" %>
