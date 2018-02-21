@@ -1,7 +1,22 @@
 require 'test_helper'
 
 class SubmissionTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  class Validations < SubmissionTest
+    def valid_submission
+      submissions(:jet_farmar)
+    end
+
+    setup do
+      # sanity check
+      assert valid_submission.valid?
+    end
+
+    test 'validates grade can be nil when feedback has not been submitted' do
+      valid_submission.grade = nil
+      valid_submission.feedback_url = nil
+      valid_submission.feedback_provider = nil
+
+      assert valid_submission.valid?
+    end
+  end
 end
