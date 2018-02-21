@@ -77,13 +77,14 @@ GEM
       sass (>= 3.2)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
-    hashie (3.4.4)
+    hashie (3.5.7)
     httparty (0.13.7)
       json (~> 1.8)
       multi_xml (>= 0.5.2)
     i18n (0.9.1)
       concurrent-ruby (~> 1.0)
     interception (0.5)
+    its-it (1.3.0)
     jbuilder (2.3.2)
       activesupport (>= 3.0.0, < 5)
       multi_json (~> 1.2)
@@ -96,6 +97,7 @@ GEM
       turbolinks
     json (1.8.6)
     jwt (1.5.4)
+    key_struct (0.4.2)
     loofah (2.1.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -105,6 +107,8 @@ GEM
     mini_mime (1.0.0)
     mini_portile2 (2.3.0)
     minitest (5.11.1)
+    modware (0.1.3)
+      key_struct (~> 0.4)
     multi_json (1.11.2)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
@@ -116,9 +120,9 @@ GEM
       multi_json (~> 1.3)
       multi_xml (~> 0.5)
       rack (>= 1.2, < 3)
-    omniauth (1.3.1)
-      hashie (>= 1.2, < 4)
-      rack (>= 1.0, < 3)
+    omniauth (1.8.1)
+      hashie (>= 3.4.6, < 3.6.0)
+      rack (>= 1.6.2, < 3)
     omniauth-github (1.1.2)
       omniauth (~> 1.0)
       omniauth-oauth2 (~> 1.1)
@@ -184,11 +188,22 @@ GEM
       sprockets (>= 2.8, < 4.0)
       sprockets-rails (>= 2.0, < 4.0)
       tilt (>= 1.1, < 3)
+    schema_monkey (2.1.5)
+      activerecord (>= 4.2)
+      modware (~> 0.1)
+    schema_plus_core (0.6.2)
+      activerecord (~> 4.2)
+      schema_monkey (~> 2.1)
+    schema_plus_enums (0.1.7)
+      activerecord (>= 4.2, < 5.2)
+      its-it (~> 1.2)
+      schema_plus_core
     sdoc (0.4.1)
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
     slop (3.6.0)
-    spring (1.4.1)
+    spring (2.0.2)
+      activesupport (>= 4.2)
     sprockets (3.7.1)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
@@ -226,7 +241,7 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   jquery-turbolinks
-  omniauth
+  omniauth (~> 1.8.1)
   omniauth-github
   pg
   pry-byebug
@@ -235,6 +250,8 @@ DEPENDENCIES
   rails_12factor
   rdoc (~> 4.3)
   sass-rails (~> 5.0)
+  schema_plus_core (~> 0.6.2)
+  schema_plus_enums
   sdoc (~> 0.4.0)
   spring
   turbolinks
@@ -242,4 +259,4 @@ DEPENDENCIES
   web-console (~> 2.0)
 
 BUNDLED WITH
-   1.15.3
+   1.16.1

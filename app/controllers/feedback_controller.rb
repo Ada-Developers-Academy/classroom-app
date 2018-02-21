@@ -13,9 +13,9 @@ class FeedbackController < ApplicationController
     if !@submission
       render :new
     else
-      feedback_url = @github.add_new(params[:Feedback], @repo.repo_url, @submission.pr_id)
+      feedback_url = @github.add_new(feedback_params[:comments], @repo.repo_url, @submission.pr_id)
       if feedback_url
-        @submission.update_group(feedback_url: feedback_url, user_id: session[:user_id])
+        @submission.update_group(feedback_url: feedback_url, user_id: session[:user_id], grade: feedback_params[:grade])
         flash[:notice] = "Feedback successfully posted"
       else
         flash[:error] = "Feedback not successfully posted"
@@ -35,5 +35,9 @@ class FeedbackController < ApplicationController
 
   def authorize!
     super :create, @submission
+  end
+
+  def feedback_params
+    params.require(:feedback).permit(:comments, :grade)
   end
 end

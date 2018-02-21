@@ -35,7 +35,7 @@ gem 'httparty'
 gem 'bootstrap-sass', '~> 3.3.6'
 gem 'font-awesome-sass', '~> 4.5.0'
 
-gem "omniauth"
+gem "omniauth", "~> 1.8.1"
 gem "omniauth-github"
 
 # Authorization framework
@@ -43,6 +43,10 @@ gem "cancancan"
 
 # Epic Editor for markdown previewing
 gem "epic-editor-rails"
+
+# For using Postgres-specific DB features
+gem "schema_plus_core", "~> 0.6.2"
+gem "schema_plus_enums"
 
 group :production do
   gem 'rails_12factor'
