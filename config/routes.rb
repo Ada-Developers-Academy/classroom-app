@@ -18,6 +18,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :attendance
+
   get "/auth/:provider/callback", to: "sessions#create"
   delete "/logout", to: "sessions#destroy"
 end
