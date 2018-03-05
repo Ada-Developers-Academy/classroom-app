@@ -6,7 +6,7 @@ class SessionsController < ApplicationController
     auth_hash = request.env['omniauth.auth']
 
     if params[:provider] != "schoology"
-      # github 
+      # github
       if auth_hash && auth_hash["uid"]
         @user = User.update_or_create_from_omniauth(auth_hash)
         if @user
@@ -33,12 +33,19 @@ class SessionsController < ApplicationController
       end
     else
       # schoology
+      session[:schoology_token] = auth_hash[:credentials][:token]
+      session[:schoology_secret] = auth_hash[:credentials][:secret]
+
+      redirect_to root_path
     end
   end
 
   def destroy
     session.delete :user_id
     session.delete :token
+
+    session.delete :schoology_token
+    session.delete :schoology_secret
     redirect_to root_path
   end
 
