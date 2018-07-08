@@ -156,7 +156,13 @@ class ReposControllerTest < ActionController::TestCase
       end
 
       test "should create new repo" do
-        post :create, create_params
+        puts "fooooooooooooooooooooooooooooo!!!!!!!!"
+        foo = {
+            repo_url: nil
+        }
+
+        post :create, params: { repo: foo }
+        # post :create, create_params
 
         assert_response :redirect
         assert_redirected_to repos_path

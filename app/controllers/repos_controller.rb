@@ -2,7 +2,6 @@ require 'github'
 
 class ReposController < ApplicationController
   load_and_authorize_resource except: [:show]
-
   load_and_authorize_resource :repo, parent: true, only: [:show]
   load_and_authorize_resource :cohort, parent: false, only: [:show]
 

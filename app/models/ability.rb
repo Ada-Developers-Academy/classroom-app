@@ -1,5 +1,6 @@
 class Ability < ApplicationRecord
-  include CanCan::Ability
+  # self.abstract_class = true
+include CanCan::Ability
 
   def initialize(user)
     return guest_rules unless user
@@ -26,4 +27,5 @@ class Ability < ApplicationRecord
     can :read, Submission, student: { github_name: user.github_name }
     can :read, Student, github_name: user.github_name
   end
+
 end
