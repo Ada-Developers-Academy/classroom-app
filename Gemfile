@@ -122,8 +122,8 @@ gem 'activemodel-serializers-xml' # Added. TODO: needed? http://guides.rubyonrai
 #
 # gem 'httparty'
 #
-# gem 'bootstrap-sass', '~> 3.3.6'
-# gem 'font-awesome-sass', '~> 4.5.0'
+gem 'bootstrap-sass', '~> 3.3.6'
+gem 'font-awesome-sass', '~> 4.5.0'
 #
 gem "omniauth", "~> 1.8.1"
 gem "omniauth-github"
@@ -132,7 +132,7 @@ gem "omniauth-github"
 gem "cancancan"
 #
 # # Epic Editor for markdown previewing
-# gem "epic-editor-rails" # TODO: conflicts with railties
+# gem "epic-editor-rails" # TODO: conflicts with railties and is unmaintained
 #
 # # For using Postgres-specific DB features
 # # gem "schema_plus_core", "~> 0.6.2"

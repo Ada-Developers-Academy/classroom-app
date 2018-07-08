@@ -44,3 +44,6 @@ Things NOT done from Rails Guide [update list](http://guides.rubyonrails.org)
 - [New Framework Defaults (several!)](http://edgeguides.rubyonrails.org/upgrading_ruby_on_rails.html#new-framework-defaults)
 - [Changes with JSON/JSONB serialization](http://edgeguides.rubyonrails.org/upgrading_ruby_on_rails.html#changes-with-json-jsonb-serialization)
 - [Expiry in signed or encrypted cookie is now embedded in the cookies values](http://guides.rubyonrails.org/upgrading_ruby_on_rails.html#expiry-in-signed-or-encrypted-cookie-is-now-embedded-in-the-cookies-values)
+
+from /Users/kirstenschumy/Documents/Ada/capstone-project/ada-prs/app/assets/javascripts/application.js
+//= require epiceditor
