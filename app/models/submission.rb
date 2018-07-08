@@ -1,4 +1,4 @@
-class Submission < ActiveRecord::Base
+class Submission < ApplicationRecord
   belongs_to :student
   belongs_to :repo
   belongs_to :feedback_provider, class_name: 'User', foreign_key: 'user_id'

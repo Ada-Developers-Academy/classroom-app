@@ -1,4 +1,4 @@
-class UserInvite < ActiveRecord::Base
+class UserInvite < ApplicationRecord
   belongs_to :inviter, class_name: 'User'
   belongs_to :cohort, dependent: :destroy
 

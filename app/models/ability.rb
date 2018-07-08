@@ -1,4 +1,4 @@
-class Ability
+class Ability < ApplicationRecord
   include CanCan::Ability
 
   def initialize(user)

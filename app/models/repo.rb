@@ -1,4 +1,4 @@
-class Repo < ActiveRecord::Base
+class Repo < ApplicationRecord
   has_and_belongs_to_many :cohorts
   has_many :submissions, dependent: :destroy
   validates :repo_url, presence: true
