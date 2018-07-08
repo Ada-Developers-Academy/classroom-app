@@ -10,12 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_01_11_181821) do
+ActiveRecord::Schema.define(version: 2018_07_08_055032) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "cohorts", id: :serial, force: :cascade do |t|
+  create_table "cohorts", force: :cascade do |t|
     t.integer "number", null: false
     t.string "name", null: false
     t.datetime "created_at", null: false
@@ -24,20 +24,20 @@ ActiveRecord::Schema.define(version: 2018_01_11_181821) do
     t.index ["number", "name"], name: "index_cohorts_on_number_and_name", unique: true
   end
 
-  create_table "cohorts_repos", id: :serial, force: :cascade do |t|
+  create_table "cohorts_repos", force: :cascade do |t|
     t.integer "cohort_id", null: false
     t.string "repo_id", null: false
     t.index ["cohort_id", "repo_id"], name: "index_cohorts_repos_on_cohort_id_and_repo_id", unique: true
   end
 
-  create_table "repos", id: :serial, force: :cascade do |t|
+  create_table "repos", force: :cascade do |t|
     t.string "repo_url", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "individual", default: true
   end
 
-  create_table "students", id: :serial, force: :cascade do |t|
+  create_table "students", force: :cascade do |t|
     t.string "name", null: false
     t.integer "cohort_id", null: false
     t.string "github_name", null: false
@@ -47,7 +47,7 @@ ActiveRecord::Schema.define(version: 2018_01_11_181821) do
     t.index ["cohort_id", "github_name"], name: "index_students_on_cohort_id_and_github_name", unique: true
   end
 
-  create_table "submissions", id: :serial, force: :cascade do |t|
+  create_table "submissions", force: :cascade do |t|
     t.integer "student_id", null: false
     t.integer "repo_id", null: false
     t.datetime "submitted_at"
@@ -55,24 +55,25 @@ ActiveRecord::Schema.define(version: 2018_01_11_181821) do
     t.datetime "updated_at", null: false
     t.string "pr_url"
     t.string "feedback_url"
-    t.integer "user_id"
-    t.enum "grade"
+    t.bigint "user_id"
+    t.integer "grade"
     t.index ["student_id", "repo_id"], name: "index_submissions_on_student_id_and_repo_id", unique: true
     t.index ["user_id"], name: "index_submissions_on_user_id"
   end
 
-  create_table "user_invites", id: :serial, force: :cascade do |t|
+  create_table "user_invites", force: :cascade do |t|
     t.integer "inviter_id", null: false
     t.string "github_name", null: false
     t.string "role", default: "unknown", null: false
     t.boolean "accepted", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "cohort_id"
+    t.bigint "cohort_id"
+    t.index ["cohort_id"], name: "index_user_invites_on_cohort_id"
     t.index ["github_name"], name: "index_user_invites_on_github_name", unique: true, where: "(accepted = false)"
   end
 
-  create_table "users", id: :serial, force: :cascade do |t|
+  create_table "users", force: :cascade do |t|
     t.string "name", null: false
     t.string "uid", null: false
     t.string "provider", null: false
