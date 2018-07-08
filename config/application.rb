@@ -11,6 +11,12 @@ module PullRequests
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 5.0
 
+    # Added. TODO: Needed?
+    # https://github.com/rails/rails/pull/17227
+    # http://guides.rubyonrails.org/upgrading_ruby_on_rails.html#halting-callback-chains-via-throw-abort
+    # ActiveSupport.halt_callback_chains_on_return_false = false
+
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded after loading

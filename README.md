@@ -24,3 +24,23 @@ Ideally this application has configuration for two different roles, **Instructor
 1. Add the `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET` from the app you just registered to the `.env` file
 1. `rails s`
 1. App should be running at `localhost:3000`
+
+
+# IMPORTANT!
+Things NOT done from Rails Guide [update list](http://guides.rubyonrails.org)
+- [Autoloading is Disabled After Booting in the Production Environment](http://guides.rubyonrails.org/upgrading_ruby_on_rails.html#autoloading-is-disabled-after-booting-in-the-production-environment)
+- [Removed Support for Legacy mysql Database Adapter](http://guides.rubyonrails.org/upgrading_ruby_on_rails.html#removed-support-for-legacy-mysql-database-adapter)
+- [Removed Support for Debugger](http://guides.rubyonrails.org/upgrading_ruby_on_rails.html#removed-support-for-debugger)
+- [Use bin/rails for running tasks and tests](http://guides.rubyonrails.org/upgrading_ruby_on_rails.html#use-bin-rails-for-running-tasks-and-tests) - nothing to change(?)
+- [ActionController::Parameters No Longer Inherits from HashWithIndifferentAccess](http://edgeguides.rubyonrails.org/upgrading_ruby_on_rails.html#actioncontroller-parameters-no-longer-inherits-from-hashwithindifferentaccess)
+- [protect_from_forgery Now Defaults to prepend: false](http://edgeguides.rubyonrails.org/upgrading_ruby_on_rails.html#protect-from-forgery-now-defaults-to-prepend-false)
+- [Default Template Handler is Now RAW](http://edgeguides.rubyonrails.org/upgrading_ruby_on_rails.html#default-template-handler-is-now-raw)
+- [Added Wildcard Matching for Template Dependencies](http://edgeguides.rubyonrails.org/upgrading_ruby_on_rails.html#added-wildcard-matching-for-template-dependencies)
+- [ActionView::Helpers::RecordTagHelper moved to external gem (record_tag_helper)](http://edgeguides.rubyonrails.org/upgrading_ruby_on_rails.html#actionview-helpers-recordtaghelper-moved-to-external-gem-record-tag-helper)
+- [Removed Support for protected_attributes Gem](http://edgeguides.rubyonrails.org/upgrading_ruby_on_rails.html#removed-support-for-protected-attributes-gem)
+- [Removed support for activerecord-deprecated_finders gem](http://edgeguides.rubyonrails.org/upgrading_ruby_on_rails.html#removed-support-for-activerecord-deprecated-finders-gem)
+- [ActiveSupport::TestCase Default Test Order is Now Random](http://edgeguides.rubyonrails.org/upgrading_ruby_on_rails.html#activesupport-testcase-default-test-order-is-now-random)
+- [ActionController::Live became a Concern](http://edgeguides.rubyonrails.org/upgrading_ruby_on_rails.html#actioncontroller-live-became-a-concern)
+- [New Framework Defaults (several!)](http://edgeguides.rubyonrails.org/upgrading_ruby_on_rails.html#new-framework-defaults)
+- [Changes with JSON/JSONB serialization](http://edgeguides.rubyonrails.org/upgrading_ruby_on_rails.html#changes-with-json-jsonb-serialization)
+- [Expiry in signed or encrypted cookie is now embedded in the cookies values](http://guides.rubyonrails.org/upgrading_ruby_on_rails.html#expiry-in-signed-or-encrypted-cookie-is-now-embedded-in-the-cookies-values)

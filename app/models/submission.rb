@@ -1,4 +1,6 @@
 class Submission < ApplicationRecord
+  # TODO: belongs_to now is required by default. Should these be changed to optional?
+  # http://guides.rubyonrails.org/upgrading_ruby_on_rails.html#active-record-belongs-to-required-by-default-option
   belongs_to :student
   belongs_to :repo
   belongs_to :feedback_provider, class_name: 'User', foreign_key: 'user_id'

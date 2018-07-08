@@ -75,11 +75,16 @@ group :development do
 end
 
 group :test do
+ # Added. TODO: this right? http://guides.rubyonrails.org/upgrading_ruby_on_rails.html#extraction-of-some-helper-methods-to-rails-controller-testing
+  gem 'rails-controller-testing'
+
   gem 'minitest-rails'
   gem 'minitest-reporters'
 end
 
 gem 'httparty'
+
+gem 'activemodel-serializers-xml' # Added. TODO: needed? http://guides.rubyonrails.org/upgrading_ruby_on_rails.html#xml-serialization
 
 # source 'https://rubygems.org'
 #
@@ -125,7 +130,7 @@ gem "omniauth-github"
 gem "cancancan"
 #
 # # Epic Editor for markdown previewing
-# gem "epic-editor-rails" # !!!!! conflicts with railties
+# gem "epic-editor-rails" # TODO: conflicts with railties
 #
 # # For using Postgres-specific DB features
 # # gem "schema_plus_core", "~> 0.6.2"
@@ -133,7 +138,7 @@ gem "schema_plus_core"
 # gem "schema_plus_enums"
 #
 # group :production do
-#   gem 'rails_12factor'  # no longer need https://github.com/heroku/rails_12factor
+#   gem 'rails_12factor'  # TODO: no longer need https://github.com/heroku/rails_12factor
 #   gem 'rdoc', '~> 4.3'
 # end
 #
