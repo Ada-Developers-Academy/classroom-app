@@ -26,7 +26,7 @@ Ideally this application has configuration for two different roles, **Instructor
 1. App should be running at `localhost:3000`
 
 
-# IMPORTANT!
+## IMPORTANT!
 Things NOT done from Rails Guide [update list](http://guides.rubyonrails.org)
 - [Autoloading is Disabled After Booting in the Production Environment](http://guides.rubyonrails.org/upgrading_ruby_on_rails.html#autoloading-is-disabled-after-booting-in-the-production-environment)
 - [Removed Support for Legacy mysql Database Adapter](http://guides.rubyonrails.org/upgrading_ruby_on_rails.html#removed-support-for-legacy-mysql-database-adapter)
@@ -45,5 +45,16 @@ Things NOT done from Rails Guide [update list](http://guides.rubyonrails.org)
 - [Changes with JSON/JSONB serialization](http://edgeguides.rubyonrails.org/upgrading_ruby_on_rails.html#changes-with-json-jsonb-serialization)
 - [Expiry in signed or encrypted cookie is now embedded in the cookies values](http://guides.rubyonrails.org/upgrading_ruby_on_rails.html#expiry-in-signed-or-encrypted-cookie-is-now-embedded-in-the-cookies-values)
 
-from /Users/kirstenschumy/Documents/Ada/capstone-project/ada-prs/app/assets/javascripts/application.js
+## Issues
+1. enum gem no longer supported.
+1. btree thing missing from schema
+1. workaround for tests is probably wrong (or maybe not?? https://stackoverflow.com/questions/43797133/controller-spec-unknown-keyword-id)
+1. gems for markdown preview no longer works or is supported. List is possible replacements
+    - [draft-js](https://github.com/facebook/draft-js) ([Docs](https://draftjs.org/docs/getting-started.html) - also has an active community building [resources](https://github.com/nikgraf/awesome-draft-js)
+    - [react-markdown-editor](https://github.com/jrm2k6/react-markdown-editor)
+    - [react-mde](https://github.com/andrerpena/react-mde)
+    
+## Kirsten's Random Notes
+from /Users/kirstenschumy/Documents/Ada/capstone-project/ada-prs/app/assets/javascripts/application.js  
 //= require epiceditor
+
