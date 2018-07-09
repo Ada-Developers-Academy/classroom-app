@@ -50,7 +50,7 @@ Things NOT done from Rails Guide [update list](http://guides.rubyonrails.org)
 1. btree thing missing from schema
 1. workaround for tests is probably wrong (or maybe not?? https://stackoverflow.com/questions/43797133/controller-spec-unknown-keyword-id)
 1. gems for markdown preview no longer works or is supported. List is possible replacements
-    - [draft-js](https://github.com/facebook/draft-js) ([Docs](https://draftjs.org/docs/getting-started.html) - also has an active community building [resources](https://github.com/nikgraf/awesome-draft-js)
+    - [draft-js](https://github.com/facebook/draft-js) ([Docs](https://draftjs.org/docs/getting-started.html)) - also has an active community building [resources](https://github.com/nikgraf/awesome-draft-js)
     - [react-markdown-editor](https://github.com/jrm2k6/react-markdown-editor)
     - [react-mde](https://github.com/andrerpena/react-mde)
     
