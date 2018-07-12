@@ -117,7 +117,7 @@ class AssignmentsControllerTest < ActionController::TestCase
 
     test "should get the show page for a particular assignment and cohort" do
       with_github_mock do
-        get :show, params: { repo_id: @assignment.id, id: @cohort.id }
+        get :show, params: { assignment_id: @assignment.id, id: @cohort.id }
 
         assert_response :success
         assert_template :show
@@ -129,7 +129,7 @@ class AssignmentsControllerTest < ActionController::TestCase
       # Sanity check
       assert_nil Cohort.find_by(id: invalid_cohort_id)
 
-      get :show, params: { repo_id: @assignment.id, id: invalid_cohort_id }
+      get :show, params: { assignment_id: @assignment.id, id: invalid_cohort_id }
 
       assert_response :redirect
       assert_redirected_to assignments_path
