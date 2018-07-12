@@ -11,7 +11,7 @@
         <% @student.submissions.each do |submit| %>
           <tr>
             <td class="<%= class_for_grade(submit.grade) %>">
-              <%= link_to submit.repo.repo_url, submit.repo.full_repo_url, :target => "blank" %>
+              <%= link_to submit.assignment.repo_url, submit.assignment.full_repo_url, :target => "blank" %>
             </td>
             <td>
               <% if submit.pr_url %>

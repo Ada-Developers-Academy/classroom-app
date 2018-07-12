@@ -10,10 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_08_055032) do
+ActiveRecord::Schema.define(version: 2018_07_12_183108) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "assignments", force: :cascade do |t|
+    t.string "repo_url", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "individual", default: true
+  end
+
+  create_table "assignments_cohorts", force: :cascade do |t|
+    t.integer "cohort_id", null: false
+    t.string "assignment_id", null: false
+    t.index ["cohort_id", "assignment_id"], name: "index_assignments_cohorts_on_cohort_id_and_assignment_id", unique: true
+  end
 
   create_table "cohorts", force: :cascade do |t|
     t.integer "number", null: false
@@ -22,19 +35,6 @@ ActiveRecord::Schema.define(version: 2018_07_08_055032) do
     t.datetime "updated_at", null: false
     t.string "instructor_emails"
     t.index ["number", "name"], name: "index_cohorts_on_number_and_name", unique: true
-  end
-
-  create_table "cohorts_repos", force: :cascade do |t|
-    t.integer "cohort_id", null: false
-    t.string "repo_id", null: false
-    t.index ["cohort_id", "repo_id"], name: "index_cohorts_repos_on_cohort_id_and_repo_id", unique: true
-  end
-
-  create_table "repos", force: :cascade do |t|
-    t.string "repo_url", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.boolean "individual", default: true
   end
 
   create_table "students", force: :cascade do |t|
@@ -49,7 +49,7 @@ ActiveRecord::Schema.define(version: 2018_07_08_055032) do
 
   create_table "submissions", force: :cascade do |t|
     t.integer "student_id", null: false
-    t.integer "repo_id", null: false
+    t.integer "assignment_id", null: false
     t.datetime "submitted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -57,7 +57,7 @@ ActiveRecord::Schema.define(version: 2018_07_08_055032) do
     t.string "feedback_url"
     t.bigint "user_id"
     t.integer "grade"
-    t.index ["student_id", "repo_id"], name: "index_submissions_on_student_id_and_repo_id", unique: true
+    t.index ["student_id", "assignment_id"], name: "index_submissions_on_student_id_and_assignment_id", unique: true
     t.index ["user_id"], name: "index_submissions_on_user_id"
   end
 

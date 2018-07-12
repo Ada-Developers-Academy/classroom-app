@@ -1,6 +1,6 @@
-<%= button_to "Add New Repo", new_repo_path, method: :get %>
+<%= button_to "Add New Assignment", new_assignment_path, method: :get %>
 
-<table class="table" id="repo-table">
+<table class="table" id="assignment-table">
   <thead>
     <tr>
       <th>Cohort</th>
@@ -13,7 +13,7 @@
     </tr>
   </thead>
   <tbody>
-    <% @repos.each do |r| %>
+    <% @assignments.each do |r| %>
       <tr>
         <td><% r.cohorts.each do |c| %>
           <%= c.display_name %><br>
@@ -30,8 +30,8 @@
           <% end %>
         </td>
         <td>
-          <%= link_to icon('pencil'), { controller: "repos", action: "edit", id: r.id } %>
-          <%= link_to icon('trash'), { controller: "repos", action: "destroy", id: r.id }, method: :delete, data: { confirm: "Are you sure? "} %>
+          <%= link_to icon('pencil'), { controller: "assignments", action: "edit", id: r.id } %>
+          <%= link_to icon('trash'), { controller: "assignments", action: "destroy", id: r.id }, method: :delete, data: { confirm: "Are you sure? "} %>
         </td>
       </tr>
     <% end %>

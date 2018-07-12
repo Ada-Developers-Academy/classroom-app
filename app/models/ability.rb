@@ -20,7 +20,7 @@ include CanCan::Ability
 
   def instructor_rules
     alias_action :new_instructor, :new_student, to: :create
-    [Cohort, Repo, Student, Submission, User, UserInvite].each do |model|
+    [Cohort, Assignment, Student, Submission, User, UserInvite].each do |model|
       can :manage, model
     end
   end
