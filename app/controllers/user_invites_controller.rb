@@ -10,7 +10,7 @@ class UserInvitesController < ApplicationController
 
   def create
     action = :"create_#{params[:role]}"
-    return send(action) if respond_to?(action, true)
+    return send(action) if respond_to?(action, true) # NOTE: calls create_student or instructor (see below)
 
     render not_found
   end
