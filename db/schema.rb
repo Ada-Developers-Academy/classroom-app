@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_12_013053) do
+ActiveRecord::Schema.define(version: 2018_07_12_183108) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,6 +22,12 @@ ActiveRecord::Schema.define(version: 2018_07_12_013053) do
     t.boolean "individual", default: true
   end
 
+  create_table "assignments_cohorts", force: :cascade do |t|
+    t.integer "cohort_id", null: false
+    t.string "assignment_id", null: false
+    t.index ["cohort_id", "assignment_id"], name: "index_assignments_cohorts_on_cohort_id_and_assignment_id", unique: true
+  end
+
   create_table "cohorts", force: :cascade do |t|
     t.integer "number", null: false
     t.string "name", null: false
@@ -29,12 +35,6 @@ ActiveRecord::Schema.define(version: 2018_07_12_013053) do
     t.datetime "updated_at", null: false
     t.string "instructor_emails"
     t.index ["number", "name"], name: "index_cohorts_on_number_and_name", unique: true
-  end
-
-  create_table "cohorts_assignments", force: :cascade do |t|
-    t.integer "cohort_id", null: false
-    t.string "assignment_id", null: false
-    t.index ["cohort_id", "assignment_id"], name: "index_cohorts_assignments_on_cohort_id_and_assignment_id", unique: true
   end
 
   create_table "students", force: :cascade do |t|
