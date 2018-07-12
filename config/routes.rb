@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   root 'pull_requests#home'
 
-  resources :assignment do
+  resources :assignments do
     resources :cohort, only: [:show], controller: 'assignments'
 
     resources :students, only: [] do

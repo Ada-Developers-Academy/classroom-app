@@ -28,7 +28,7 @@ class FeedbackController < ApplicationController
   private
 
   def find_objects
-    @assignment = Assignment.find(params[:repo_id])
+    @assignment = Assignment.find(params[:assignment_id])
     @submission = Submission.find_by(student: params[:student_id], assignment: @assignment)
     @github = GitHubComment.new(session[:token])
   end
