@@ -6,11 +6,26 @@ class AssignmentsController < ApplicationController
   load_and_authorize_resource :cohort, parent: false, only: [:show]
 
   def index
+    # new code for api wrapper:
+    if params[:query]
+      data = RepoWrapper.search(params[:query])
+    else
+      data = Assignment.all
+    end
+    render status: :ok, json: data
   end
 
   def show
-    gh = GitHub.new(session[:token])
-    @all_data = gh.retrieve_student_info(@assignment, @cohort)
+    # original code for views:
+    # gh = GitHub.new(session[:token])
+    # @all_data = gh.retrieve_student_info(@assignment, @cohort)
+
+    # render(
+    #   status: :ok,
+    #   json: @assignment.as_json(
+    #     only: [:id, :repo_url]
+    #   )
+    # )
   end
 
   def new
