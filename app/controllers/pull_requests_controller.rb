@@ -3,10 +3,10 @@
 class PullRequestsController < ApplicationController
   skip_before_action :require_login, only: [:home]
   skip_authorization_check only: [:home]
-  load_and_authorize_resource class: Repo, instance_name: :repo, except: [:home]
+  load_and_authorize_resource class: Assignment, instance_name: :assignment, except: [:home]
 
   def home
-    if can? :read, Repo
+    if can? :read, Assignment
       redirect_to pull_requests_path
     elsif can? :read, Student
       students = Student.accessible_by(current_ability)

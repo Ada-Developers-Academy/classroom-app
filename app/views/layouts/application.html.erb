@@ -15,7 +15,7 @@
         <ul class="nav navbar-nav">
           <li><a href="#" class="logo"></a></li>
           <li class= <%= 'active' if current_page?(pull_requests_path) %>><%= link_to "Home", root_path %></li>
-          <li class= <%= 'active' if current_page?(repos_path) %>><%= link_to "Repos", repos_path %></li>
+          <li class= <%= 'active' if current_page?(assignments_path) %>><%= link_to "Assignment", assignments_path %></li>
           <li class= <%= 'active' if current_page?(students_path) %>><%= link_to "Students", students_path %></li>
           <li class= <%= 'active' if current_page?(user_invites_path) %>><%= link_to "Invites", user_invites_path %></li>
           <li><a href="#"></a></li>

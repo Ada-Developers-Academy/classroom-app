@@ -15,10 +15,14 @@ class SessionsControllerTest < ActionController::TestCase
         set_auth_mock :github
       end
 
+      def provider_params
+        { provider: :github }
+      end
+
       test 'with no OAuth data redirects to root' do
         request.env['omniauth.auth'] = nil
 
-        get :create, provider: :github
+        get :create, params: provider_params
 
         assert_response :redirect
         assert_redirected_to root_path
@@ -26,7 +30,7 @@ class SessionsControllerTest < ActionController::TestCase
       end
 
       test 'OAuth login redirects to root' do
-        get :create, provider: :github
+        get :create, params: provider_params
 
         assert_response :redirect
         assert_redirected_to root_path
@@ -35,17 +39,17 @@ class SessionsControllerTest < ActionController::TestCase
 
       test 'first-time OAuth login creates a new user' do
         assert_difference(lambda{ User.count }, 1) do
-          get :create, provider: :github
+          get :create, params: provider_params
         end
 
         # Additional logins do not create new users
         assert_no_difference(lambda{ User.count }) do
-          get :create, provider: :github
+          get :create, params: provider_params
         end
       end
 
       test 'first-time OAuth login sets appropriate fields on User record' do
-        get :create, provider: :github
+        get :create, params: provider_params
 
         user = User.last
         auth_hash = request.env['omniauth.auth']
@@ -69,7 +73,7 @@ class SessionsControllerTest < ActionController::TestCase
         set_auth_mock :github_changed_info
         request.env['omniauth.auth']['uid'] = user.uid
 
-        get :create, provider: :github
+        get :create, params: provider_params
 
         user.reload
         user_info.each do |attr, old_value|
@@ -80,7 +84,7 @@ class SessionsControllerTest < ActionController::TestCase
       test 'uninvited users have unknown role' do
         set_auth_mock :uninvited
 
-        get :create, provider: :github
+        get :create, params: provider_params
 
         assert_equal 'unknown', User.last.role
       end
@@ -89,7 +93,7 @@ class SessionsControllerTest < ActionController::TestCase
         # This matches up with the `instructor` UserInvite fixture
         set_auth_mock :invited_instructor
 
-        get :create, provider: :github
+        get :create, params: provider_params
 
         assert_equal 'instructor', User.last.role
       end
@@ -98,13 +102,13 @@ class SessionsControllerTest < ActionController::TestCase
         # This matches up with the `student` UserInvite fixture
         set_auth_mock :invited_student
 
-        get :create, provider: :github
+        get :create, params: provider_params
 
         assert_equal 'student', User.last.role
       end
 
       test 'existing users accept invites' do
-        get :create, provider: :github
+        get :create, params: provider_params
 
         user = User.last
         # sanity check
@@ -114,7 +118,7 @@ class SessionsControllerTest < ActionController::TestCase
         # valid invite and making it work for this user
         user_invites(:valid_instructor).dup.update(github_name: 'adatest')
 
-        get :create, provider: :github
+        get :create, params: provider_params
 
         user.reload
         assert_equal user_invites(:valid_instructor).role, user.role

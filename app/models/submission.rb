@@ -1,7 +1,10 @@
-class Submission < ActiveRecord::Base
+class Submission < ApplicationRecord
+  # TODO: belongs_to now is required by default. Should these be changed to optional?
+  # http://guides.rubyonrails.org/upgrading_ruby_on_rails.html#active-record-belongs-to-required-by-default-option
   belongs_to :student
-  belongs_to :repo
-  belongs_to :feedback_provider, class_name: 'User', foreign_key: 'user_id'
+  belongs_to :assignment
+  # TODO: had to make optional due to model test failing. See: models/submission_test.rb:12
+  belongs_to :feedback_provider, class_name: 'User', foreign_key: 'user_id', optional: true
 
   GRADES = [
     :meet_standard,
@@ -19,7 +22,7 @@ class Submission < ActiveRecord::Base
   end
 
   def update_group(attrs)
-    if repo.individual?
+    if assignment.individual?
       update(attrs)
     else
       Submission.grouped_with(self).update_all(attrs)
@@ -27,7 +30,7 @@ class Submission < ActiveRecord::Base
   end
 
   def student_names
-    if repo.individual?
+    if assignment.individual?
       student.name
     else
       Submission.grouped_with(self).map do |sub|

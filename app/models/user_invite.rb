@@ -1,6 +1,8 @@
-class UserInvite < ActiveRecord::Base
+class UserInvite < ApplicationRecord
+  # TODO: belongs_to now is required by default. Should these be changed to optional?
+  # http://guides.rubyonrails.org/upgrading_ruby_on_rails.html#active-record-belongs-to-required-by-default-option
   belongs_to :inviter, class_name: 'User'
-  belongs_to :cohort, dependent: :destroy
+  belongs_to :cohort, dependent: :destroy, optional: true # TODO: had to make optional make model test work. See: models/user_invite_test.rb:13
 
   validates_with UserRoleValidator
   validates :inviter, presence: true

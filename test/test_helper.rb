@@ -1,7 +1,16 @@
 ENV['RAILS_ENV'] ||= 'test'
-require File.expand_path('../../config/environment', __FILE__)
+# require File.expand_path('../../config/environment', __FILE__)
+require_relative '../config/environment'
 require 'rails/test_help'
 require 'minitest/autorun'
+require "minitest/reporters"
+
+
+Minitest::Reporters.use!(
+    Minitest::Reporters::SpecReporter.new,
+    ENV,
+    Minitest.backtrace_filter
+)
 
 # Uncomment these lines to automatically start pry
 # when a test fails or an exception is unhandled.

@@ -46,68 +46,68 @@ class StudentsControllerTest < ActionController::TestCase
     end
 
     test "should not create a student without required fields" do
-      post :create, create_params_invalid
+      post :create, params: create_params_invalid
 
       assert_response :bad_request
       assert_template :new
     end
 
     test "should redirect when created successfully with required fields" do
-      post :create, create_params
+      post :create, params: create_params
 
       assert_redirected_to students_path
     end
 
     test "should redirect when attempting to edit student that doesn't exist" do
-      get :edit, { id: 9999 }
+      get :edit, params: { id: 9999 }
 
       assert_redirected_to students_path
     end
 
 
     test "should get the edit form" do
-      get :edit, { id: @student.id }
+      get :edit, params: { id: @student.id }
 
       assert_response :success
       assert_template :edit
     end
 
     test "should not update a student without required fields" do
-      patch :update, update_params_invalid
+      patch :update, params: update_params_invalid
 
       assert_response :bad_request
       assert_template :edit
     end
 
     test "should redirect when updated successfully" do
-      patch :update, update_params
+      patch :update, params: update_params
 
       assert_redirected_to students_path
     end
 
     test "show should redirect to index when student not found" do
-      get :show, { id: 9999 }
+      get :show, params: { id: 9999 }
 
       assert_not_empty flash[:error]
       assert_redirected_to students_path
     end
 
     test "should load show template for an individual student" do
-      get :show, { id: @student.id }
+      get :show, params: { id: @student.id }
 
       assert_response :success
       assert_template :show
     end
 
     test "delete should add a flash error when student not found" do
-      delete :destroy, { id: 9999 }
+      delete :destroy, params: { id: 9999 }
 
       assert_not_empty flash[:error]
       assert_redirected_to students_path
     end
 
     test "delete should redirect to index on success" do
-      delete :destroy, { id: @student.id }
+      delete :destroy, params: { id: @student.id }
 
       assert_redirected_to students_path
     end
@@ -133,7 +133,7 @@ class StudentsControllerTest < ActionController::TestCase
       end
 
       test "should get show page of student" do
-        get :show, id: @student.id
+        get :show, params: { id: @student.id }
 
         assert_response :success
       end
@@ -145,27 +145,27 @@ class StudentsControllerTest < ActionController::TestCase
       end
 
       test "should create new student" do
-        post :create, create_params
+        post :create, params: create_params
 
         assert_response :redirect
         assert_redirected_to students_path
       end
 
       test "should get edit student form" do
-        get :edit, id: @student.id
+        get :edit, params: { id: @student.id }
 
         assert_response :success
       end
 
       test "should update existing student" do
-        patch :update, update_params
+        patch :update, params: update_params
 
         assert_response :redirect
         assert_redirected_to students_path
       end
 
       test "should destroy existing student" do
-        delete :destroy, id: @student.id
+        delete :destroy, params: { id: @student.id }
 
         assert_redirected_to students_path
       end
@@ -184,7 +184,7 @@ class StudentsControllerTest < ActionController::TestCase
       end
 
       test "should get show page of own student" do
-        get :show, id: @student.id
+        get :show, params: { id: @student.id }
 
         assert_response :success
         assert_template :show
@@ -192,7 +192,7 @@ class StudentsControllerTest < ActionController::TestCase
 
       test "should not get show page of other student" do
         student = students(:jet)
-        get :show, id: student.id
+        get :show, params: { id: student.id }
 
         assert_response :redirect
         assert_redirected_to root_path
@@ -209,7 +209,7 @@ class StudentsControllerTest < ActionController::TestCase
 
       test "should not create new student" do
         assert_no_difference(lambda { ::Student.count }) do
-          post :create, create_params
+          post :create, params: create_params
 
           assert_response :redirect
           assert_redirected_to root_path
@@ -218,7 +218,7 @@ class StudentsControllerTest < ActionController::TestCase
       end
 
       test "should not get edit student form" do
-        get :edit, id: @student.id
+        get :edit, params: { id: @student.id }
 
         assert_response :redirect
         assert_redirected_to root_path
@@ -226,7 +226,7 @@ class StudentsControllerTest < ActionController::TestCase
       end
 
       test "should not update existing student" do
-        patch :update, update_params
+        patch :update, params: update_params
 
         assert_not_equal @student.reload.github_name, "othername"
         assert_response :redirect
@@ -236,7 +236,7 @@ class StudentsControllerTest < ActionController::TestCase
 
       test "should not destroy existing student" do
         assert_no_difference(lambda { ::Student.count }) do
-          delete :destroy, id: @student.id
+          delete :destroy, params: { id: @student.id }
 
           assert_response :redirect
           assert_redirected_to root_path
@@ -259,7 +259,7 @@ class StudentsControllerTest < ActionController::TestCase
       end
 
       test "should not get show page of student" do
-        get :show, id: @student.id
+        get :show, params: { id: @student.id }
 
         assert_response :redirect
         assert_redirected_to root_path
@@ -276,7 +276,7 @@ class StudentsControllerTest < ActionController::TestCase
 
       test "should not create new student" do
         assert_no_difference(lambda { ::Student.count }) do
-          post :create, create_params
+          post :create, params: create_params
 
           assert_response :redirect
           assert_redirected_to root_path
@@ -285,7 +285,7 @@ class StudentsControllerTest < ActionController::TestCase
       end
 
       test "should not get edit student form" do
-        get :edit, id: @student.id
+        get :edit, params: { id: @student.id }
 
         assert_response :redirect
         assert_redirected_to root_path
@@ -293,7 +293,7 @@ class StudentsControllerTest < ActionController::TestCase
       end
 
       test "should not update existing student" do
-        patch :update, update_params
+        patch :update, params: update_params
 
         assert_not_equal @student.reload.github_name, "othername"
         assert_response :redirect
@@ -303,7 +303,7 @@ class StudentsControllerTest < ActionController::TestCase
 
       test "should not destroy existing student" do
         assert_no_difference(lambda { ::Student.count }) do
-          delete :destroy, id: @student.id
+          delete :destroy, params: { id: @student.id }
 
           assert_response :redirect
           assert_redirected_to root_path
@@ -326,7 +326,7 @@ class StudentsControllerTest < ActionController::TestCase
       end
 
       test "should not get show page of student" do
-        get :show, id: @student.id
+        get :show, params: { id: @student.id }
 
         assert_response :redirect
         assert_redirected_to root_path
@@ -343,7 +343,7 @@ class StudentsControllerTest < ActionController::TestCase
 
       test "should not create new student" do
         assert_no_difference(lambda { ::Student.count }) do
-          post :create, create_params
+          post :create, params: create_params
 
           assert_response :redirect
           assert_redirected_to root_path
@@ -352,7 +352,7 @@ class StudentsControllerTest < ActionController::TestCase
       end
 
       test "should not get edit student form" do
-        get :edit, id: @student.id
+        get :edit, params: { id: @student.id }
 
         assert_response :redirect
         assert_redirected_to root_path
@@ -360,7 +360,7 @@ class StudentsControllerTest < ActionController::TestCase
       end
 
       test "should not update existing student" do
-        patch :update, update_params
+        patch :update, params: update_params
 
         assert_not_equal @student.reload.github_name, "othername"
         assert_response :redirect
@@ -370,7 +370,7 @@ class StudentsControllerTest < ActionController::TestCase
 
       test "should not destroy existing student" do
         assert_no_difference(lambda { ::Student.count }) do
-          delete :destroy, id: @student.id
+          delete :destroy, params: { id: @student.id }
 
           assert_response :redirect
           assert_redirected_to root_path

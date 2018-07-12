@@ -7,6 +7,8 @@ class UserInviteTest < ActiveSupport::TestCase
     end
 
     setup do
+      # puts user_invites(:valid_instructor).inspect
+      # puts user_invites(:valid_instructor).valid?.inspect
       # sanity check
       assert valid_invite.valid?
     end

@@ -1,4 +1,4 @@
-class User < ActiveRecord::Base
+class User < ApplicationRecord
   validates :name, :uid, :provider, :github_name, presence: true
   validates_with UserRoleValidator
 
