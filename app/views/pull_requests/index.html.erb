@@ -12,10 +12,10 @@
       <td><%= r.repo_url %></td>
       <td>
         <% r.cohorts.each do |c| %>
-          <%= link_to c.display_name, repo_cohort_path(r.id, c.id) %><br>
+          <%= link_to c.display_name, assignment_cohort_path(r.id, c.id) %><br>
         <% end %>
       </td>
-      <!-- <td><%= link_to "Students", repo_path(r.id) %></td> -->
+      <!-- <td><%= link_to "Students", assignment_path(r.id) %></td> -->
       <td><%= link_to "Github", "http://github.com/" + r.repo_url + "/pulls", :target => "_blank" %></td>
       <td><%= r.created_at.strftime("%Y-%m-%d") %></td>
 
