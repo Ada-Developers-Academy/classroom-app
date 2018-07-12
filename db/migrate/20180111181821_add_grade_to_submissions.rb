@@ -7,5 +7,5 @@ class AddGradeToSubmissions < ActiveRecord::Migration[5.2]
   def down
     remove_column :submissions, :grade
     drop_enum :grades
-    end
+  end
 end
