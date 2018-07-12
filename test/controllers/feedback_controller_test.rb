@@ -3,12 +3,12 @@ require 'test_helper'
 class FeedbackControllerTest < ActionController::TestCase
   setup do
     @student = students(:jet)
-    @repo = repos(:farmar)
+    @assignment = assignments(:farmar)
   end
 
   def new_params
     {
-      repo_id: @repo.id,
+      assignment_id: @assignment.id,
       student_id: @student.id
     }
   end

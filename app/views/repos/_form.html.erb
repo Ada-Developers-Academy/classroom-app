@@ -1,11 +1,11 @@
-<%= form_for(@repo) do |f| %>
-  <legend>Repositiory Properties</legend>
+<%= form_for(@assignment) do |f| %>
+  <legend>Assignment Properties</legend>
 
   <!-- Errors -->
-  <% if @repo.errors.any? %>
+  <% if @assignment.errors.any? %>
     <div class="bg-danger">
       <ul>
-        <% @repo.errors.full_messages.each do |msg| %>
+        <% @assignment.errors.full_messages.each do |msg| %>
           <li><%= msg %></li>
         <% end %>
       </ul>

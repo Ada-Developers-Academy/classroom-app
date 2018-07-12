@@ -1,14 +1,14 @@
 require 'test_helper'
 
-class ReposControllerTest < ActionController::TestCase
+class AssignmentsControllerTest < ActionController::TestCase
   setup do
-    @repo = repos(:word_guess)
+    @assignment = assignments(:word_guess)
     @cohort = cohorts(:sharks)
   end
 
   def create_params
     {
-      repo: {
+      assignment: {
         repo_url: "test"
       }
     }
@@ -16,7 +16,7 @@ class ReposControllerTest < ActionController::TestCase
 
   def create_params_invalid
     {
-      repo: {
+      assignment: {
         repo_url: nil
       }
     }
@@ -24,23 +24,23 @@ class ReposControllerTest < ActionController::TestCase
 
   def update_params
     {
-      id: @repo.id,
-      repo: {
+      id: @assignment.id,
+      assignment: {
         repo_url: "other_repo_url"
       }
     }
   end
 
   def update_params_invalid
-    update_params.deep_merge(repo: { repo_url: nil })
+    update_params.deep_merge(assignment: { repo_url: nil })
   end
 
-  class Functionality < ReposControllerTest
+  class Functionality < AssignmentsControllerTest
     setup do
       session[:user_id] = users(:instructor).id
     end
 
-    test "index should load list of repos" do
+    test "index should load list of assignments" do
       get :index
 
       assert_template :index
@@ -54,7 +54,7 @@ class ReposControllerTest < ActionController::TestCase
       assert_template :new
     end
 
-    test "should not create a repo without required fields" do
+    test "should not create a assignment without required fields" do
       post :create, params: create_params_invalid
 
       assert_response :bad_request
@@ -64,23 +64,23 @@ class ReposControllerTest < ActionController::TestCase
     test "should redirect when created successfully with required fields" do
       post :create, params: create_params
 
-      assert_redirected_to repos_path
+      assert_redirected_to assignments_path
     end
 
-    test "should redirect when attempting to edit repo that doesn't exist" do
+    test "should redirect when attempting to edit assignment that doesn't exist" do
       get :edit, params: { id: 9999 }
 
-      assert_redirected_to repos_path
+      assert_redirected_to assignments_path
     end
 
     test "should get the edit form" do
-      get :edit, params: { id: @repo.id }
+      get :edit, params: { id: @assignment.id }
 
       assert_response :success
       assert_template :edit
     end
 
-    test "should not update a repo without required fields" do
+    test "should not update a assignment without required fields" do
       patch :update, params: update_params_invalid
 
       assert_response :bad_request
@@ -90,34 +90,34 @@ class ReposControllerTest < ActionController::TestCase
     test "should redirect when updated successfully" do
       patch :update,params: update_params
 
-      assert_redirected_to repos_path
+      assert_redirected_to assignments_path
     end
 
-    test "delete should add a flash error when repo not found" do
+    test "delete should add a flash error when assignment not found" do
       delete :destroy, params: { id: 9999 }
 
       assert_not_empty flash[:error]
-      assert_redirected_to repos_path
+      assert_redirected_to assignments_path
     end
 
     test "delete should redirect to index on success" do
-      delete :destroy, params: { id: @repo.id }
+      delete :destroy, params: { id: @assignment.id }
 
-      assert_redirected_to repos_path
+      assert_redirected_to assignments_path
     end
 
     def with_github_mock(&block)
       github_mock = Minitest::Mock.new
-      def github_mock.retrieve_student_info(repo, cohort)
-        Submission.where(repo: repo)
+      def github_mock.retrieve_student_info(assignment, cohort)
+        Submission.where(assignment: assignment)
       end
 
       GitHub.stub :new, github_mock, &block
     end
 
-    test "should get the show page for a particular repo and cohort" do
+    test "should get the show page for a particular assignment and cohort" do
       with_github_mock do
-        get :show, params: { repo_id: @repo.id, id: @cohort.id }
+        get :show, params: { repo_id: @assignment.id, id: @cohort.id }
 
         assert_response :success
         assert_template :show
@@ -129,57 +129,57 @@ class ReposControllerTest < ActionController::TestCase
       # Sanity check
       assert_nil Cohort.find_by(id: invalid_cohort_id)
 
-      get :show, params: { repo_id: @repo.id, id: invalid_cohort_id }
+      get :show, params: { repo_id: @assignment.id, id: invalid_cohort_id }
 
       assert_response :redirect
-      assert_redirected_to repos_path
+      assert_redirected_to assignments_path
       assert_not_empty flash[:error]
     end
   end
 
-  class Authorization < ReposControllerTest
+  class Authorization < AssignmentsControllerTest
     class Instructor < Authorization
       setup do
         session[:user_id] = users(:instructor).id
       end
 
-      test "should get index of repos" do
+      test "should get index of assignments" do
         get :index
 
         assert_response :success
       end
 
-      test "should get new repo form" do
+      test "should get new assignment form" do
         get :new
 
         assert_response :success
       end
 
-      test "should create new repo" do
+      test "should create new assignment" do
         # puts "fooooooooooooooooooooooooooooo!!!!!!!!"
         post :create, params: create_params
 
         assert_response :redirect
-        assert_redirected_to repos_path
+        assert_redirected_to assignments_path
       end
 
-      test "should get edit repo form" do
-        get :edit, params: { id: @repo.id }
+      test "should get edit assignment form" do
+        get :edit, params: { id: @assignment.id }
 
         assert_response :success
       end
 
-      test "should update existing repo" do
+      test "should update existing assignment" do
         patch :update, params: update_params
 
         assert_response :redirect
-        assert_redirected_to repos_path
+        assert_redirected_to assignments_path
       end
 
-      test "should destroy existing repo" do
-        delete :destroy, params: { id: @repo.id }
+      test "should destroy existing assignment" do
+        delete :destroy, params: { id: @assignment.id }
 
-        assert_redirected_to repos_path
+        assert_redirected_to assignments_path
       end
     end
 
@@ -188,7 +188,7 @@ class ReposControllerTest < ActionController::TestCase
         session[:user_id] = users(:student).id
       end
 
-      test "should not get index of repos" do
+      test "should not get index of assignments" do
         get :index
 
         assert_response :redirect
@@ -196,7 +196,7 @@ class ReposControllerTest < ActionController::TestCase
         assert_not_empty flash[:error]
       end
 
-      test "should not get new repo form" do
+      test "should not get new assignment form" do
         get :new
 
         assert_response :redirect
@@ -204,8 +204,8 @@ class ReposControllerTest < ActionController::TestCase
         assert_not_empty flash[:error]
       end
 
-      test "should not create new repo" do
-        assert_no_difference(lambda { Repo.count }) do
+      test "should not create new assignment" do
+        assert_no_difference(lambda { Assignment.count }) do
           post :create, params: create_params
 
           assert_response :redirect
@@ -214,26 +214,26 @@ class ReposControllerTest < ActionController::TestCase
         end
       end
 
-      test "should not get edit repo form" do
-        get :edit, params: { id: @repo.id }
+      test "should not get edit assignment form" do
+        get :edit, params: { id: @assignment.id }
 
         assert_response :redirect
         assert_redirected_to root_path
         assert_not_empty flash[:error]
       end
 
-      test "should not update existing repo" do
+      test "should not update existing assignment" do
         patch :update, params: update_params
 
-        assert_not_equal @repo.reload.repo_url, "other_repo_url"
+        assert_not_equal @assignment.reload.repo_url, "other_repo_url"
         assert_response :redirect
         assert_redirected_to root_path
         assert_not_empty flash[:error]
       end
 
-      test "should not destroy existing repo" do
-        assert_no_difference(lambda { Repo.count }) do
-          delete :destroy, params: { id: @repo.id }
+      test "should not destroy existing assignment" do
+        assert_no_difference(lambda { Assignment.count }) do
+          delete :destroy, params: { id: @assignment.id }
 
           assert_response :redirect
           assert_redirected_to root_path
@@ -247,7 +247,7 @@ class ReposControllerTest < ActionController::TestCase
         session[:user_id] = users(:unknown).id
       end
 
-      test "should not get index of repos" do
+      test "should not get index of assignments" do
         get :index
 
         assert_response :redirect
@@ -255,7 +255,7 @@ class ReposControllerTest < ActionController::TestCase
         assert_not_empty flash[:error]
       end
 
-      test "should not get new repo form" do
+      test "should not get new assignment form" do
         get :new
 
         assert_response :redirect
@@ -263,8 +263,8 @@ class ReposControllerTest < ActionController::TestCase
         assert_not_empty flash[:error]
       end
 
-      test "should not create new repo" do
-        assert_no_difference(lambda { Repo.count }) do
+      test "should not create new assignment" do
+        assert_no_difference(lambda { Assignment.count }) do
           post :create, params: create_params
 
           assert_response :redirect
@@ -273,26 +273,26 @@ class ReposControllerTest < ActionController::TestCase
         end
       end
 
-      test "should not get edit repo form" do
-        get :edit, params: { id: @repo.id }
+      test "should not get edit assignment form" do
+        get :edit, params: { id: @assignment.id }
 
         assert_response :redirect
         assert_redirected_to root_path
         assert_not_empty flash[:error]
       end
 
-      test "should not update existing repo" do
+      test "should not update existing assignment" do
         patch :update, params: update_params
 
-        assert_not_equal @repo.reload.repo_url, "other_repo_url"
+        assert_not_equal @assignment.reload.repo_url, "other_repo_url"
         assert_response :redirect
         assert_redirected_to root_path
         assert_not_empty flash[:error]
       end
 
-      test "should not destroy existing repo" do
-        assert_no_difference(lambda { Repo.count }) do
-          delete :destroy, params: { id: @repo.id }
+      test "should not destroy existing assignment" do
+        assert_no_difference(lambda { Assignment.count }) do
+          delete :destroy, params: { id: @assignment.id }
 
           assert_response :redirect
           assert_redirected_to root_path
@@ -306,7 +306,7 @@ class ReposControllerTest < ActionController::TestCase
         session[:user_id] = nil
       end
 
-      test "should not get index of repos" do
+      test "should not get index of assignments" do
         get :index
 
         assert_response :redirect
@@ -314,7 +314,7 @@ class ReposControllerTest < ActionController::TestCase
         assert_not_empty flash[:error]
       end
 
-      test "should not get new repo form" do
+      test "should not get new assignment form" do
         get :new
 
         assert_response :redirect
@@ -322,8 +322,8 @@ class ReposControllerTest < ActionController::TestCase
         assert_not_empty flash[:error]
       end
 
-      test "should not create new repo" do
-        assert_no_difference(lambda { Repo.count }) do
+      test "should not create new assignment" do
+        assert_no_difference(lambda { Assignment.count }) do
           post :create, params: create_params
 
           assert_response :redirect
@@ -332,26 +332,26 @@ class ReposControllerTest < ActionController::TestCase
         end
       end
 
-      test "should not get edit repo form" do
-        get :edit, params: { id: @repo.id }
+      test "should not get edit assignment form" do
+        get :edit, params: { id: @assignment.id }
 
         assert_response :redirect
         assert_redirected_to root_path
         assert_not_empty flash[:error]
       end
 
-      test "should not update existing repo" do
+      test "should not update existing assignment" do
         patch :update, params: update_params
 
-        assert_not_equal @repo.reload.repo_url, "other_repo_url"
+        assert_not_equal @assignment.reload.repo_url, "other_repo_url"
         assert_response :redirect
         assert_redirected_to root_path
         assert_not_empty flash[:error]
       end
 
-      test "should not destroy existing repo" do
-        assert_no_difference(lambda { Repo.count }) do
-          delete :destroy, params: { id: @repo.id }
+      test "should not destroy existing assignment" do
+        assert_no_difference(lambda { Assignment.count }) do
+          delete :destroy, params: { id: @assignment.id }
 
           assert_response :redirect
           assert_redirected_to root_path

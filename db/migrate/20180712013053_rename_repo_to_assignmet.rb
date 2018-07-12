@@ -12,6 +12,6 @@ class RenameRepoToAssignmet < ActiveRecord::Migration[5.2]
 
     add_index :submissions, [:student_id, :assignment_id], unique: true
     add_index :cohorts_assignments, [:cohort_id, :assignment_id], unique: true
-      
+
   end
 end
