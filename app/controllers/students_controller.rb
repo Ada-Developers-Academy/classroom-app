@@ -32,12 +32,16 @@ class StudentsController < ApplicationController
     data = Student.all
     # data = data.paginate(page: params[:p], per_page: params[:n])
     render status: :ok, json: data
-    # render json: data.as_json(
-    #   only: [:name, :email, :github_name, :cohort]
-    # )
+  
   end
 
   def show
+    # puts "reached Student#show"
+    # data = Student.find_by(@student.id)
+
+    #   render json: data.as_json(
+    #   only: [:name, :email, :github_name, :cohort]
+    # )
   end
 
   def destroy
