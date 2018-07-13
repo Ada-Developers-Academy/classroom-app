@@ -7,6 +7,7 @@ class SubmissionTest < ActiveSupport::TestCase
     end
 
     setup do
+      # puts submissions(:jet_farmar).inspect
       # sanity check
       assert valid_submission.valid?
     end

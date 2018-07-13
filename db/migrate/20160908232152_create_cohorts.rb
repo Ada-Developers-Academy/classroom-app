@@ -1,4 +1,4 @@
-class CreateCohorts < ActiveRecord::Migration
+class CreateCohorts < ActiveRecord::Migration[5.2]
   def change
     create_table :cohorts do |t|
       t.integer :number, null: false

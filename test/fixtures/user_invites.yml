@@ -7,7 +7,7 @@ valid_instructor:
 valid_student:
   github_name: adastudent
   role: student
-  cohort: sharks
+  classroom: sharks
   inviter: instructor
   accepted: false
 

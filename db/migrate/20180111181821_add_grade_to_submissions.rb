@@ -1,8 +1,8 @@
-class AddGradeToSubmissions < ActiveRecord::Migration
+class AddGradeToSubmissions < ActiveRecord::Migration[5.2]
   def up
     create_enum :grades, 'not_standard', 'approach_standard', 'meet_standard'
     add_column :submissions, :grade, :grades
-  end
+    end
 
   def down
     remove_column :submissions, :grade

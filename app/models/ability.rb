@@ -1,7 +1,10 @@
-class Ability
-  include CanCan::Ability
+class Ability #< ApplicationRecord
+  # self.abstract_class = true
+include CanCan::Ability
 
   def initialize(user)
+    # puts "********************************"
+    # puts user.inspect
     return guest_rules unless user
     unauthorized_rules unless user.authorized?
 
@@ -17,7 +20,7 @@ class Ability
 
   def instructor_rules
     alias_action :new_instructor, :new_student, to: :create
-    [Cohort, Repo, Student, Submission, User, UserInvite].each do |model|
+    [Classroom, Assignment, Student, Submission, User, UserInvite].each do |model|
       can :manage, model
     end
   end
@@ -26,4 +29,5 @@ class Ability
     can :read, Submission, student: { github_name: user.github_name }
     can :read, Student, github_name: user.github_name
   end
+
 end

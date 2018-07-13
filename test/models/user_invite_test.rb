@@ -7,6 +7,8 @@ class UserInviteTest < ActiveSupport::TestCase
     end
 
     setup do
+      # puts user_invites(:valid_instructor).inspect
+      # puts user_invites(:valid_instructor).valid?.inspect
       # sanity check
       assert valid_invite.valid?
     end
@@ -59,14 +61,14 @@ class UserInviteTest < ActiveSupport::TestCase
       refute invalid_invite.valid?
     end
 
-    test 'validates cohort must be specified when role is student' do
-      valid_invite.cohort = nil
+    test 'validates classroom must be specified when role is student' do
+      valid_invite.classroom = nil
       valid_invite.role = 'student'
       refute valid_invite.valid?
     end
 
-    test 'validates cohort must not be specified when role is not student' do
-      valid_invite.cohort = cohorts(:sharks)
+    test 'validates classroom must not be specified when role is not student' do
+      valid_invite.classroom = classrooms(:sharks)
 
       (User::ROLES - ['student']).each do |role|
         valid_invite.role = role

@@ -1,11 +1,11 @@
 shark_word_guess:
   student: shark
-  repo: word_guess
+  assignment: word_guess
   submitted_at: 2017-01-25 17:00
   pr_url: https://github.com/Ada-C99/Word-Guess/pulls/1
 
 jet_farmar:
   student: jet
-  repo: farmar
+  assignment: farmar
   submitted_at: 2017-01-31 11:00
   pr_url: https://github.com/Ada-C99/FarMar/pulls/1

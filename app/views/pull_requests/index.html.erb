@@ -1,21 +1,21 @@
 <table class="table" id="homepage-table">
   <thead>
     <tr>
-      <th>Repo Name</th>
+      <th>Assignment Name</th>
       <th>Student Submissions</th>
       <th>View on GitHub</th>
       <th>Created</th>
     </tr>
   </thead>
-  <% @repos.each do |r| %>
+  <% @assignments.each do |r| %>
     <tr>
       <td><%= r.repo_url %></td>
       <td>
-        <% r.cohorts.each do |c| %>
-          <%= link_to c.display_name, repo_cohort_path(r.id, c.id) %><br>
+        <% r.classrooms.each do |c| %>
+          <%= link_to c.display_name, assignment_classroom_path(r.id, c.id) %><br>
         <% end %>
       </td>
-      <!-- <td><%= link_to "Students", repo_path(r.id) %></td> -->
+      <!-- <td><%= link_to "Students", assignment_path(r.id) %></td> -->
       <td><%= link_to "Github", "http://github.com/" + r.repo_url + "/pulls", :target => "_blank" %></td>
       <td><%= r.created_at.strftime("%Y-%m-%d") %></td>
 

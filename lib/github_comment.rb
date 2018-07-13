@@ -14,8 +14,8 @@ class GitHubComment
     @token = token
   end
 
-  def find_template(repo)
-    url = "https://raw.githubusercontent.com/#{ repo.repo_url }/master/feedback.md"
+  def find_template(assignment)
+    url = "https://raw.githubusercontent.com/#{ assignment.repo_url }/master/feedback.md"
     response = HTTParty.get(url, headers: {"user-agent" => "rails", "Authorization" => "token #{ token }"})
     if response.code == 404
       return nil

@@ -51,7 +51,7 @@ class UserInvitesControllerTest < ActionController::TestCase
     class Create < Functionality
       class Unknown < Create
         test 'responds 404 with invalid role' do
-          post :create, role: 'unknown'
+          post :create, params: { role: 'unknown' }
 
           assert_response :not_found
         end
@@ -66,19 +66,19 @@ class UserInvitesControllerTest < ActionController::TestCase
           {
             role: 'student',
             github_names: github_names.join("\n"),
-            cohort_id: cohorts(:sharks)
+            classroom_id: classrooms(:sharks)
           }
         end
 
         test 'redirects to invites index' do
-          post :create, create_params
+          post :create, params: create_params
 
           assert_response :redirect
           assert_redirected_to user_invites_path
         end
 
         test 'lists invited users and errors in flash notice' do
-          post :create, create_params
+          post :create, params: create_params
 
           assert_equal github_names.length, (flash[:notice].length + flash[:alert].length),
             'Flash messages must have a number of entries that matches the number of GitHub names submitted'
@@ -86,13 +86,13 @@ class UserInvitesControllerTest < ActionController::TestCase
 
         test 'creates invites for each GitHub name' do
           assert_difference(lambda{ UserInvite.count }, github_names.length) do
-            post :create, create_params
+            post :create, params: create_params
           end
         end
 
         test 'creates invites with student role' do
           assert_difference(lambda{ UserInvite.where(role: 'student').count }, github_names.length) do
-            post :create, create_params
+            post :create, params: create_params
           end
         end
 
@@ -100,16 +100,16 @@ class UserInvitesControllerTest < ActionController::TestCase
           user_invites(:valid_student).dup.update(github_name: 'adatest1')
 
           assert_difference(lambda{ UserInvite.count }, github_names.length - 1) do
-            post :create, create_params
+            post :create, params: create_params
 
             assert_equal github_names.length, (flash[:notice].length + flash[:alert].length)
               'Flash messages must have a number of entries that matches the number of GitHub names submitted'
           end
         end
 
-        test 'does not create invites for non-existent cohort' do
+        test 'does not create invites for non-existent classroom' do
           assert_difference(lambda{ UserInvite.count }, 0) do
-            post :create, create_params.merge(cohort_id: -1)
+            post :create, params: create_params.merge(classroom_id: -1)
 
             refute_nil flash[:alert]
           end
@@ -117,7 +117,7 @@ class UserInvitesControllerTest < ActionController::TestCase
 
         test 'ignores duplicate names' do
           assert_difference(lambda{ UserInvite.count }, github_names.length) do
-            post :create, create_params.merge({
+            post :create, params: create_params.merge({
               github_names: (github_names + [github_names.last]).join("\n")
             })
           end
@@ -137,7 +137,7 @@ class UserInvitesControllerTest < ActionController::TestCase
         end
 
         test 'redirects to invites index on success' do
-          post :create, create_params
+          post :create, params: create_params
 
           assert_response :redirect
           assert_redirected_to user_invites_path
@@ -146,7 +146,7 @@ class UserInvitesControllerTest < ActionController::TestCase
         test 're-renders form on failure' do
           # I'd like to find a more generic way to force an error
           # when creating the invite
-          post :create, create_params.merge(github_name: nil)
+          post :create, params: create_params.merge(github_name: nil)
 
           assert_response :ok
           assert_template 'new_instructor'
@@ -154,13 +154,13 @@ class UserInvitesControllerTest < ActionController::TestCase
 
         test 'creates a new invite' do
           assert_difference(lambda{ UserInvite.count }, 1) do
-            post :create, create_params
+            post :create, params: create_params
           end
         end
 
         test 'creates invite with instructor role' do
           assert_difference(lambda{ UserInvite.where(role: 'instructor').count }, 1) do
-            post :create, create_params
+            post :create, params: create_params
           end
         end
 
@@ -168,7 +168,7 @@ class UserInvitesControllerTest < ActionController::TestCase
           user_invites(:valid_instructor).dup.update(github_name: github_name)
 
           assert_difference(lambda{ UserInvite.count }, 0) do
-            post :create, create_params
+            post :create, params: create_params
 
             assert_not_nil flash[:alert]
           end
@@ -176,13 +176,13 @@ class UserInvitesControllerTest < ActionController::TestCase
 
         test 'does not create invites for empty Github username' do
           assert_difference(lambda{ UserInvite.count }, 0) do
-            post :create, create_params.merge(github_name: '')
+            post :create, params: create_params.merge(github_name: '')
 
             assert_not_nil flash[:alert]
           end
 
           assert_difference(lambda{ UserInvite.count }, 0) do
-            post :create, create_params.merge(github_name: nil)
+            post :create, params: create_params.merge(github_name: nil)
 
             assert_not_nil flash[:alert]
           end
@@ -215,7 +215,7 @@ class UserInvitesControllerTest < ActionController::TestCase
       end
 
       test "create responds with redirect to invites index" do
-        post :create, create_params
+        post :create, params: create_params
 
         assert_response :redirect
         assert_redirected_to user_invites_path
@@ -239,7 +239,7 @@ class UserInvitesControllerTest < ActionController::TestCase
       end
 
       test "create fails with redirect to root" do
-        post :create, create_params
+        post :create, params: create_params
 
         assert_response :redirect
         assert_redirected_to root_path
@@ -263,7 +263,7 @@ class UserInvitesControllerTest < ActionController::TestCase
       end
 
       test "create fails with redirect to root" do
-        post :create, create_params
+        post :create, params: create_params
 
         assert_response :redirect
         assert_redirected_to root_path
@@ -287,7 +287,7 @@ class UserInvitesControllerTest < ActionController::TestCase
       end
 
       test "create fails with redirect to root" do
-        post :create, create_params
+        post :create, params: create_params
 
         assert_response :redirect
         assert_redirected_to root_path

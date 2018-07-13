@@ -14,10 +14,22 @@
 # Ignore all logfiles and tempfiles.
 /log/*
 !/log/.keep
-/tmp
+/tmp/*
+!/tmp/.keep
 
 .DS_Store
 .env
+
+# Ignore uploaded files in development
+/storage/*
+
+/node_modules
+/yarn-error.log
+/public/assets
+.byebug_history
+
+# Ignore master key for decrypting credentials and more.
+/config/master.key
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
@@ -25,3 +37,11 @@
 !.elasticbeanstalk/*.global.yml
 
 /lib/seeds/students.csv
+
+# Kirsten and Leti's capstone data
+/lib/seeds/c9students.csv
+
+# VS Code and Intellij project settings
+.vscode
+.vs
+.idea
