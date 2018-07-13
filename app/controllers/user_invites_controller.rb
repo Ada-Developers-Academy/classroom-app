@@ -8,6 +8,7 @@ class UserInvitesController < ApplicationController
   def new_student; end
   def new_instructor; end
 
+  # TODO: tell Leti about this because it's fancy as fuck
   def create
     action = :"create_#{params[:role]}"
     return send(action) if respond_to?(action, true) # NOTE: calls create_student or instructor (see below)
@@ -19,10 +20,10 @@ class UserInvitesController < ApplicationController
 
   def create_student
     github_names = params[:github_names].split(/[ \t\r\n]+/).map(&:strip).uniq
-    cohort = Cohort.find_by(id: params[:cohort_id])
-    if !cohort.present?
+    classroom = Classroom.find_by(id: params[:classroom_id])
+    if !classroom.present?
       return redirect_to user_invites_path,
-                         alert: "Could not find cohort with ID #{params[:cohort_id]}"
+                         alert: "Could not find classroom with ID #{params[:classroom_id]}"
     end
 
     msgs = github_names.map do |name|
@@ -30,7 +31,7 @@ class UserInvitesController < ApplicationController
         inviter: current_user,
         github_name: name,
         role: 'student',
-        cohort: cohort
+        classroom: classroom
       })
 
       if invite.persisted?

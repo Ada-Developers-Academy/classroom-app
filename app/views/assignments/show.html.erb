@@ -1,7 +1,7 @@
 <%= render partial: "errors" %>
 
 <h1><%= @assignment.repo_url %></h1>
-<h3><%= @cohort.display_name %></h3>
+<h3><%= @classroom.display_name %></h3>
 <h4><%= link_to "Github", @assignment.pulls_url, :target => "_blank" %></h4>
 <table class="table" id="submission-table">
   <thead>
@@ -18,7 +18,7 @@
         <td><%= student.name %></td>
         <td><%= student.github_name %></td>
         <% if !submission.submitted_at %>
-          <td><%= mail_to student.email, "Send Notification", cc: student.cohort.instructor_emails,
+          <td><%= mail_to student.email, "Send Notification", cc: student.classroom.instructor_emails,
            subject: @assignment.repo_url, target: "_blank" %></td>
            <td></td>
         <% else %>

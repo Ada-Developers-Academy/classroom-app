@@ -3,7 +3,7 @@ require 'github'
 class AssignmentsController < ApplicationController
   load_and_authorize_resource except: [:show]
   load_and_authorize_resource :assignment, parent: true, only: [:show]
-  load_and_authorize_resource :cohort, parent: false, only: [:show]
+  load_and_authorize_resource :classroom, parent: false, only: [:show]
 
   def index
     # new code for api wrapper:
@@ -18,6 +18,7 @@ class AssignmentsController < ApplicationController
   def show
     # original code for views:
     gh = GitHub.new(session[:token])
+
     @all_data = gh.retrieve_student_info(@assignment, @cohort)
 
     # render(
@@ -27,6 +28,7 @@ class AssignmentsController < ApplicationController
     #   )
     # )
     # Should we change this?
+
   end
 
   def new
@@ -41,12 +43,12 @@ class AssignmentsController < ApplicationController
   end
 
   def edit
-    @max_size = Cohort.all.length
+    @max_size = Classroom.all.length
   end
 
   def update
     if @assignment.update_attributes(assignment_params)
-      @assignment.cohorts.build
+      @assignment.classrooms.build
       redirect_to assignments_path
     else
       render :edit, :status => :bad_request
@@ -66,6 +68,6 @@ class AssignmentsController < ApplicationController
   end
 
   def assignment_params
-    params.require(:assignment).permit(:repo_url, :individual, :cohort_ids => [] )
+    params.require(:assignment).permit(:repo_url, :individual, :classroom_ids => [] )
   end
 end

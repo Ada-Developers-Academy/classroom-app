@@ -11,8 +11,8 @@
     <tr>
       <td><%= r.repo_url %></td>
       <td>
-        <% r.cohorts.each do |c| %>
-          <%= link_to c.display_name, assignment_cohort_path(r.id, c.id) %><br>
+        <% r.classrooms.each do |c| %>
+          <%= link_to c.display_name, assignment_classroom_path(r.id, c.id) %><br>
         <% end %>
       </td>
       <!-- <td><%= link_to "Students", assignment_path(r.id) %></td> -->

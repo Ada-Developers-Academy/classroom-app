@@ -3,8 +3,8 @@
   <%= hidden_field_tag 'role', 'student' %>
 
   <div class="control-group">
-    <%= label_tag :cohort_id, 'Cohort', class: 'control-label' %>
-    <%= select_tag :cohort_id, options_from_collection_for_select(Cohort.all, :id, :display_name),
+    <%= label_tag :classroom_id, 'Classroom', class: 'control-label' %>
+    <%= select_tag :classroom_id, options_from_collection_for_select(Classroom.all, :id, :display_name),
                                class: 'form-control' %>
   </div>
 

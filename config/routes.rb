@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   root 'pull_requests#home'
 
   resources :assignments do
-    resources :cohort, only: [:show], controller: 'assignments'
+    resources :classroom, only: [:show], controller: 'assignments'
 
     resources :students, only: [] do
       resources :feedback, only: [:new, :create]
