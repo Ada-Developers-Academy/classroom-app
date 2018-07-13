@@ -1,21 +1,22 @@
 class UserInvite < ApplicationRecord
-  # TODO: belongs_to now is required by default. Should these be changed to optional?
+  # QUESTION: belongs_to now is required by default. Should these be changed to optional?
   # http://guides.rubyonrails.org/upgrading_ruby_on_rails.html#active-record-belongs-to-required-by-default-option
   belongs_to :inviter, class_name: 'User'
-  belongs_to :cohort, dependent: :destroy, optional: true # TODO: had to make optional make model test work. See: models/user_invite_test.rb:13
+  belongs_to :classroom, dependent: :destroy, optional: true # NOTE: had to make optional make model test work.
 
   validates_with UserRoleValidator
   validates :inviter, presence: true
   validate :inviter_must_be_instructor
   validates :github_name, presence: true, uniqueness: { conditions: -> { acceptable } }
-  validate :only_students_have_cohort
+  # TODO: was only_students_have_classroom. Should we revert back to this when we make cohorts?
+  validate :only_students_have_classroom
 
   scope :acceptable, -> { where(accepted: false) }
 
   default_scope { order(created_at: :desc) }
 
-  def cohort?
-    cohort.present?
+  def classroom?
+    classroom.present?
   end
 
   private
@@ -27,11 +28,13 @@ class UserInvite < ApplicationRecord
     end
   end
 
-  def only_students_have_cohort
+  # TODO: was only_students_have_classroom. Should we revert back to this when we make cohorts? Obviously would need to
+  # address changes in method as well
+  def only_students_have_classroom
     if role == 'student'
-      errors.add(:cohort, "must be set for student invitations") unless cohort?
+      errors.add(:classroom, "must be set for student invitations") unless classroom?
     else
-      errors.add(:cohort, "may only be set for student invitations") if cohort?
+      errors.add(:classroom, "may only be set for student invitations") if classroom?
     end
   end
 end

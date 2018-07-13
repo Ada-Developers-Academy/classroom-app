@@ -4,7 +4,7 @@
   <thead>
     <tr>
       <th>Student Name</th>
-      <th>Cohort</th>
+      <th>Classroom</th>
       <th>Class</th>
       <th>GitHub Name</th>
       <th>Email</th>
@@ -14,8 +14,8 @@
   <% @students.each do |s| %>
     <tr>
       <td><%= link_to s.name, student_path(s) %></td>
-      <td><%= s.cohort.number %></td>
-      <td><%= s.cohort.name %></td>
+      <td><%= s.classroom.number %></td>
+      <td><%= s.classroom.name %></td>
       <td><%= s.github_name %></td>
       <td><%= s.email %></td>
       <td>

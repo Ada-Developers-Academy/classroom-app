@@ -11,13 +11,13 @@ class StudentsControllerTest < ActionController::TestCase
         name: "test",
         github_name: "test_github",
         email: "test@example.com",
-        cohort_id: cohorts(:jets).id
+        classroom_id: classrooms(:jets).id
       }
     }
   end
 
   def create_params_invalid
-    create_params.deep_merge(student: { github_name: nil, email: nil, cohort_id: nil })
+    create_params.deep_merge(student: { github_name: nil, email: nil, classroom_id: nil }) # QUESTION: what is deep_merge?
   end
 
   def update_params
@@ -208,7 +208,7 @@ class StudentsControllerTest < ActionController::TestCase
       end
 
       test "should not create new student" do
-        assert_no_difference(lambda { ::Student.count }) do
+        assert_no_difference(lambda { ::Student.count }) do # QUESTION: what's (lambda { ::Student.count }) do
           post :create, params: create_params
 
           assert_response :redirect

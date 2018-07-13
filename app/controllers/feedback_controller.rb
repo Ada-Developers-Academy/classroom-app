@@ -21,7 +21,7 @@ class FeedbackController < ApplicationController
         flash[:error] = "Feedback not successfully posted"
       end
 
-      redirect_to repo_cohort_path(@assignment, @submission.student.cohort)
+      redirect_to repo_classroom_path(@assignment, @submission.student.classroom)
     end
   end
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_12_183108) do
+ActiveRecord::Schema.define(version: 2018_07_12_234801) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,29 +22,29 @@ ActiveRecord::Schema.define(version: 2018_07_12_183108) do
     t.boolean "individual", default: true
   end
 
-  create_table "assignments_cohorts", force: :cascade do |t|
-    t.integer "cohort_id", null: false
+  create_table "assignments_classrooms", force: :cascade do |t|
+    t.integer "classroom_id", null: false
     t.string "assignment_id", null: false
-    t.index ["cohort_id", "assignment_id"], name: "index_assignments_cohorts_on_cohort_id_and_assignment_id", unique: true
+    t.index ["classroom_id", "assignment_id"], name: "index_assignments_classrooms_on_classroom_id_and_assignment_id", unique: true
   end
 
-  create_table "cohorts", force: :cascade do |t|
+  create_table "classrooms", force: :cascade do |t|
     t.integer "number", null: false
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "instructor_emails"
-    t.index ["number", "name"], name: "index_cohorts_on_number_and_name", unique: true
+    t.index ["number", "name"], name: "index_classrooms_on_number_and_name", unique: true
   end
 
   create_table "students", force: :cascade do |t|
     t.string "name", null: false
-    t.integer "cohort_id", null: false
+    t.integer "classroom_id", null: false
     t.string "github_name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "email"
-    t.index ["cohort_id", "github_name"], name: "index_students_on_cohort_id_and_github_name", unique: true
+    t.index ["classroom_id", "github_name"], name: "index_students_on_classroom_id_and_github_name", unique: true
   end
 
   create_table "submissions", force: :cascade do |t|
@@ -68,8 +68,8 @@ ActiveRecord::Schema.define(version: 2018_07_12_183108) do
     t.boolean "accepted", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "cohort_id"
-    t.index ["cohort_id"], name: "index_user_invites_on_cohort_id"
+    t.bigint "classroom_id"
+    t.index ["classroom_id"], name: "index_user_invites_on_classroom_id"
     t.index ["github_name"], name: "index_user_invites_on_github_name", unique: true, where: "(accepted = false)"
   end
 
@@ -86,6 +86,6 @@ ActiveRecord::Schema.define(version: 2018_07_12_183108) do
   end
 
   add_foreign_key "submissions", "users"
-  add_foreign_key "user_invites", "cohorts", on_delete: :cascade
+  add_foreign_key "user_invites", "classrooms", on_delete: :cascade
   add_foreign_key "user_invites", "users", column: "inviter_id", on_delete: :cascade
 end

@@ -3,7 +3,7 @@
 <table class="table" id="assignment-table">
   <thead>
     <tr>
-      <th>Cohort</th>
+      <th>Classroom</th>
       <th>Repo URL</th>
       <th>Feedback Template</th>
       <th>Student PR Template</th>
@@ -15,7 +15,7 @@
   <tbody>
     <% @assignments.each do |r| %>
       <tr>
-        <td><% r.cohorts.each do |c| %>
+        <td><% r.classrooms.each do |c| %>
           <%= c.display_name %><br>
           <% end %>
         </td>

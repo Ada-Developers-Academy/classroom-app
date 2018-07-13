@@ -3,7 +3,7 @@ require 'test_helper'
 class AssignmentsControllerTest < ActionController::TestCase
   setup do
     @assignment = assignments(:word_guess)
-    @cohort = cohorts(:sharks)
+    @classroom = classrooms(:sharks)
   end
 
   def create_params
@@ -108,28 +108,28 @@ class AssignmentsControllerTest < ActionController::TestCase
 
     def with_github_mock(&block)
       github_mock = Minitest::Mock.new
-      def github_mock.retrieve_student_info(assignment, cohort)
+      def github_mock.retrieve_student_info(assignment, classroom)
         Submission.where(assignment: assignment)
       end
 
       GitHub.stub :new, github_mock, &block
     end
 
-    test "should get the show page for a particular assignment and cohort" do
+    test "should get the show page for a particular assignment and classroom" do
       with_github_mock do
-        get :show, params: { assignment_id: @assignment.id, id: @cohort.id }
+        get :show, params: { assignment_id: @assignment.id, id: @classroom.id }
 
         assert_response :success
         assert_template :show
       end
     end
 
-    test "should redirect when cohort ID is invalid" do
-      invalid_cohort_id = 0
+    test "should redirect when classroom ID is invalid" do
+      invalid_classroom_id = 0
       # Sanity check
-      assert_nil Cohort.find_by(id: invalid_cohort_id)
+      assert_nil Classroom.find_by(id: invalid_classroom_id)
 
-      get :show, params: { assignment_id: @assignment.id, id: invalid_cohort_id }
+      get :show, params: { assignment_id: @assignment.id, id: invalid_classroom_id }
 
       assert_response :redirect
       assert_redirected_to assignments_path
@@ -156,7 +156,6 @@ class AssignmentsControllerTest < ActionController::TestCase
       end
 
       test "should create new assignment" do
-        # puts "fooooooooooooooooooooooooooooo!!!!!!!!"
         post :create, params: create_params
 
         assert_response :redirect
