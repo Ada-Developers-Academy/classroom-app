@@ -28,6 +28,13 @@ class StudentsController < ApplicationController
   end
 
   def index
+    # Code for constructing internal api to be called by front-end:
+    data = Student.all
+    # data = data.paginate(page: params[:p], per_page: params[:n])
+    render status: :ok, json: data
+    # render json: data.as_json(
+    #   only: [:name, :email, :github_name, :cohort]
+    # )
   end
 
   def show

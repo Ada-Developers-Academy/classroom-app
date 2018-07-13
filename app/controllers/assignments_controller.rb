@@ -17,8 +17,8 @@ class AssignmentsController < ApplicationController
 
   def show
     # original code for views:
-    # gh = GitHub.new(session[:token])
-    # @all_data = gh.retrieve_student_info(@assignment, @cohort)
+    gh = GitHub.new(session[:token])
+    @all_data = gh.retrieve_student_info(@assignment, @cohort)
 
     # render(
     #   status: :ok,
@@ -26,6 +26,7 @@ class AssignmentsController < ApplicationController
     #     only: [:id, :repo_url]
     #   )
     # )
+    # Should we change this?
   end
 
   def new
