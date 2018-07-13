@@ -66,7 +66,7 @@ class UserInvitesControllerTest < ActionController::TestCase
           {
             role: 'student',
             github_names: github_names.join("\n"),
-            cohort_id: cohorts(:sharks)
+            classroom_id: classrooms(:sharks)
           }
         end
 
@@ -107,9 +107,9 @@ class UserInvitesControllerTest < ActionController::TestCase
           end
         end
 
-        test 'does not create invites for non-existent cohort' do
+        test 'does not create invites for non-existent classroom' do
           assert_difference(lambda{ UserInvite.count }, 0) do
-            post :create, params: create_params.merge(cohort_id: -1)
+            post :create, params: create_params.merge(classroom_id: -1)
 
             refute_nil flash[:alert]
           end

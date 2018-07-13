@@ -1,11 +1,11 @@
 shark:
   name: Shark Student
-  cohort: sharks
+  classroom: sharks
   github_name: ada-student-shark
   email: ada-student-shark@example.com
 
 jet:
   name: Jet Student
-  cohort: jets
+  classroom: jets
   github_name: ada-student-jet
   email: ada-student-jet@example.com

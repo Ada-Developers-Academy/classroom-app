@@ -9,18 +9,18 @@ class GitHub
   end
 
   # Overall method that will pull together all pieces
-  def retrieve_student_info(assignment, cohort)
+  def retrieve_student_info(assignment, classroom)
     # First, call the API to get the PR data
     pr_info = get_prs(assignment.repo_url)
 
-    # Get the students in the cohort
-    cohort_students = Student.where(cohort_id: cohort.id).sort
+    # Get the students in the classroom
+    classroom_students = Student.where(classroom_id: classroom.id).sort
 
     # Use the PR data to construct the list of students submitted
-    pr_students = pr_student_submissions(assignment, pr_info, cohort_students)
+    pr_students = pr_student_submissions(assignment, pr_info, classroom_students)
 
     # Add te student info for those who haven't submitted
-    pr_students = add_missing_students(pr_students, cohort_students, assignment)
+    pr_students = add_missing_students(pr_students, classroom_students, assignment)
     return pr_students
   end
 
@@ -88,7 +88,7 @@ class GitHub
     return pr_info
   end
 
-  def group_project(cohort_students, data, assignment)
+  def group_project(classroom_students, data, assignment)
     students = []
     url = contributors_url(data)
     return students unless url
@@ -97,14 +97,14 @@ class GitHub
     pr_url = data["html_url"]
 
     contributors = make_request(url)
-    github_usernames = cohort_students.map{ |stud| stud.github_name.downcase }
+    github_usernames = classroom_students.map{ |stud| stud.github_name.downcase }
 
     contributors.each do |contributor|
       curr_github_username = contributor["login"].downcase
 
       # If the contributor is in the student list, add it!
       if github_usernames.include?(curr_github_username)
-        student = create_student(cohort_students, curr_github_username, assignment_created, assignment, pr_url)
+        student = create_student(classroom_students, curr_github_username, assignment_created, assignment, pr_url)
         students << student if student
       end
     end

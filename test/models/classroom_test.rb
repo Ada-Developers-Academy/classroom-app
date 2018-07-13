@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class CohortTest < ActiveSupport::TestCase
+class ClassroomTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end
