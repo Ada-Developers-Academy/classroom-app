@@ -1,10 +1,10 @@
 require 'httparty'
 
-class AssignmentWrapper
+class RepoWrapper
   BASE_URL = "https://api.github.com/repos/Ada-C9/" #TODO: change to a variable
   KEY = ENV["GITHUB_TOKEN"]
 
-  ALL_BASE_URL = "https://api.github.com/users/Ada-C9/repos" #TODO: change to a variable
+  ALL_BASE_URL = "https://api.github.com/users/Ada-C9/repos" #TODO: change 'Ada-C9' to a variable that holds the cohort name
 
   def self.get_repos(assignment_repo = "")
     url = ALL_BASE_URL + assignment_repo + "?page=1&per_page=100&access_token=" + KEY #TODO: change to a variable
@@ -44,12 +44,15 @@ class AssignmentWrapper
   def self.construct_assignment(result)
 
     parent_url = result["fork"] ? self.get_repo(result["name"])["parent"]["html_url"] : nil
+    
     Assignment.create(
         # name: response["name"],
+        repo_url: result["html_url"]
         start_date: result["created_at"],
         due_date: nil,
-        github_url: result["html_url"],
-        tet_url: parent_url
+        individual: true
+        #  add parent url to repo/assignment?
+        # change individual depending on collaborators?
     )
   end
 
