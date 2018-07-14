@@ -6,6 +6,18 @@ User.create!(name: "Test Instructor 1",
              github_name: "ada-instructor-1",
              role: "instructor")
 
+User.create!(name: "Kirsten \"Fuck AWS\" Schumy",
+              provider: :github,
+              uid: "29172352",
+              github_name: "kschumy",
+              role: "instructor")
+ 
+ User.create!(name: "Leticia \"Fuck AWS\" Tran",
+              provider: :github,
+              uid: "29556476",
+              github_name: "LetiTran",
+              role: "instructor")
+
 puts "\n********USER CREATED!*********\n\n"
 
 # Create classrooms
