@@ -56,7 +56,6 @@ ActiveRecord::Schema.define(version: 2018_07_12_234801) do
     t.string "pr_url"
     t.string "feedback_url"
     t.bigint "user_id"
-    t.integer "grade"
     t.index ["student_id", "assignment_id"], name: "index_submissions_on_student_id_and_assignment_id", unique: true
     t.index ["user_id"], name: "index_submissions_on_user_id"
   end
