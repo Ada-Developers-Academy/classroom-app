@@ -18,6 +18,9 @@ Rails.application.routes.draw do
     end
   end
 
+  get "/assignmentsapi", to: "assignments#send_api_assignments"
+  get "/studentsapi", to: "students#send_api_students"
+
   get "/auth/:provider/callback", to: "sessions#create"
   delete "/logout", to: "sessions#destroy"
 end
