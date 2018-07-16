@@ -6,7 +6,9 @@ class User < ApplicationRecord
 
   def self.update_or_create_from_omniauth(auth_hash)
     gh_info = github_info(auth_hash)
+    puts gh_info.inspect
     user = self.find_by(uid: gh_info[:uid], provider: gh_info[:provider])
+    puts user.inspect
     if !user.nil?
       return user if user.update(gh_info)
     else
