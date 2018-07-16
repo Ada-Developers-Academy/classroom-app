@@ -1,0 +1,39 @@
+<%= button_to "Add New Assignment", new_assignment_path, method: :get %>
+
+<table class="table" id="assignment-table">
+  <thead>
+    <tr>
+      <th>Classroom</th>
+      <th>Repo URL</th>
+      <th>Feedback Template</th>
+      <th>Student PR Template</th>
+      <th>Created</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @assignments.each do |r| %>
+      <tr>
+        <td><% r.classrooms.each do |c| %>
+          <%= c.display_name %><br>
+          <% end %>
+        </td>
+        <td><%= link_to r.repo_url, r.full_repo_url, :target => "blank" %></td>
+        <td><%= link_to "Template", r.feedback_template_url, :target => "blank" %></td>
+        <td><%= link_to "PR Template", r.pr_template_url, :target => "blank" %></td>
+        <td><%= r.created_at.strftime("%Y-%m-%d") %></td>
+        <td>
+          <%= icon('user') %>
+          <% if !r.individual %>
+            <%= icon('user') %>
+          <% end %>
+        </td>
+        <td>
+          <%= link_to icon('pencil'), { controller: "assignments", action: "edit", id: r.id } %>
+          <%= link_to icon('trash'), { controller: "assignments", action: "destroy", id: r.id }, method: :delete, data: { confirm: "Are you sure? "} %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

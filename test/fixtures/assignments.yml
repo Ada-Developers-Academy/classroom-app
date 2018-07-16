@@ -1,0 +1,9 @@
+word_guess:
+  classrooms: sharks
+  repo_url: Ada-C99/Word-Guess
+  individual: true
+
+farmar:
+  classrooms: jets
+  repo_url: Ada-C99/FarMar
+  individual: false

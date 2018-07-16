@@ -1,0 +1,36 @@
+<%= render partial: "errors" %>
+
+<h1><%= @assignment.repo_url %></h1>
+<h3><%= @classroom.display_name %></h3>
+<h4><%= link_to "Github", @assignment.pulls_url, :target => "_blank" %></h4>
+<table class="table" id="submission-table">
+  <thead>
+    <th>Student Name</th>
+    <th>GitHub Name</th>
+    <th>Submitted</th>
+    <th>Feedback Status</th>
+    <th>Feedback Provider</th>
+  </thead>
+  <tbody>
+    <% @all_data.each do |submission| %>
+      <% student = submission.student %>
+      <tr class='<%= style_type(submission) %>' >
+        <td><%= student.name %></td>
+        <td><%= student.github_name %></td>
+        <% if !submission.submitted_at %>
+          <td><%= mail_to student.email, "Send Notification", cc: student.classroom.instructor_emails,
+           subject: @assignment.repo_url, target: "_blank" %></td>
+           <td></td>
+        <% else %>
+          <td><%= link_to localize(submission.submitted_at, :format => :short), submission.pr_url, target: "_blank" if submission.submitted_at %></td>
+          <% if submission.feedback_url %>
+            <td><%= link_to "View Feedback", submission.feedback_url, :target => "_blank" %></td>
+          <% else %>
+            <td><%= link_to "Submit Feedback", new_assignment_student_feedback_path(@assignment.id, student.id), data: submission.pr_url %></td>
+          <% end %>
+        <% end %>
+        <td><%= feedback_provider(submission) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

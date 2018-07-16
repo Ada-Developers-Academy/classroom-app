@@ -1,7 +1,6 @@
-class Cohort < ActiveRecord::Base
-  has_and_belongs_to_many :repos
-  
-  def display_name
-    "#{number}: #{name}"
-  end
+class Cohort < ApplicationRecord
+  has_many :classroom #, dependent: :destroy  QUESTIONS: needed?
+  validates :repo_name, presence: true
+
+
 end

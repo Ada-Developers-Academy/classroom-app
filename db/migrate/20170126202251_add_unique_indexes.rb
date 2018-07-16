@@ -1,4 +1,4 @@
-class AddUniqueIndexes < ActiveRecord::Migration
+class AddUniqueIndexes < ActiveRecord::Migration[5.2]
   def change
     add_index :users, [:uid, :provider], unique: true
 

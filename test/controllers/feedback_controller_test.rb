@@ -3,12 +3,12 @@ require 'test_helper'
 class FeedbackControllerTest < ActionController::TestCase
   setup do
     @student = students(:jet)
-    @repo = repos(:farmar)
+    @assignment = assignments(:farmar)
   end
 
   def new_params
     {
-      repo_id: @repo.id,
+      assignment_id: @assignment.id,
       student_id: @student.id
     }
   end
@@ -19,7 +19,7 @@ class FeedbackControllerTest < ActionController::TestCase
     end
 
     test "should get the new form" do
-      get :new, new_params
+      get :new, params: new_params
 
       assert_response :success
       assert_template :new
@@ -33,7 +33,7 @@ class FeedbackControllerTest < ActionController::TestCase
       end
 
       test "should be able to get the new form" do
-        get :new, new_params
+        get :new, params: new_params
 
         assert_response :success
       end
@@ -45,7 +45,7 @@ class FeedbackControllerTest < ActionController::TestCase
       end
 
       test "should not be able to get the new form" do
-        get :new, new_params
+        get :new, params: new_params
 
         assert_response :redirect
         assert_redirected_to root_path
@@ -59,7 +59,7 @@ class FeedbackControllerTest < ActionController::TestCase
       end
 
       test "should not be able to get the new form" do
-        get :new, new_params
+        get :new, params: new_params
 
         assert_response :redirect
         assert_redirected_to root_path
@@ -73,7 +73,7 @@ class FeedbackControllerTest < ActionController::TestCase
       end
 
       test "should not be able to get the new form" do
-        get :new, new_params
+        get :new, params: new_params
 
         assert_response :redirect
         assert_redirected_to root_path

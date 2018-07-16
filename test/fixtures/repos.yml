@@ -1,9 +1,0 @@
-word_guess:
-  cohorts: sharks
-  repo_url: Ada-C99/Word-Guess
-  individual: true
-
-farmar:
-  cohorts: jets
-  repo_url: Ada-C99/FarMar
-  individual: false

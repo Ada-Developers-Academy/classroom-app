@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
   root 'pull_requests#home'
 
-  resources :repos do
-    resources :cohort, only: [:show], controller: 'repos'
+  resources :assignments do
+    resources :classroom, only: [:show], controller: 'assignments'
 
     resources :students, only: [] do
       resources :feedback, only: [:new, :create]
@@ -18,6 +18,6 @@ Rails.application.routes.draw do
     end
   end
 
-  get "/auth/:provider/callback", to: "sessions#create"
-  delete "/logout", to: "sessions#destroy"
+  get '/auth/:provider/callback', to: 'sessions#create'#, path: 'login' # , format: false # QUESTION: need the format thing?
+  delete '/logout', to: 'sessions#destroy'
 end

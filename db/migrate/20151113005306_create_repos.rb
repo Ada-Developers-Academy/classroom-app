@@ -1,4 +1,4 @@
-class CreateRepos < ActiveRecord::Migration
+class CreateRepos < ActiveRecord::Migration[5.2]
   def change
     create_table :repos do |t|
       t.integer :cohort_num, null:false

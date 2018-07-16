@@ -1,8 +1,8 @@
-<%= form_tag repo_student_feedback_index_path, :class => 'form-horizontal' do %>
+<%= form_tag assignment_student_feedback_index_path, :class => 'form-horizontal' do %>
 <fieldset>
   <legend>
     Submit Feedback for <%= @student_name %> on
-    <%= link_to @repo.repo_url, @submission.pr_url, :target => "blank" %>
+    <%= link_to @assignment.repo_url, @submission.pr_url, :target => "blank" %>
   </legend>
   <div class="control-group">
     <div id="epiceditor" aria-label="Enter feedback comments for the project submission">

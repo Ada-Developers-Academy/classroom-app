@@ -49,8 +49,8 @@ class AbilityTest < ActiveSupport::TestCase
     end
 
     [:create, :read, :update, :destroy].each do |action|
-      test_cannot_all action, Cohort, %i{sharks jets}
-      test_cannot_all action, Repo, %i{word_guess farmar}
+      test_cannot_all action, Classroom, %i{sharks jets}
+      test_cannot_all action, Assignment, %i{word_guess farmar}
       test_cannot_all action, Student, %i{shark jet}
       test_cannot_all action, Submission, %i{shark_word_guess jet_farmar}
       test_cannot_all action, User, %i{unknown instructor student}
@@ -64,8 +64,8 @@ class AbilityTest < ActiveSupport::TestCase
     end
 
     [:create, :read, :update, :destroy].each do |action|
-      test_cannot_all action, Cohort, %i{sharks jets}
-      test_cannot_all action, Repo, %i{word_guess farmar}
+      test_cannot_all action, Classroom, %i{sharks jets}
+      test_cannot_all action, Assignment, %i{word_guess farmar}
       test_cannot_all action, Student, %i{shark jet}
       test_cannot_all action, Submission, %i{shark_word_guess jet_farmar}
       test_cannot_all action, User, %i{unknown instructor student}
@@ -79,8 +79,8 @@ class AbilityTest < ActiveSupport::TestCase
     end
 
     [:create, :read, :update, :destroy].each do |action|
-      test_can_all action, Cohort, %i{sharks jets}
-      test_can_all action, Repo, %i{word_guess farmar}
+      test_can_all action, Classroom, %i{sharks jets}
+      test_can_all action, Assignment, %i{word_guess farmar}
       test_can_all action, Student, %i{shark jet}
       test_can_all action, Submission, %i{shark_word_guess jet_farmar}
       test_can_all action, User, %i{unknown instructor student}
@@ -95,8 +95,8 @@ class AbilityTest < ActiveSupport::TestCase
       end
 
       [:create, :read, :update, :destroy].each do |action|
-        test_cannot_all action, Cohort, %i{sharks jets}
-        test_cannot_all action, Repo, %i{word_guess farmar}
+        test_cannot_all action, Classroom, %i{sharks jets}
+        test_cannot_all action, Assignment, %i{word_guess farmar}
         test_cannot_all action, User, %i{unknown instructor student}
         test_cannot_all action, UserInvite, %i{valid_instructor valid_student valid_unknown accepted}
       end
