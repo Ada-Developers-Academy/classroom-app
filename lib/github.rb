@@ -1,6 +1,7 @@
 require 'httparty'
 require 'pr_student'
 
+# TODO: review this class and logic involving it when we start with SubmissionGroup
 class GitHub
   attr_reader :token
 

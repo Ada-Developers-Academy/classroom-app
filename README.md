@@ -59,4 +59,4 @@ from /Users/kirstenschumy/Documents/Ada/capstone-project/ada-prs/app/assets/java
 //= require epiceditor
 
 ## Significant Changes
-repos table renamed to assignments
+- repos table renamed to assignments
