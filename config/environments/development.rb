@@ -27,6 +27,10 @@ Rails.application.configure do
     config.cache_store = :null_store
   end
 
+  # # Added when rails app was switched to API. To render an HTML page with debugging information, use the value :default.
+  # # To render debugging information preserving the response format, use the value :api.
+  # config.debug_exception_response_format = :default
+
   # Store uploaded files on the local file system (see config/storage.yml for options)
   config.active_storage.service = :local
 
