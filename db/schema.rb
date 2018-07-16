@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_12_234801) do
+ActiveRecord::Schema.define(version: 2018_07_16_215636) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,7 +34,20 @@ ActiveRecord::Schema.define(version: 2018_07_12_234801) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "instructor_emails"
+    t.bigint "cohort_id"
+    t.index ["cohort_id"], name: "index_classrooms_on_cohort_id"
     t.index ["number", "name"], name: "index_classrooms_on_number_and_name", unique: true
+  end
+
+  create_table "cohorts", force: :cascade do |t|
+    t.integer "number"
+    t.string "name"
+    t.string "repo_name"
+    t.date "start_date"
+    t.date "end_date"
+    t.date "graduation_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "students", force: :cascade do |t|
@@ -56,6 +69,7 @@ ActiveRecord::Schema.define(version: 2018_07_12_234801) do
     t.string "pr_url"
     t.string "feedback_url"
     t.bigint "user_id"
+    t.integer "grade"
     t.index ["student_id", "assignment_id"], name: "index_submissions_on_student_id_and_assignment_id", unique: true
     t.index ["user_id"], name: "index_submissions_on_user_id"
   end
@@ -84,6 +98,7 @@ ActiveRecord::Schema.define(version: 2018_07_12_234801) do
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
+  add_foreign_key "classrooms", "cohorts", on_delete: :cascade
   add_foreign_key "submissions", "users"
   add_foreign_key "user_invites", "classrooms", on_delete: :cascade
   add_foreign_key "user_invites", "users", column: "inviter_id", on_delete: :cascade
