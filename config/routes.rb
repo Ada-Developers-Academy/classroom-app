@@ -1,9 +1,4 @@
 Rails.application.routes.draw do
-  get 'classrooms/index'
-  get 'classrooms/show'
-  get 'classrooms/create'
-  get 'classrooms/update'
-  get 'classrooms/delete'
   root 'pull_requests#home'
 
   resources :assignments do
@@ -23,10 +18,10 @@ Rails.application.routes.draw do
     end
   end
 
-
-  get "/assignmentsapi", to: "assignments#send_api_assignments"
-  get "/studentsapi", to: "students#send_api_students"
-  get "/classroomapi", to: "classrooms#send_api_classrooms"
+  # Api calls:
+  get "/assignmentsapi", to: "assignments#index"
+  get "/studentsapi", to: "students#index"
+  get "/classroomsapi", to: "classrooms#index"
 
   get "/auth/:provider/callback", to: "sessions#create" # , format: false # QUESTION: need the format thing?
 

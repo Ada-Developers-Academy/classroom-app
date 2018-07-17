@@ -1,12 +1,9 @@
 class ClassroomsController < ApplicationController
   load_and_authorize_resource 
 
-  def send_api_classrooms
-    # (change to idnex later)
+  def index
     # send a list of all classrooms:
-
     data = Classroom.all
-
     render status: :ok, json: data
   end
 

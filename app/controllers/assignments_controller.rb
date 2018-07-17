@@ -5,28 +5,13 @@ class AssignmentsController < ApplicationController
   load_and_authorize_resource :assignment, parent: true, only: [:show]
   load_and_authorize_resource :classroom, parent: false, only: [:show]
 
-
-  def send_api_assignments
-    # @user = User.find_by(id: 1)
-    # TODO: Fix logged-in user situation
-    # send a list of all assignments:
+  def index
     if params[:query]
       data = RepoWrapper.search(params[:query])
     else
       data = Assignment.all
     end
     render status: :ok, json: data
-  end
-
-  def index
-    # new code for api wrapper:
-
-    # if params[:query]
-    #   data = RepoWrapper.search(params[:query])
-    # else
-    #   data = Assignment.all
-    # end
-    # render status: :ok, json: data
   end
 
   def show
