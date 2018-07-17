@@ -3,6 +3,7 @@ class Classroom < ApplicationRecord
   # changed to optional?
   # http://guides.rubyonrails.org/upgrading_ruby_on_rails.html#active-record-belongs-to-required-by-default-option
   has_and_belongs_to_many :assignments
+  belongs_to :cohort
   
   def display_name
     "#{number}: #{name}"
