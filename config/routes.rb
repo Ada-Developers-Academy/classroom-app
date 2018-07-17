@@ -18,6 +18,12 @@ Rails.application.routes.draw do
     end
   end
 
+  # Api calls:
+  get "/assignmentsapi", to: "assignments#index"
+  get "/studentsapi", to: "students#index"
+  get "/classroomsapi", to: "classrooms#index"
+
   get "/auth/:provider/callback", to: "sessions#create" # , format: false # QUESTION: need the format thing?
+
   delete "/logout", to: "sessions#destroy"
 end
