@@ -26,7 +26,7 @@ Rails.application.routes.draw do
 
   get "/assignmentsapi", to: "assignments#send_api_assignments"
   get "/studentsapi", to: "students#send_api_students"
-  get "/classroomapi", to: "students#send_api_classrooms"
+  get "/classroomapi", to: "classrooms#send_api_classrooms"
 
   get "/auth/:provider/callback", to: "sessions#create" # , format: false # QUESTION: need the format thing?
 

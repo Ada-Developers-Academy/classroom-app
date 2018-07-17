@@ -5,7 +5,7 @@ class ClassroomsController < ApplicationController
     # (change to idnex later)
     # send a list of all classrooms:
 
-    data = Classrom.all
+    data = Classroom.all
 
     render status: :ok, json: data
   end
