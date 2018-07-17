@@ -1,0 +1,2 @@
+class SubmissionGroup < ApplicationRecord
+end
