@@ -60,3 +60,5 @@ from /Users/kirstenschumy/Documents/Ada/capstone-project/ada-prs/app/assets/java
 
 ## Significant Changes
 - repos table renamed to assignments
+- cohort table renamed to classroom
+- front-end deleted 
