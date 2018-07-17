@@ -7,13 +7,18 @@ class ApplicationController < ActionController::Base
   check_authorization
 
   def current_user
+
     puts "!" * 20
     puts session[:user_id]
     # @user ||= User.find_by(id: session[:user_id])
 
     # HACK: get right of this before turing in
     # enable this for admin permission:
-    @user ||= User.find_by(id: 1)
+
+    # @user ||= User.find_by(id: 1)
+    @user = User.find_by(id: 1)
+    # dont forget to change it back to line 10 !
+
   end
 
   def require_login

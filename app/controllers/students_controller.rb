@@ -1,8 +1,12 @@
 class StudentsController < ApplicationController
   load_and_authorize_resource
 
-  def new
-  end
+  def index
+    # Code for constructing internal api to be called by front-end:
+    data = Student.all
+    # data = data.paginate(page: params[:p], per_page: params[:n])
+    render status: :ok, json: data
+   end
 
   def create
     if @student.save
@@ -25,14 +29,6 @@ class StudentsController < ApplicationController
     else
       redirect_to students_path
     end
-  end
-
-  def index
-    # Code for constructing internal api to be called by front-end:
-    data = Student.all
-    # data = data.paginate(page: params[:p], per_page: params[:n])
-    render status: :ok, json: data
-  
   end
 
   def show

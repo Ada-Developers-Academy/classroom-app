@@ -6,7 +6,6 @@ class AssignmentsController < ApplicationController
   load_and_authorize_resource :classroom, parent: false, only: [:show]
 
   def index
-    # new code for api wrapper:
     if params[:query]
       data = RepoWrapper.search(params[:query])
     else
@@ -27,7 +26,8 @@ class AssignmentsController < ApplicationController
     #     only: [:id, :repo_url]
     #   )
     # )
-    # Should we change this?
+    # # Should we change this?
+    #
 
   end
 
