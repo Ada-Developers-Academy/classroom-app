@@ -43,7 +43,7 @@ class AssignmentsController < ApplicationController
   end
 
   def edit
-    @max_size = Classroom.all.length
+    @max_size = Classroom.all.length # QUESTION: the fuck is max_size??
   end
 
   def update

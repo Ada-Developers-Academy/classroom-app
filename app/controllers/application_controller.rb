@@ -9,12 +9,11 @@ class ApplicationController < ActionController::Base
   def current_user
     puts "!" * 20
     puts session[:user_id]
-    @user ||= User.find_by(id: session[:user_id])
     # @user ||= User.find_by(id: session[:user_id])
 
+    # HACK: get right of this before turing in
     # enable this for admin permission:
-    # @user ||= User.find_by(id: 1)
-    # dont forget to change it back to line 10 !
+    @user ||= User.find_by(id: 1)
   end
 
   def require_login
@@ -31,6 +30,7 @@ class ApplicationController < ActionController::Base
   private
 
   rescue_from CanCan::AccessDenied do |ex|
+    # If we "accidentally" locked ourselves out, would we have to complete our capstone? 🤔
     flash[:error] = "You are not authorized to do that."
     redirect_to root_path
   end

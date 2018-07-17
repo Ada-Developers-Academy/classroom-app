@@ -3,6 +3,7 @@
 class PullRequestsController < ApplicationController
   skip_before_action :require_login, only: [:home]
   skip_authorization_check only: [:home]
+  # QUESTION: what's this "instance_name: :assignment" thing about and why does Charles gotta be so fancy?
   load_and_authorize_resource class: Assignment, instance_name: :assignment, except: [:home]
 
   def home

@@ -47,7 +47,7 @@ class RepoWrapper
     
     Assignment.create(
         # name: response["name"],
-        repo_url: result["html_url"]
+        repo_url: result["html_url"],
         start_date: result["created_at"],
         due_date: nil,
         individual: true
