@@ -22,6 +22,7 @@ Rails.application.routes.draw do
   get "/assignmentsapi", to: "assignments#index"
   get "/studentsapi", to: "students#index"
   get "/classroomsapi", to: "classrooms#index"
+  get "/cohortsapi", to: "cohorts#index"
 
   get "/auth/:provider/callback", to: "sessions#create" # , format: false # QUESTION: need the format thing?
 
