@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_17_191400) do
+ActiveRecord::Schema.define(version: 2018_07_17_201542) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -67,13 +67,16 @@ ActiveRecord::Schema.define(version: 2018_07_17_191400) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "email"
+    t.string "preferred_name"
+    t.string "uid"
     t.index ["classroom_id", "github_name"], name: "index_students_on_classroom_id_and_github_name", unique: true
   end
 
-  create_table "students_submission_groups", id: false, force: :cascade do |t|
-    t.bigint "submission_group_id", null: false
-    t.bigint "student_id", null: false
-    t.index ["student_id", "submission_group_id"], name: "index_student_id_and_group_id", unique: true
+  create_table "students_submission_groups", force: :cascade do |t|
+    t.integer "submission_group_id", null: false
+    t.string "student_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["submission_group_id", "student_id"], name: "index_group_id_and_student_id", unique: true
   end
 

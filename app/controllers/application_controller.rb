@@ -16,7 +16,7 @@ class ApplicationController < ActionController::Base
     # enable this for admin permission:
 
     # @user ||= User.find_by(id: 1)
-    @user = User.find_by(id: 1)
+    @user = User.find(1)
     # dont forget to change it back to line 10 !
 
   end
