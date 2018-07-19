@@ -58,6 +58,7 @@ ActiveRecord::Schema.define(version: 2018_07_17_201542) do
     t.boolean "active", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "uid"
   end
 
   create_table "students", force: :cascade do |t|
@@ -107,6 +108,7 @@ ActiveRecord::Schema.define(version: 2018_07_17_201542) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "classroom_id"
+    t.string "uid"
     t.index ["classroom_id"], name: "index_user_invites_on_classroom_id"
     t.index ["github_name"], name: "index_user_invites_on_github_name", unique: true, where: "(accepted = false)"
   end

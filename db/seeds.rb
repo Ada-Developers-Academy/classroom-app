@@ -5,6 +5,36 @@ require 'httparty'
 
 
 # CREATE USERS
+INSTRUCTOR_FILE = Rails.root.join('db', './.capstone_seed_data/instructors_seed_data.csv')
+puts "Loading raw works data from #{INSTRUCTOR_FILE}"
+
+instructor_failures = []
+CSV.foreach(INSTRUCTOR_FILE, :headers => true) do |row|
+  instructor = Instructor.new
+#   student.id = row['id']
+  instructor.name = row['name']
+  instructor.active = row['active']
+  instructor.uid = row['uid']
+  instructor.github_name = row['github_name']
+  # instructor.role = row['role']
+
+  if instructor.save
+    puts "Created instructor: #{instructor.inspect}"
+  else
+    instructor_failures << user
+    puts "Failed to save instructor: #{instructor.inspect}"
+  end
+end
+
+puts "Added #{Instructor.count} instructor records"
+puts "#{instructor_failures.length} instructor failed to save"
+puts "done"
+
+puts "*" * 30
+
+########################################################################################################################
+
+# CREATE USERS
 USER_FILE = Rails.root.join('db', './.capstone_seed_data/users_seed_data.csv')
 puts "Loading raw works data from #{USER_FILE}"
 
@@ -37,7 +67,7 @@ puts "*" * 30
 # TODO: don't know if these dates are right
 Cohort.create!(
   name: "C9",
-  repo_name: "ada-C9",
+  repo_name: "Ada-C9",
   class_start_date: Date.new(2018,2,5),
   class_end_date: Date.new(2018,7,27),  # noooooooo 😭
   internship_start_date: Date.new(2018,8,6),

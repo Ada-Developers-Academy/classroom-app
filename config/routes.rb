@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  root 'pull_requests#home'
+  # root 'pull_requests#home'
 
   resources :assignments do
     resources :classroom, only: [:show], controller: 'assignments'
@@ -8,6 +8,8 @@ Rails.application.routes.draw do
       resources :feedback, only: [:new, :create]
     end
   end
+
+  resources :cohorts
   resources :students
   resources :pull_requests
   resources :user_invites, only: [:index, :create], path: 'invites' do
@@ -18,6 +20,7 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :instructors
   # Api calls:
   get "/assignmentsapi", to: "assignments#index"
   get "/studentsapi", to: "students#index"
