@@ -20,7 +20,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :instructors
+  resources :instructors, only: [:index, :create]
   # Api calls:
   get "/assignmentsapi", to: "assignments#index"
   get "/studentsapi", to: "students#index"
