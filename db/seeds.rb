@@ -5,7 +5,7 @@ require 'httparty'
 
 
 # CREATE USERS
-INSTRUCTOR_FILE = Rails.root.join('db', './.capstone_seed_data/instructors_seed_data.csv')
+INSTRUCTOR_FILE = Rails.root.join('db', INSTRUCTOR_FILE_PATH)
 puts "Loading raw works data from #{INSTRUCTOR_FILE}"
 
 instructor_failures = []
