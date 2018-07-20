@@ -10,4 +10,6 @@ class CohortsController < ApplicationController
     render status: :ok, json: cohorts
   end
 
+
+
 end

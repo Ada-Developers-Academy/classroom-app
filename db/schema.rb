@@ -59,6 +59,7 @@ ActiveRecord::Schema.define(version: 2018_07_17_201542) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "uid"
+    t.index ["uid"], name: "index_instructors_on_uid", unique: true
   end
 
   create_table "students", force: :cascade do |t|
@@ -71,6 +72,7 @@ ActiveRecord::Schema.define(version: 2018_07_17_201542) do
     t.string "preferred_name"
     t.string "uid"
     t.index ["classroom_id", "github_name"], name: "index_students_on_classroom_id_and_github_name", unique: true
+    t.index ["uid"], name: "index_students_on_uid", unique: true
   end
 
   create_table "students_submission_groups", force: :cascade do |t|
@@ -109,6 +111,7 @@ ActiveRecord::Schema.define(version: 2018_07_17_201542) do
     t.datetime "updated_at", null: false
     t.bigint "classroom_id"
     t.string "uid"
+    t.index ["classroom_id", "uid"], name: "index_user_invites_on_classroom_id_and_uid", unique: true
     t.index ["classroom_id"], name: "index_user_invites_on_classroom_id"
     t.index ["github_name"], name: "index_user_invites_on_github_name", unique: true, where: "(accepted = false)"
   end

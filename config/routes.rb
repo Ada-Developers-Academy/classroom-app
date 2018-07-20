@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  # root 'pull_requests#home'
+  root 'pull_requests#home'
 
   resources :assignments do
     resources :classroom, only: [:show], controller: 'assignments'

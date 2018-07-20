@@ -17,16 +17,14 @@ class InstructorsController < ApplicationController
   #
   # end
 
-  # def new
-  #
-  # end
+  def edit
 
-  # TODO: probably fucked this up and need to check it
+  end
+
   # @pre params must contain key :username, whose value is is a valid GitHub username
   # @return json that responds to :name if a new instructor is created. Otherwise returns error.
   def create
     uid_and_name = GitHubUserInfo.get_name_and_uid_from_gh(params[:github_name])
-    puts uid_and_name.inspect
     existing = Instructor.find_by(uid: uid_and_name[:uid])
 
     if existing
@@ -34,7 +32,7 @@ class InstructorsController < ApplicationController
       return
     else
       new_instructor = Instructor.new(
-          name: params[:name] || (uid_and_name[:name] || params[:github_name]),
+          name: params[:name] || (uid_and_name[:name] || params[:github_name]), # params[:github_name] should not be null
           github_name: params[:github_name],
           uid: uid_and_name[:uid],
           active: true
