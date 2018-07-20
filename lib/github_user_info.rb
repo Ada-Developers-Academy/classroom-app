@@ -14,7 +14,7 @@ class GitHubUserInfo
 
   def self.get_uid_from_gh(github_username)
     response =  HTTParty.get('https://api.github.com/users/' + github_username)
-    return response["id"] if response.respond_to? "id"
+    return response["id"] #if response.respond_to? "id"
   end
 
 end
