@@ -2,12 +2,16 @@ class UserInvite < ApplicationRecord
   # QUESTION: belongs_to now is required by default. Should these be changed to optional?
   # http://guides.rubyonrails.org/upgrading_ruby_on_rails.html#active-record-belongs-to-required-by-default-option
   belongs_to :inviter, class_name: 'User'
-  belongs_to :classroom, dependent: :destroy, optional: true # NOTE: had to make optional make model test work.
+  # TODO: why dependent: destroy
+  belongs_to :classroom, optional: true # NOTE: had to make optional make model test work.
+  # belongs_to :classroom, dependent: :destroy, optional: true # NOTE: had to make optional make model test work.
 
   validates_with UserRoleValidator
   validates :inviter, presence: true
   validate :inviter_must_be_instructor
   validates :github_name, presence: true, uniqueness: { conditions: -> { acceptable } }
+  validates :uid, presence: true, uniqueness: true
+
   # TODO: was only_students_have_classroom. Should we revert back to this when we make cohorts?
   validate :only_students_have_classroom
 

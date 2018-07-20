@@ -1,5 +1,5 @@
 class ClassroomsController < ApplicationController
-  load_and_authorize_resource 
+  load_and_authorize_resource
 
   def index
     # send a list of all classrooms:

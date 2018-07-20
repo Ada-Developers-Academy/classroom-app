@@ -8,6 +8,8 @@ Rails.application.routes.draw do
       resources :feedback, only: [:new, :create]
     end
   end
+
+  resources :cohorts
   resources :students
   resources :pull_requests
   resources :user_invites, only: [:index, :create], path: 'invites' do
@@ -18,10 +20,12 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :instructors, only: [:index, :create]
   # Api calls:
   get "/assignmentsapi", to: "assignments#index"
   get "/studentsapi", to: "students#index"
   get "/classroomsapi", to: "classrooms#index"
+  get "/cohortsapi", to: "cohorts#index"
 
   get "/auth/:provider/callback", to: "sessions#create" # , format: false # QUESTION: need the format thing?
 

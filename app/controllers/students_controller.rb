@@ -1,5 +1,5 @@
 class StudentsController < ApplicationController
-  load_and_authorize_resource
+  load_and_authorize_resource # QUESTION: what does this actually do?
 
   def index
     # Code for constructing internal api to be called by front-end:
@@ -17,10 +17,14 @@ class StudentsController < ApplicationController
   end
 
   def edit
-    if !@student
-      flash[:error] = "Student not found."
-      redirect_to students_path
-    end
+    @student = Student.find_by(id: params[:id])
+    # if student
+    #
+    # end
+    # if !@student
+    #   flash[:error] = "Student not found."
+    #   redirect_to students_path
+    # end
   end
 
   def update
@@ -29,6 +33,11 @@ class StudentsController < ApplicationController
     else
       redirect_to students_path
     end
+    # if !@student.update(student_params)
+    #   render :edit, :status => :bad_request
+    # else
+    #   redirect_to students_path
+    # end
   end
 
   def show

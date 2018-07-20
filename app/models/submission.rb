@@ -35,7 +35,20 @@ class Submission < ApplicationRecord
     else
       Submission.grouped_with(self).map do |sub|
         sub.student.name
-      end.join(' & ')
+      end.join(' & ') # QUESTION: what the fuck is this? Adds " & " between students' names??
     end
   end
+
+  def is_graded?
+    return self.grade.nil?
+  end
+
+  def is_turned_in?
+    return self.pr_url.nil?
+  end
+
+  # def is_individual_submission?
+  #   return self.grade.nil?
+  # end
+
 end
