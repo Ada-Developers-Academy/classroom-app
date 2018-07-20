@@ -63,9 +63,11 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
+  # ActiveRecord::Base.logger = Logger.new(STDOUT)
+
   config.web_console.whitelisted_ips = ENV["LETI_IP"]
 
-  leti_ip = "#{ENV["LETI_IP"]}:3000"
+  leti_ip = ENV["LETI_IP"] + ":3000"
   kirsten_ipad_ip = "#{ENV["KIRSTEN_IPAD_IP"]}:3000"
 
   config.middleware.insert_before 0, Rack::Cors do

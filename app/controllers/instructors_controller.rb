@@ -4,12 +4,13 @@ class InstructorsController < ApplicationController
   load_and_authorize_resource
   # NOTE: commented out lined for any reason other than I copied and pasted them from somewhere else and couldn't decide
   # if we needed it or not. And then I left it because I'm a terrible partner.
-  # load_and_authorize_resource except: [:show]
+  # load_and_authorize_resource except: [:create]
   # load_and_authorize_resource :assignment, parent: true, only: [:show]
   # load_and_authorize_resource :classroom, parent: false, only: [:show]
 
   def index
-    instructors = Instructor.where(active: true)
+    # instructors = Instructor.where(active: true)
+    instructors = Instructor.all
     render status: :ok, json: instructors
   end
 
@@ -30,20 +31,20 @@ class InstructorsController < ApplicationController
     end
   end
 
-  # @pre params must contain key :username, whose value is is a valid GitHub username
+  # @param must contain key :username, whose value is is a valid GitHub username
   # @return json that responds to :name if a new instructor is created. Otherwise returns error.
   def create
-    uid_and_name = GitHubUserInfo.get_name_and_uid_from_gh(params[:github_name])
-    existing = Instructor.find_by(uid: uid_and_name[:uid])
+    uid_from_gh = GitHubUserInfo.get_uid_from_gh(params[:github_name])
+    existing = Instructor.find_by(uid: uid_from_gh)
 
     if existing
       render json: {ok: false, errors: "Instructor already exists"}, status: :bad_request
       return
     else
       new_instructor = Instructor.new(
-        name: params[:name] || (uid_and_name[:name] || params[:github_name]), # params[:github_name] should not be null
+        name: params[:name] || params[:github_name], # params[:github_name] should not be null
         github_name: params[:github_name],
-        uid: uid_and_name[:uid],
+        uid: uid_from_gh,
         active: true
       )
 
@@ -58,14 +59,13 @@ class InstructorsController < ApplicationController
   end
 
   private
-
+    def instructor_params
+      params.require(:instructor).permit(:name, :github_name, :uid, :active, :user_invite)
+    end
   # def create_new_instructor(params, uid_and_name)
   #   return
   # end
 
-  def instructor_params
-    params.permit(:name, :github_name, :uid, :active)
-  end
 
 
 end
