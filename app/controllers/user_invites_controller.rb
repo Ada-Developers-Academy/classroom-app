@@ -1,8 +1,12 @@
+require 'github_user_info'
+
 class UserInvitesController < ApplicationController
   load_and_authorize_resource instance_name: :invite
+  # after_create
 
   def index
-    @invites = @invites.acceptable
+    acceptable_invites = @invites.acceptable
+    render json: { acceptable_invites: acceptable_invites }, status: :ok
   end
 
   def new_student; end
@@ -13,53 +17,64 @@ class UserInvitesController < ApplicationController
     action = :"create_#{params[:role]}"
     return send(action) if respond_to?(action, true) # NOTE: calls create_student or instructor (see below)
 
-    render not_found
+    render json: { errors: "Could not create" }, status: 404
   end
 
   private
 
+  def user_invites_params
+    params.require(:user_invite).permit(:inviter, :github_name, :role, :classroom_id, :uid)
+  end
+
+  # @param :github_names must be a String of valid, unique Github username separated by a tab, end of line, or new line
+  # @param :classroom_id much be a valid classroom id
   def create_student
     github_names = params[:github_names].split(/[ \t\r\n]+/).map(&:strip).uniq
     classroom = Classroom.find_by(id: params[:classroom_id])
     if !classroom.present?
-      return redirect_to user_invites_path,
-                         alert: "Could not find classroom with ID #{params[:classroom_id]}"
+      render json: { errors: "Could not find classroom with ID #{params[:classroom_id]}" }, status: 404
+      return
     end
 
     msgs = github_names.map do |name|
+      github_uid = GitHubUserInfo.get_uid_from_gh(name)
       invite = UserInvite.create({
         inviter: current_user,
         github_name: name,
         role: 'student',
-        classroom: classroom
+        classroom: classroom,
+        uid: github_uid
       })
 
-      if invite.persisted?
+      if invite.persisted? # QUESTION: what is this?
         [true, "Invited #{name}"]
       else
         [false, "Could not invite #{name} because #{invite.errors.full_messages.first}"]
       end
     end
 
-    redirect_to user_invites_path, {
+    render json: {
       notice: msgs.select(&:first).map(&:second),
       alert:  msgs.reject(&:first).map(&:second),
     }
   end
 
+  # @param :github_name must be a valid GitHub name (note this is singular)
   def create_instructor
     name = params[:github_name]
+    response = GitHubUserInfo.get_uid_from_gh(name)
     invite = UserInvite.create({
       inviter: current_user,
       github_name: name,
-      role: 'instructor'
+      role: 'instructor',
+      uid: response
     })
 
     if invite.persisted?
-      redirect_to user_invites_path, notice: "Successfully invited Github account #{name}"
+
+      render json: { message: "Successfully invited Github account #{invite.github_name}" }, status: :ok
     else
-     flash[:alert] = "Could not invite #{name} because #{invite.errors.full_messages.first}"
-     render "new_instructor"
+      render json: { errors: "Could not invited Github account #{invite.github_name}" }, status: 404
     end
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_17_191400) do
+ActiveRecord::Schema.define(version: 2018_07_17_201542) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -58,6 +58,8 @@ ActiveRecord::Schema.define(version: 2018_07_17_191400) do
     t.boolean "active", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "uid"
+    t.index ["uid"], name: "index_instructors_on_uid", unique: true
   end
 
   create_table "students", force: :cascade do |t|
@@ -67,13 +69,17 @@ ActiveRecord::Schema.define(version: 2018_07_17_191400) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "email"
+    t.string "preferred_name"
+    t.string "uid"
     t.index ["classroom_id", "github_name"], name: "index_students_on_classroom_id_and_github_name", unique: true
+    t.index ["uid"], name: "index_students_on_uid", unique: true
   end
 
-  create_table "students_submission_groups", id: false, force: :cascade do |t|
-    t.bigint "submission_group_id", null: false
-    t.bigint "student_id", null: false
-    t.index ["student_id", "submission_group_id"], name: "index_student_id_and_group_id", unique: true
+  create_table "students_submission_groups", force: :cascade do |t|
+    t.integer "submission_group_id", null: false
+    t.string "student_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["submission_group_id", "student_id"], name: "index_group_id_and_student_id", unique: true
   end
 
@@ -104,6 +110,8 @@ ActiveRecord::Schema.define(version: 2018_07_17_191400) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "classroom_id"
+    t.string "uid"
+    t.index ["classroom_id", "uid"], name: "index_user_invites_on_classroom_id_and_uid", unique: true
     t.index ["classroom_id"], name: "index_user_invites_on_classroom_id"
     t.index ["github_name"], name: "index_user_invites_on_github_name", unique: true, where: "(accepted = false)"
   end

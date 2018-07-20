@@ -8,13 +8,21 @@ class PullRequestsController < ApplicationController
 
   def home
     if can? :read, Assignment
-      redirect_to pull_requests_path
+      data = Assignment.all
+      render status: :ok, json: data
+      # redirect_to pull_requests_path
     elsif can? :read, Student
       students = Student.accessible_by(current_ability)
 
       redirect_to students.first if students.length == 1
       redirect_to students_path if students.length > 1
+    elsif can? :read, Instructor
+      instructors = Instructor.accessible_by(current_ability)
+      #
+      # redirect_to students.first if students.length == 1
+      redirect_to instructors_path #if students.length > 1
     end
+
   end
 
   def index

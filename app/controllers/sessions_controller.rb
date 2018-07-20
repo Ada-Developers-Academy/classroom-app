@@ -18,16 +18,17 @@ class SessionsController < ApplicationController
           begin
             @user.accept_invite(invite)
           rescue
-            return redirect_to root_path, notice: "Unable to accept invitation"
+            render json: { notice:  "Unable to accept invitation" }
           end
         end
 
-        redirect_to root_path
+        return
+        # redirect_to root_path
       else
-        redirect_to root_path, notice: "Failed to save the user"
+        render json: { notice: "Failed to save the user" }
       end
     else
-      redirect_to root_path, notice: "Failed to authenticate"
+      render json: { notice: "Failed to authenticate" }
     end
   end
 

@@ -39,7 +39,7 @@
 /lib/seeds/students.csv
 
 # Kirsten and Leti's capstone data
-/lib/seeds/c9students.csv
+/db/.capstone_seed_data/*
 
 # VS Code and Intellij project settings
 .vscode
