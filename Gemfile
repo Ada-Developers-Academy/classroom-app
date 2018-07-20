@@ -100,4 +100,4 @@ gem "schema_plus_core"
 
 gem "faker"
 
-gem "rack-cors"
+gem "rack-cors", require: "rack/cors"

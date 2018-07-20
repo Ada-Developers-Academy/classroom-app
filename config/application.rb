@@ -12,6 +12,20 @@ module PullRequests  # TODO: do we need this?
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 5.0
 
+    # ActiveRecord::Base.logger = Logger.new(STDOUT)
+
+    config.web_console.whitelisted_ips = ENV["LETI_IP"]
+
+    # leti_ip = ENV["LETI_IP"] + ":3000"
+    # kirsten_ipad_ip = "#{ENV["KIRSTEN_IPAD_IP"]}:3000"
+
+    config.middleware.insert_before 0, Rack::Cors do
+      allow do
+        origins '*'
+        resource '*', headers: :any, methods: [:get, :post, :put, :patch, :options]
+      end
+    end
+
     # Added. TODO: Needed?
     # https://github.com/rails/rails/pull/17227
     # http://guides.rubyonrails.org/upgrading_ruby_on_rails.html#halting-callback-chains-via-throw-abort
