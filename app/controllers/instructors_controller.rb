@@ -18,7 +18,16 @@ class InstructorsController < ApplicationController
   # end
 
   def edit
+    instructor = Instructor.find_by(params[:id])
 
+
+    if instructor.save
+      render json: { name: new_instructor.name }, status: :ok
+      return
+    else
+      render json: {ok: false, errors: "Instructor not created"}, status: :bad_request
+      return
+    end
   end
 
   # @pre params must contain key :username, whose value is is a valid GitHub username
@@ -32,10 +41,10 @@ class InstructorsController < ApplicationController
       return
     else
       new_instructor = Instructor.new(
-          name: params[:name] || (uid_and_name[:name] || params[:github_name]), # params[:github_name] should not be null
-          github_name: params[:github_name],
-          uid: uid_and_name[:uid],
-          active: true
+        name: params[:name] || (uid_and_name[:name] || params[:github_name]), # params[:github_name] should not be null
+        github_name: params[:github_name],
+        uid: uid_and_name[:uid],
+        active: true
       )
 
       if new_instructor.save

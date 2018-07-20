@@ -99,3 +99,5 @@ gem "cancancan"
 gem "schema_plus_core"
 
 gem "faker"
+
+gem "rack-cors"

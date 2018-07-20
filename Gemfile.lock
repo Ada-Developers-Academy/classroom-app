@@ -171,6 +171,7 @@ GEM
     public_suffix (3.0.2)
     puma (3.11.4)
     rack (2.0.5)
+    rack-cors (1.0.2)
     rack-test (1.0.0)
       rack (>= 1.0, < 3)
     rails (5.2.0)
@@ -289,6 +290,7 @@ DEPENDENCIES
   omniauth-github
   pg (>= 0.18, < 2.0)
   puma (~> 3.11)
+  rack-cors
   rails (~> 5.2.0)
   rails-controller-testing
   sass-rails (~> 5.0)

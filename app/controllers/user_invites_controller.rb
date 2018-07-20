@@ -2,6 +2,7 @@ require 'github_user_info'
 
 class UserInvitesController < ApplicationController
   load_and_authorize_resource instance_name: :invite
+  # after_create
 
   def index
     acceptable_invites = @invites.acceptable
@@ -20,6 +21,10 @@ class UserInvitesController < ApplicationController
   end
 
   private
+
+  def user_invites_params
+    params.require(:user_invite).permit(:inviter, :github_name, :role, :classroom_id, :uid)
+  end
 
   # @param :github_names must be a String of valid, unique Github username separated by a tab, end of line, or new line
   # @param :classroom_id much be a valid classroom id
@@ -54,6 +59,7 @@ class UserInvitesController < ApplicationController
     }
   end
 
+  # @param :github_name must be a valid GitHub name (note this is singular)
   def create_instructor
     name = params[:github_name]
     response = GitHubUserInfo.get_uid_from_gh(name)
@@ -65,6 +71,7 @@ class UserInvitesController < ApplicationController
     })
 
     if invite.persisted?
+
       render json: { message: "Successfully invited Github account #{invite.github_name}" }, status: :ok
     else
       render json: { errors: "Could not invited Github account #{invite.github_name}" }, status: 404
