@@ -1,10 +1,8 @@
-class Ability #< ApplicationRecord
+class Ability
   # self.abstract_class = true
 include CanCan::Ability
 
   def initialize(user)
-    # puts "********************************"
-    # puts user.inspect
     return guest_rules unless user
     unauthorized_rules unless user.authorized?
 

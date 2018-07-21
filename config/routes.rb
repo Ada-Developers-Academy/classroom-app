@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   end
 
   resources :cohorts
+  resources :classrooms
   resources :students
   resources :pull_requests
   resources :user_invites, only: [:index, :create], path: 'invites' do

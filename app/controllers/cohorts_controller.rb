@@ -10,12 +10,20 @@ class CohortsController < ApplicationController
 
   end
 
+  # @param :number
+  # @param :name
+  # @param :repo_name required
+  # @param :class_start_date
+  # @param :class_end_date
+  # @param :internship_start_date
+  # @param :internship_end_date
+  # @param :graduation_date
   def create
-    # existing = Cohort.find_by(id: params[:id])
+    existing = Cohort.find_by(id: params[:id])
 
-    # if existing
-    #   render json: { errors: "Cohort already exists"}, status: :bad_request
-    # else
+    if existing
+      render json: { errors: "Cohort already exists"}, status: :bad_request
+    else
       new_cohort = Cohort.new(
           number: params[:number],
           name: params[:name],
@@ -28,17 +36,18 @@ class CohortsController < ApplicationController
       )
 
       if new_cohort.save
-        render json: { name: new_cohort.name }, status: :ok
+        render json: { message: "New cohort #{new_cohort.name} created!" }, status: :ok
       else
         render json: { errors: "New cohort not created"}, status: :bad_request
       end
 
-    # end
+    end
   end
 
   private
   def cohort_params
-    params.require(:cohort).permit(:number, :name, :repo_name, :class_start_date, :class_end_date, :internship_start_date, :internship_end_date, :graduation_date)
+    params.require(:cohort).permit(:number, :name, :repo_name, :class_start_date, :class_end_date,
+                                   :internship_start_date, :internship_end_date, :graduation_date)
   end
 
 end
