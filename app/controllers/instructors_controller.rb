@@ -10,8 +10,11 @@ class InstructorsController < ApplicationController
     render json: { instructors: all_instructors }, status: :ok
   end
 
+  # @param :id
+  # @return :instructor if provided a valid id
+  # @return :error if not provided a valid id
   def show
-    NotImplementedError
+    render json: { instructor: @instructor }, status: :ok
   end
 
   def edit
@@ -54,13 +57,18 @@ class InstructorsController < ApplicationController
   end
 
   private
-    def instructor_params
-      params.require(:instructor).permit(:name, :github_name, :uid, :active, :user_invite)
-    end
 
-    def find_instructor
-      @instructor = Instructor.find_by(params[:id])
-    end
+  rescue_from ActiveRecord::RecordNotFound do |ex|
+    render json: { error: "#{ex}" }, status: :bad_request
+  end
+
+  def instructor_params
+    params.require(:instructor).permit(:name, :github_name, :uid, :active, :user_invite)
+  end
+
+  def find_instructor
+    @instructor = Instructor.find_by(id: params[:id])
+  end
 
 end
 

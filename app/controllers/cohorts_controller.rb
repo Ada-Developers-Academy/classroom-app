@@ -12,7 +12,7 @@ class CohortsController < ApplicationController
 
   # @param :number
   # @param :name
-  # @param :repo_name required
+  # @param :repo_name *required*
   # @param :class_start_date
   # @param :class_end_date
   # @param :internship_start_date

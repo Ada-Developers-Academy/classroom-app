@@ -2,9 +2,7 @@ class StudentsController < ApplicationController
   load_and_authorize_resource # QUESTION: what does this actually do?
 
   def index
-    # Code for constructing internal api to be called by front-end:
     data = Student.all
-    # data = data.paginate(page: params[:p], per_page: params[:n])
     render status: :ok, json: data
    end
 
@@ -40,13 +38,11 @@ class StudentsController < ApplicationController
     # end
   end
 
+  # @param :id
+  # @return :student if provided a valid id
+  # @return :error if not provided a valid id
   def show
-    # puts "reached Student#show"
-    # data = Student.find_by(@student.id)
-
-    #   render json: data.as_json(
-    #   only: [:name, :email, :github_name, :cohort]
-    # )
+    render json: { student: @student }, status: :ok
   end
 
   def destroy
@@ -56,9 +52,12 @@ class StudentsController < ApplicationController
 
   private
 
+  def find_student
+    @student = Student.find_by(id: params[:id])
+  end
+
   rescue_from ActiveRecord::RecordNotFound do |ex|
-    flash[:error] = "Student not found."
-    redirect_to students_path
+    render json: { error: "#{ex}" }, status: :bad_request
   end
 
   def student_params
