@@ -2,22 +2,24 @@ require 'github_user_info'
 
 class UserInvitesController < ApplicationController
   load_and_authorize_resource instance_name: :invite
-  # after_create
 
+  # @return :invites list of all invites
   def index
-    acceptable_invites = @invites.acceptable
-    render json: { acceptable_invites: acceptable_invites }, status: :ok
+    # acceptable_invites = @invites.acceptable  # QUESTION: why did they originally have it as '@invites.acceptable'?
+    all_invites = UserInvite.all
+    render json: { invites: all_invites }, status: :ok
   end
 
-  def new_student; end
+  def new_student; end # QUESTION: What's up with this? Are the just to make the routes happy?
   def new_instructor; end
 
-  # TODO: tell Leti about this because it's fancy as fuck
-  def create
+
+  # @return :errors if there was a problem creating
+  def create   # TODO: tell Leti about this because it's fancy as fuck
     action = :"create_#{params[:role]}"
     return send(action) if respond_to?(action, true) # NOTE: calls create_student or instructor (see below)
 
-    render json: { errors: "Could not create" }, status: 404
+    render json: { errors: "Could not create" }, status: bad_request
   end
 
   private
@@ -26,13 +28,18 @@ class UserInvitesController < ApplicationController
     params.require(:user_invite).permit(:inviter, :github_name, :role, :classroom_id, :uid)
   end
 
+  # TODO: clear up repeated code in create_student and create_instructor and put it here
+  def create_helper()
+
+  end
+
   # @param :github_names must be a String of valid, unique Github username separated by a tab, end of line, or new line
   # @param :classroom_id much be a valid classroom id
   def create_student
     github_names = params[:github_names].split(/[ \t\r\n]+/).map(&:strip).uniq
     classroom = Classroom.find_by(id: params[:classroom_id])
     if !classroom.present?
-      render json: { errors: "Could not find classroom with ID #{params[:classroom_id]}" }, status: 404
+      render json: { errors: "Could not find classroom with ID #{params[:classroom_id]}" }, status: bad_request
       return
     end
 
@@ -47,9 +54,9 @@ class UserInvitesController < ApplicationController
       })
 
       if invite.persisted? # QUESTION: what is this?
-        [true, "Invited #{name}"]
+        [true, "Successfully invited Github account #{name}"]
       else
-        [false, "Could not invite #{name} because #{invite.errors.full_messages.first}"]
+        [false, "Could not invited Github account #{name} because #{invite.errors.full_messages.first}"]
       end
     end
 
@@ -71,10 +78,9 @@ class UserInvitesController < ApplicationController
     })
 
     if invite.persisted?
-
       render json: { message: "Successfully invited Github account #{invite.github_name}" }, status: :ok
     else
-      render json: { errors: "Could not invited Github account #{invite.github_name}" }, status: 404
+      render json: { errors: "Could not invited Github account #{invite.github_name}" }, status: bad_request
     end
   end
 end

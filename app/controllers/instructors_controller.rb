@@ -2,25 +2,20 @@ require 'github_user_info'
 
 class InstructorsController < ApplicationController
   load_and_authorize_resource
-  # NOTE: commented out lined for any reason other than I copied and pasted them from somewhere else and couldn't decide
-  # if we needed it or not. And then I left it because I'm a terrible partner.
-  # load_and_authorize_resource except: [:create]
-  # load_and_authorize_resource :assignment, parent: true, only: [:show]
-  # load_and_authorize_resource :classroom, parent: false, only: [:show]
+  before_action :find_instructor, only: [:show, :edit, :update, :destroy]
 
+  # @return :instructors list of all instructors, regardless of their active status. Sorted by ID.
   def index
-    # instructors = Instructor.where(active: true)
-    instructors = Instructor.all
-    render status: :ok, json: instructors
+    all_instructors = Instructor.all
+    render json: { instructors: all_instructors }, status: :ok
   end
 
-  # def show
-  #
-  # end
+  def show
+    NotImplementedError
+  end
 
   def edit
     instructor = Instructor.find_by(params[:id])
-
 
     if instructor.save
       render json: { name: new_instructor.name }, status: :ok
@@ -62,11 +57,10 @@ class InstructorsController < ApplicationController
     def instructor_params
       params.require(:instructor).permit(:name, :github_name, :uid, :active, :user_invite)
     end
-  # def create_new_instructor(params, uid_and_name)
-  #   return
-  # end
 
-
+    def find_instructor
+      @instructor = Instructor.find_by(params[:id])
+    end
 
 end
 

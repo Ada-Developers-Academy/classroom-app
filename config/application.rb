@@ -24,12 +24,11 @@ module PullRequests  # TODO: do we need this?
     # http://guides.rubyonrails.org/upgrading_ruby_on_rails.html#halting-callback-chains-via-throw-abort
     # ActiveSupport.halt_callback_chains_on_return_false = false
 
-
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded after loading
     # the framework and any gems in your application.
-    #
+
     # TODO: need? was in original
     #  # Auto-generate .js files instead of .coffee
     # config.generators do |g|
