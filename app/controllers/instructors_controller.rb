@@ -14,7 +14,10 @@ class InstructorsController < ApplicationController
   # @return :instructor if provided a valid id
   # @return :error if not provided a valid id
   def show
-    render json: { instructor: @instructor }, status: :ok
+    render(
+      status: :ok,
+      json: @instructor.as_json(only: [:id, :name, :github_name, :active])
+    )
   end
 
   def edit
@@ -40,15 +43,14 @@ class InstructorsController < ApplicationController
       return
     else
       new_instructor = Instructor.new(
-        name: params[:name] || params[:github_name], # params[:github_name] should not be null
+        name: params[:name] || params[:github_name],
         github_name: params[:github_name],
         uid: uid_from_gh,
         active: true
       )
 
       if new_instructor.save
-        render json: { name: new_instructor.name }, status: :ok
-        return
+        return info_as_json
       else
         render json: {ok: false, errors: "Instructor not created"}, status: :bad_request
         return
@@ -57,6 +59,13 @@ class InstructorsController < ApplicationController
   end
 
   private
+
+  def info_as_json
+    return render(
+        status: :ok,
+        json: @instructor.as_json(only: [:id, :name, :github_name, :active])
+    )
+  end
 
   rescue_from ActiveRecord::RecordNotFound do |ex|
     render json: { error: "#{ex}" }, status: :bad_request
@@ -71,12 +80,3 @@ class InstructorsController < ApplicationController
   end
 
 end
-
-#
-# rental = Rental.new(movie: @movie, customer: @customer, due_date: params[:due_date])
-# rental.returned = false
-# if rental.save
-#   render status: :ok, json: {due_date: rental.due_date}
-# else
-#   render status: :bad_request, json: { errors: rental.errors.messages }
-# end
