@@ -72,7 +72,7 @@ class InstructorsController < ApplicationController
   end
 
   def instructor_params
-    params.require(:instructor).permit(:name, :github_name, :uid, :active, :user_invite)
+    params.permit(:name, :github_name, :uid, :active, :user_invite)
   end
 
   def find_instructor
