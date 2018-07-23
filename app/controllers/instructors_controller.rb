@@ -23,7 +23,7 @@ class InstructorsController < ApplicationController
     if @instructor.update(instructor_params)
       info_as_json
     else
-      render json: {ok: false, errors: "Instructor not created"}, status: :bad_request
+      render json: {errors: "Instructor not created"}, status: :bad_request
     end
   end
 

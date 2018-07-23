@@ -24,8 +24,8 @@ class UserInvitesController < ApplicationController
 
   private
 
-  def user_invites_params
-    params.require(:user_invite).permit(:inviter, :github_name, :role, :classroom_id, :uid)
+  def user_invite_params
+    params.permit(:inviter, :github_name, :role, :classroom_id, :uid)
   end
 
   # TODO: clear up repeated code in create_student and create_instructor and put it here
@@ -45,15 +45,15 @@ class UserInvitesController < ApplicationController
 
     msgs = github_names.map do |name|
       github_uid = GitHubUserInfo.get_uid_from_gh(name)
-      invite = UserInvite.create({
+      invite = UserInvite.new({
         inviter: current_user,
         github_name: name,
         role: 'student',
-        classroom: classroom,
+        classroom_id: params[:classroom_id],
         uid: github_uid
       })
 
-      if invite.persisted? # QUESTION: what is this?
+      if invite.save # QUESTION: what is this?
         [true, "Successfully invited Github account #{name}"]
       else
         [false, "Could not invited Github account #{name} because #{invite.errors.full_messages.first}"]
@@ -70,14 +70,14 @@ class UserInvitesController < ApplicationController
   def create_instructor
     name = params[:github_name]
     response = GitHubUserInfo.get_uid_from_gh(name)
-    invite = UserInvite.create({
+    invite = UserInvite.new({
       inviter: current_user,
       github_name: name,
       role: 'instructor',
       uid: response
     })
 
-    if invite.persisted?
+    if invite.save
       render json: { message: "Successfully invited Github account #{invite.github_name}" }, status: :ok
     else
       render json: { errors: "Could not invited Github account #{invite.github_name}" }, status: bad_request

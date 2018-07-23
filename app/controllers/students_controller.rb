@@ -10,9 +10,9 @@ class StudentsController < ApplicationController
 
   def create
     if @student.save
-      redirect_to students_path
+      info_as_json
     else
-      render :new, :status => :bad_request
+      render json: {errors: "Instructor not created"}, status: :bad_request
     end
   end
 
@@ -21,10 +21,10 @@ class StudentsController < ApplicationController
   end
 
   def update
-    if !@student.update(student_params)
-      render :edit, :status => :bad_request
+    if @student.update(student_params)
+      info_as_json
     else
-      redirect_to students_path
+      render json: {errors: "Instructor not updated"}, status: :bad_request
     end
     # if !@student.update(student_params)
     #   render :edit, :status => :bad_request
