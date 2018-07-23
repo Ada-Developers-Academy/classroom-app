@@ -34,7 +34,7 @@ class InstructorsController < ApplicationController
       )
 
       if  @instructor.save
-        return info_as_json
+        return info_as_json("Instructor #{@instructor.name} created")
       else
         render status: :bad_request, json: { errors: "Instructor not created"}
         return
@@ -46,7 +46,7 @@ class InstructorsController < ApplicationController
     if @instructor.update(instructor_params)
       info_as_json
     else
-      render json: {errors: "Instructor not created"}, status: :bad_request
+      render json: {errors: "Instructor not updated"}, status: :bad_request
     end
   end
 
@@ -67,10 +67,11 @@ class InstructorsController < ApplicationController
     )
   end
 
-  def info_as_json
+  def info_as_json(message = "")
     return render(
         status: :ok,
-        json: @instructor.as_json(only: [:id, :name, :github_name, :active])
+        json: @instructor.as_json(only: [:id, :name, :github_name, :active]),
+        message: message
     )
   end
 
