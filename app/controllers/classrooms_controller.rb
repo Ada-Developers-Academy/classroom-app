@@ -36,7 +36,7 @@ class ClassroomsController < ApplicationController
 
   def update
     if @classroom.update(classroom_params)
-      info_as_json("New classroom #{classroom.name} updated")
+      info_as_json("New classroom #{@classroom.name} updated")
     else
       render json: {errors: "Classroom could not be updated"}, status: :bad_request
     end
@@ -66,7 +66,7 @@ class ClassroomsController < ApplicationController
   def info_as_json(message = "")
     return render(
         status: :ok,
-        json: @classroom.as_json(only: [:number, :name, :instructor_emails, :cohort_id]),
+        json: @classroom.as_json(only: [:id, :number, :name, :instructor_emails, :cohort_id]),
         message: message
     )
   end

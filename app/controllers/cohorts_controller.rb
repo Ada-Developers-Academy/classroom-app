@@ -82,14 +82,15 @@ class CohortsController < ApplicationController
     return render(
         status: :ok,
         json: @cohort.as_json(only: [
-            :number,
-             :name,
-             :repo_name,
-             :class_start_date,
-             :class_end_date,
-             :internship_start_date,
-             :internship_end_date,
-             :graduation_date
+                                    :id,
+                                    :number,
+                                    :name,
+                                    :repo_name,
+                                    :class_start_date,
+                                    :class_end_date,
+                                    :internship_start_date,
+                                    :internship_end_date,
+                                    :graduation_date
         ]),
         message: message
     )
