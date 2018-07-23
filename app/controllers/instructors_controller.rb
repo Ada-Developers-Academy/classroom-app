@@ -17,25 +17,14 @@ class InstructorsController < ApplicationController
   end
 
   def edit
-    # instructor = Instructor.find_by(params[:id])
   end
 
   def update
-
     if @instructor.update(instructor_params)
-      return info_as_json
-      # render json: { name: new_instructor.name }, status: :ok
+      info_as_json
     else
       render json: {ok: false, errors: "Instructor not created"}, status: :bad_request
     end
-    #
-    # if instructor.save
-    #   render json: { name: new_instructor.name }, status: :ok
-    #   return
-    # else
-    #   render json: {ok: false, errors: "Instructor not created"}, status: :bad_request
-    #   return
-    # end
   end
 
   # @param must contain key :github_name, whose value is is a valid GitHub username

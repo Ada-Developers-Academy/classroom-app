@@ -1,5 +1,7 @@
 class StudentsController < ApplicationController
   load_and_authorize_resource # QUESTION: what does this actually do?
+  before_action :find_student, only: [:show, :edit, :update, :destroy]
+
 
   def index
     data = Student.all
@@ -15,27 +17,20 @@ class StudentsController < ApplicationController
   end
 
   def edit
-    @student = Student.find_by(id: params[:id])
-    # if student
-    #
-    # end
-    # if !@student
-    #   flash[:error] = "Student not found."
-    #   redirect_to students_path
-    # end
+    find_student
   end
 
   def update
-    if !@student.update(student_params)
-      render :edit, :status => :bad_request
-    else
-      redirect_to students_path
-    end
     # if !@student.update(student_params)
     #   render :edit, :status => :bad_request
     # else
     #   redirect_to students_path
     # end
+    # # if !@student.update(student_params)
+    # #   render :edit, :status => :bad_request
+    # # else
+    # #   redirect_to students_path
+    # # end
   end
 
   # @param :id
