@@ -29,8 +29,7 @@ class UserInvitesController < ApplicationController
   end
 
   # TODO: clear up repeated code in create_student and create_instructor and put it here
-  def create_helper()
-
+  def create_helper
   end
 
   # @param :github_names must be a String of valid, unique Github username separated by a tab, end of line, or new line

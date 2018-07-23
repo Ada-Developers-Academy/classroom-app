@@ -4,12 +4,13 @@ class ClassroomsController < ApplicationController
 
   def index
     data = Classroom.all
+    # TODO: would like to change to this:
     # render json: { classrooms: all_classrooms }, status: :bad_request
     render status: :ok, json: data
   end
 
   def show
-    NotImplementedError
+    info_as_json
   end
 
   def create
@@ -25,7 +26,7 @@ class ClassroomsController < ApplicationController
       )
 
       if classroom.save
-        render json: { message: "New classroom #{classroom.name} created" }, status: :ok
+        info_as_json("New classroom #{classroom.name} created")
       else
         render json: { errors: "New cohort not created"}, status: :bad_request
       end
@@ -34,7 +35,11 @@ class ClassroomsController < ApplicationController
   end
 
   def update
-    NotImplementedError
+    if @classroom.update(classroom_params)
+      info_as_json("New classroom #{classroom.name} updated")
+    else
+      render json: {errors: "Classroom could not be updated"}, status: :bad_request
+    end
   end
 
   def delete
@@ -57,10 +62,12 @@ class ClassroomsController < ApplicationController
     )
   end
 
-  def info_as_json
+  def info_as_json(message = "")
     return render(
         status: :ok,
-        json: @instructor.as_json(only: [:id, :name, :github_name, :active])
+        json: @classroom.as_json(only: [:number, :name, :instructor_emails, :cohort_id]),
+        message: message
+
     )
   end
 

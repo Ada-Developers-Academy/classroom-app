@@ -1,5 +1,6 @@
 require 'github_comment'
 
+# QUESTION: literally everything going on here
 class FeedbackController < ApplicationController
   before_action :find_objects
   before_action :authorize!
