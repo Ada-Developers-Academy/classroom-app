@@ -36,19 +36,19 @@ class AssignmentsController < ApplicationController
 
   def create
     if @assignment.save
-      redirect_to assignments_path
+      info_as_json
     else
-      render :new, :status => :bad_request
+      render status: :bad_request, json: { errors: "Assignment not created"}
     end
   end
 
   def edit
-    @max_size = Classroom.all.length # QUESTION: the fuck is max_size??
+    @max_size = Classroom.all.length # QUESTION: the fuck is @max_size??
   end
 
   def update
     if @assignment.update_attributes(assignment_params)
-      @assignment.classrooms.build
+      @assignment.classrooms.build # QUESTION: ...what?? 😩
       redirect_to assignments_path
     else
       render :edit, :status => :bad_request
@@ -62,12 +62,26 @@ class AssignmentsController < ApplicationController
 
   private
 
+  def find_instructor
+    @assignment = Assignment.find_by(id: params[:id])
+  end
+
+  # QUESTION: can we refactor this out? Most/all controllers use this
   rescue_from ActiveRecord::RecordNotFound do |ex|
-    flash[:error] = "Resource not found."
-    redirect_to assignments_path
+    render(status: :bad_request,
+           json: { error: "#{ex}" }
+    )
   end
 
   def assignment_params
-    params.require(:assignment).permit(:repo_url, :individual, :classroom_ids => [] )
+    params.require(:assignment).permit(:repo_url, :individual, :classroom_ids => [] ) # QUESTION: What's up `with => []`
   end
+
+  def info_as_json
+    return render(
+        status: :ok,
+        json: @instructor.as_json(only: [:id, :repo_url, :classroom_ids])
+    )
+  end
+
 end

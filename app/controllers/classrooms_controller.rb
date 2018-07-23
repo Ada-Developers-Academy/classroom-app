@@ -50,4 +50,18 @@ class ClassroomsController < ApplicationController
     @classroom = Classroom.find_by(id: params[:id])
   end
 
+  # QUESTION: can we refactor this out? Most/all controllers use this
+  rescue_from ActiveRecord::RecordNotFound do |ex|
+    render(status: :bad_request,
+           json: { error: "#{ex}" }
+    )
+  end
+
+  def info_as_json
+    return render(
+        status: :ok,
+        json: @instructor.as_json(only: [:id, :name, :github_name, :active])
+    )
+  end
+
 end

@@ -21,16 +21,16 @@ class StudentsController < ApplicationController
   end
 
   def update
+    if !@student.update(student_params)
+      render :edit, :status => :bad_request
+    else
+      redirect_to students_path
+    end
     # if !@student.update(student_params)
     #   render :edit, :status => :bad_request
     # else
     #   redirect_to students_path
     # end
-    # # if !@student.update(student_params)
-    # #   render :edit, :status => :bad_request
-    # # else
-    # #   redirect_to students_path
-    # # end
   end
 
   # @param :id
@@ -57,5 +57,12 @@ class StudentsController < ApplicationController
 
   def student_params
    params.require(:student).permit(:name, :classroom_id, :github_name, :email)
+  end
+
+  def info_as_json
+    return render(
+        status: :ok,
+        json: @instructor.as_json(only: [:id, :name, :github_name, :active])
+    )
   end
 end
