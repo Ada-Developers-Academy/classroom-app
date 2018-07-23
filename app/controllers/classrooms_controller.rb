@@ -47,6 +47,7 @@ class ClassroomsController < ApplicationController
   end
 
   private
+
   def classroom_params
     params.permit(:number, :name, :instructor_emails, :cohort_id)
   end
@@ -67,7 +68,6 @@ class ClassroomsController < ApplicationController
         status: :ok,
         json: @classroom.as_json(only: [:number, :name, :instructor_emails, :cohort_id]),
         message: message
-
     )
   end
 

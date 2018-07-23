@@ -2,7 +2,7 @@ require 'github_user_info'
 
 class InstructorsController < ApplicationController
   load_and_authorize_resource
-  before_action :find_instructor, only: [:show, :edit, :update, :destroy]
+  before_action :find_instructor, only: [:show, :update]
 
   # @return :instructors list of all instructors, regardless of their active status. Sorted by ID.
   def index
@@ -13,18 +13,7 @@ class InstructorsController < ApplicationController
   # @param :id
   # @return {'id', 'name', 'github_name', 'active'} if a new instructor is created. Otherwise returns {'error'}.
   def show
-    return info_as_json
-  end
-
-  def edit
-  end
-
-  def update
-    if @instructor.update(instructor_params)
-      info_as_json
-    else
-      render json: {errors: "Instructor not created"}, status: :bad_request
-    end
+    info_as_json
   end
 
   # @param must contain key :github_name, whose value is is a valid GitHub username
@@ -50,6 +39,14 @@ class InstructorsController < ApplicationController
         render status: :bad_request, json: { errors: "Instructor not created"}
         return
       end
+    end
+  end
+
+  def update
+    if @instructor.update(instructor_params)
+      info_as_json
+    else
+      render json: {errors: "Instructor not created"}, status: :bad_request
     end
   end
 

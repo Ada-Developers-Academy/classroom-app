@@ -36,7 +36,7 @@ class AssignmentsController < ApplicationController
 
   def create
     if @assignment.save
-      info_as_json
+      info_as_json("Saved assignment #{@assignment.name}")
     else
       render status: :bad_request, json: { errors: "Assignment not created"}
     end
@@ -62,25 +62,24 @@ class AssignmentsController < ApplicationController
 
   private
 
-  def find_instructor
+  def find_assignment
     @assignment = Assignment.find_by(id: params[:id])
   end
 
   # QUESTION: can we refactor this out? Most/all controllers use this
   rescue_from ActiveRecord::RecordNotFound do |ex|
-    render(status: :bad_request,
-           json: { error: "#{ex}" }
-    )
+    render(status: :bad_request, json: { error: "#{ex}" })
   end
 
   def assignment_params
     params.require(:assignment).permit(:repo_url, :individual, :classroom_ids => [] ) # QUESTION: What's up `with => []`
   end
 
-  def info_as_json
+  def info_as_json(message = "")
     return render(
         status: :ok,
-        json: @instructor.as_json(only: [:id, :repo_url, :classroom_ids])
+        json: @instructor.as_json(only: [:id, :repo_url, :classroom_ids]),
+        message: message
     )
   end
 
