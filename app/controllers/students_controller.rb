@@ -2,11 +2,11 @@ require 'github_user_info'
 
 class StudentsController < ApplicationController
   load_and_authorize_resource # QUESTION: what does this actually do?
-  before_action :find_student, only: [:show, :update, :destroy]
+  before_action :find_student, only: [:show, :update]
 
   def index
-    data = Student.all
-    render status: :ok, json: data
+    students_data = params[:active] ? Student.where(active: params[:active]) : Student.all
+    render status: :ok, json: students_data
   end
 
   # :name, :classroom_id, :preferred_name, :github_name, :email, :active
@@ -15,22 +15,17 @@ class StudentsController < ApplicationController
   # @param :name student's full name. If not provided, set to :github_name
   # @param :github_name *REQUIRED* must be a valid GitHub username. Otherwise throws error
   def create
-    # TODO: Test!!!
     uid_from_gh = GitHubUserInfo.get_uid_from_gh(params[:github_name])
     return error_as_json("Could not find GitHub username#{params[:github_name]}") if uid_from_gh.nil?
 
     # TODO: DRY this up with repeated code in user_invites_controller
     # TODO: Add this validation to model
-    # TODO: Test!!!
     classroom = Classroom.find_by(id: params[:classroom_id])
     return error_as_json("Could not find classroom with ID #{params[:classroom_id]}") if !classroom.present?
 
-    # TODO: Add index for this then find_by it instead.
-    # TODO: Make it so that it looks at cohort, not classroom.
-    # TODO: Test!!!
+    # TODO: Add index for cohort-uid then find_by it instead.
     existing = Student.find_by(classroom_id: params[:classroom_id], uid: uid_from_gh)
     return error_as_json("Student ##{existing.id} for classroom ##{params[:classroom_id]} already exists") if existing
-
 
     # TODO: Should we just allow preferred_name to be null instead of forcing it be be something?
     @student = Student.new(
@@ -52,12 +47,29 @@ class StudentsController < ApplicationController
     info_as_json
   end
 
-  def destroy
-    # System.out.println("foo");
-    # NotImplementedError
-    @student.destroy
-    render status: :ok, json: {message: "Student destroyed"}
-  end
+  # # TODO: Make route for this
+  # def change_active_status
+  #   # System.out.println("foo");
+  #   NotImplementedError
+  #   @student.active = !@student.active
+  #   @student.save ? info_as_json("Student #{@student.name} set to #{@student.active}") : error_as_json(@student.errors)
+  # end
+  #
+  # # TODO: Make route for this
+  # def deactivate
+  #   # System.out.println("foo");
+  #   NotImplementedError
+  #   @student.active = false
+  #   @student.save ? info_as_json("Student #{@student.name} set to inactive") : error_as_json(@student.errors)
+  # end
+  #
+  # # TODO: Make route for this
+  # def activate
+  #   # System.out.println("foo");
+  #   NotImplementedError
+  #   @student.active = true
+  #   @student.save ? info_as_json("Student #{@student.name} set to active") : error_as_json(@student.errors)
+  # end
 
   private
 

@@ -7,7 +7,7 @@ class AssignmentsController < ApplicationController
 
   def index
     if params[:query]
-      data = RepoWrapper.search(params[:query])
+      data = RepoWrapper.search(params[:query]) # QUESTION: ...what?
     else
       data = Assignment.all
     end
@@ -27,12 +27,7 @@ class AssignmentsController < ApplicationController
       )
     )
     # Should we change this?
-
-
   end
-
-  # def new
-  # end
 
   def create
     if @assignment.save
@@ -65,11 +60,6 @@ class AssignmentsController < ApplicationController
 
   def find_assignment
     @assignment = Assignment.find_by(id: params[:id])
-  end
-
-  # QUESTION: can we refactor this out? Most/all controllers use this
-  rescue_from ActiveRecord::RecordNotFound do |ex|
-    render status: :bad_request, json: { error: "#{ex}" }
   end
 
   def assignment_params

@@ -27,11 +27,11 @@ class ApplicationController < ActionController::Base
     render status: :bad_request, json: { errors: message }
   end
 
-  private
-
-  def existing?
-    return
+  def find_by_params_id
+    return self.find_by(id: params[:id])
   end
+
+  private
 
   rescue_from CanCan::AccessDenied do |ex|
     # If we "accidentally" locked ourselves out, would we have to complete our capstone? 🤔

@@ -3,8 +3,8 @@ class CohortsController < ApplicationController
   before_action :find_cohort, only: [:show, :update]
 
   def index
-    data = Cohort.all
-    render status: :ok, json: data
+    all_cohorts = Cohort.all
+    render status: :ok, json: all_cohorts
   end
 
   def show
