@@ -208,24 +208,24 @@ Assignment.all.each do |assignment|
   puts pull_responses.inspect
   pull_responses.each do |pr|
     # puts pr.inspect
-    pr_user_uid = pr["user"]["id"]
-
-    new_group = SubmissionGroup.new
-    new_submission = Submission.new
-
-    group_stu = Student.where(uid: pr_user_uid)
-
-    all_students.delete_if { |stuu| stuu.github_name == pr["user"]["username"]}
-
-    new_submission.assignment_id = assignment.id
-    new_submission.submitted_at = pr["updated_at"]
-    new_submission.pr_url = pr["url"] # need to change
-    # new_submission.feedback_url =
+    # pr_user_uid = pr["user"]["id"]
     #
-    new_group.save!
-    new_submission.submission_group = new_group
-    new_submission.save!
-    break if Submission.all.count > 3
+    # new_group = SubmissionGroup.new
+    # new_submission = Submission.new
+    #
+    # group_stu = Student.where(uid: pr_user_uid)
+    #
+    # all_students.delete_if { |stuu| stuu.github_name == pr["user"]["username"]}
+    #
+    # new_submission.assignment_id = assignment.id
+    # new_submission.submitted_at = pr["updated_at"]
+    # new_submission.pr_url = pr["url"] # need to change
+    # # new_submission.feedback_url =
+    # #
+    # new_group.save!
+    # new_submission.submission_group = new_group
+    # new_submission.save!
+    # break if Submission.all.count > 3
   end
   print all_students
   # responses.each do |response|
