@@ -20,19 +20,19 @@ class AssignmentsController < ApplicationController
 
     @all_data = gh.retrieve_student_info(@assignment, @cohort)
 
-    # render(
-    #   status: :ok,
-    #   json: @assignment.as_json(
-    #     only: [:id, :repo_url]
-    #   )
-    # )
-    # # Should we change this?
-    #
+    render(
+      status: :ok,
+      json: @assignment.as_json(
+        only: [:id, :repo_url]
+      )
+    )
+    # Should we change this?
+
 
   end
 
-  def new
-  end
+  # def new
+  # end
 
   def create
     if @assignment.save
@@ -51,13 +51,14 @@ class AssignmentsController < ApplicationController
       @assignment.classrooms.build # QUESTION: ...what?? 😩
       redirect_to assignments_path
     else
-      render :edit, :status => :bad_request
+      render status: :bad_request, json: { errors: "Assignment not updated"}
     end
   end
 
   def destroy
-    @assignment.destroy
-    redirect_to assignments_path
+    NotImplementedError
+    # @assignment.destroy
+    # render status: :ok, json: { errors: "Assignment deleted"}
   end
 
   private
@@ -68,11 +69,11 @@ class AssignmentsController < ApplicationController
 
   # QUESTION: can we refactor this out? Most/all controllers use this
   rescue_from ActiveRecord::RecordNotFound do |ex|
-    render(status: :bad_request, json: { error: "#{ex}" })
+    render status: :bad_request, json: { error: "#{ex}" }
   end
 
   def assignment_params
-    params.require(:assignment).permit(:repo_url, :individual, :classroom_ids => [] ) # QUESTION: What's up `with => []`
+    params.require(:assignment).permit(:repo_url, :individual, :classroom_ids => [] ) # QUESTION: What's up with `=> []`
   end
 
   def info_as_json(message = "")

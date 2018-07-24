@@ -31,19 +31,19 @@ class SubmissionsController < ApplicationController
   end
 
   private
-
-  t.integer "student_id", null: false
-  t.integer "assignment_id", null: false
-  t.datetime "submitted_at"
-  t.datetime "created_at", null: false
-  t.datetime "updated_at", null: false
-  t.string "pr_url"
-  t.string "feedback_url"
-  t.integer "grade"
-  t.bigint "instructor_id"
+  #
+  # t.integer "student_id", null: false
+  # t.integer "assignment_id", null: false
+  # t.datetime "submitted_at"
+  # t.datetime "created_at", null: false
+  # t.datetime "updated_at", null: false
+  # t.string "pr_url"
+  # t.string "feedback_url"
+  # t.integer "grade"
+  # t.bigint "instructor_id"
 
   def submission_params
-    params.permit(:name, :github_name, :uid, :active, :user_invite)
+    params.permit(:assignment_id, :submitted_at, :pr_url, :feedback_url, :grade, :instructor_id)
   end
 
   def find_submission
