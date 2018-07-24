@@ -24,7 +24,7 @@ class StudentsController < ApplicationController
     if @student.update(student_params)
       info_as_json("Updated student #{@student.name}")
     else
-      render json: {errors: "Instructor not updated"}, status: :bad_request
+      render json: {errors: "Student not updated"}, status: :bad_request
     end
     # if !@student.update(student_params)
     #   render :edit, :status => :bad_request
@@ -63,7 +63,7 @@ class StudentsController < ApplicationController
   def info_as_json(message = "")
     return render(
         status: :ok,
-        json: @instructor.as_json(only: [:id, :name, :github_name, :active]),
+        json: @student.as_json(only: [:id, :name, :github_name, :active]),
         message: message
     )
   end
