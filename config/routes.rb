@@ -11,6 +11,7 @@ Rails.application.routes.draw do
 
   resources :cohorts
   resources :classrooms
+  resources :submissions
   resources :students
   resources :pull_requests
   resources :user_invites, only: [:index, :create], path: 'invites' do

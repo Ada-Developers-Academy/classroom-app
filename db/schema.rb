@@ -75,17 +75,12 @@ ActiveRecord::Schema.define(version: 2018_07_17_201542) do
     t.index ["uid"], name: "index_students_on_uid", unique: true
   end
 
-  create_table "students_submission_groups", force: :cascade do |t|
-    t.integer "submission_group_id", null: false
+  create_table "students_submissions", force: :cascade do |t|
+    t.integer "submission_id", null: false
     t.string "student_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["submission_group_id", "student_id"], name: "index_group_id_and_student_id", unique: true
-  end
-
-  create_table "submission_groups", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.index ["submission_id", "student_id"], name: "index_submission_id_and_student_id", unique: true
   end
 
   create_table "submissions", force: :cascade do |t|

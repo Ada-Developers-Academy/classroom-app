@@ -122,11 +122,11 @@ puts "done"
 
 puts "*" * 30
 
-# Create students
-Student.create!(name: "Test Student 1", classroom: Classroom.first,
-               github_name: "ada-student-1", email: "charles+classroom-local-student-1@adadev.org")
-Student.create!(name: "Test Student 2", classroom: Classroom.last,
-               github_name: "ada-student-2", email: "charles+classroom-local-student-2@adadev.org")
+# # Create students
+# Student.create!(name: "Test Student 1", classroom: Classroom.first,
+#                github_name: "ada-student-1", email: "charles+classroom-local-student-1@adadev.org")
+# Student.create!(name: "Test Student 2", classroom: Classroom.last,
+#                github_name: "ada-student-2", email: "charles+classroom-local-student-2@adadev.org")
 
 
 puts "******** #{Student.count} STUDENTS CREATED*********\n\n"
@@ -138,11 +138,13 @@ ASSIGNMENT_FILE = Rails.root.join('db', './.capstone_seed_data/assignment_seed_d
 puts "Loading raw works data from #{ASSIGNMENT_FILE}"
 
 assignment_failures = []
-(1..2).each do |curr_classroom_id|
+# (1..2).each do |curr_classroom_id|
   CSV.foreach(ASSIGNMENT_FILE, :headers => true) do |row|
-    assignment = Assignment.new
-    assignment.classrooms << Classroom.find(curr_classroom_id)
+    assignment = Assignment.new(id: row['id'])
+    assignment.classrooms << Classroom.find(1)
+    assignment.classrooms << Classroom.find(2)
     assignment.repo_url = row['repo_url']
+    # assignment.id = row['id']
 
     if assignment.save!
       puts "Created assignment: #{assignment.inspect}"
@@ -151,7 +153,7 @@ assignment_failures = []
     #   puts "Failed to save assignment: #{assignment.inspect}"
     end
   end
-end
+# end
 
 puts "Added #{Assignment.count} assignment records"
 puts "#{assignment_failures.length} assignment failed to save"
@@ -200,52 +202,103 @@ puts "Against all odds, nothing broke! 👏😄"
 # t.bigint "instructor_id"
 # t.index ["instructor_id"], name: "index_submissions_on_instructor_id"
 # t.index ["student_id", "assignment_id"], name: "index_submissions_on_student_id_and_assignment_id", unique: true
-#
-Assignment.all.each do |assignment|
-  # puts assignment.repo_url.inspect
-  all_students = Student.all.collect {|stu| stu.github_name}
-  pull_responses = HTTParty.get("https://api.github.com/repos/Ada-C9/#{assignment.repo_url}/pulls")
-  puts pull_responses.inspect
-  pull_responses.each do |pr|
-    # puts pr.inspect
-    # pr_user_uid = pr["user"]["id"]
-    #
-    # new_group = SubmissionGroup.new
-    # new_submission = Submission.new
-    #
-    # group_stu = Student.where(uid: pr_user_uid)
-    #
-    # all_students.delete_if { |stuu| stuu.github_name == pr["user"]["username"]}
-    #
-    # new_submission.assignment_id = assignment.id
-    # new_submission.submitted_at = pr["updated_at"]
-    # new_submission.pr_url = pr["url"] # need to change
-    # # new_submission.feedback_url =
-    # #
-    # new_group.save!
-    # new_submission.submission_group = new_group
-    # new_submission.save!
-    # break if Submission.all.count > 3
-  end
-  print all_students
-  # responses.each do |response|
-  #   new_submission = Submission.new
-  #   new_group = SubmissionGroup.new
-  #
-  #   contributors_response = HTTParty.get(`https://api.github.com/repos/mgraonic/TaskList/contributors`)
-  #
-  #   # "url": "https://api.github.com/repos/Ada-C9/TaskList/pulls/46",
-  #   new_submission.assignment_id << Classroom.find(1)
-  #   new_submission.classrooms << Classroom.find(2)
-  #   new_submission.repo_url = response['name']
-  #   new_submission.save!
 
+
+SUBMISSION_FILE = Rails.root.join('db', './.capstone_seed_data/all_submissions_seed.csv')
+puts "Loading raw works data from #{SUBMISSION_FILE}"
+
+CSV.foreach(SUBMISSION_FILE, :headers => true) do |row|
+    new_submission = Submission.new(id: row["id"])
+
+    sub_stu = Student.find_by(id: row["student_id"])
+    new_submission.assignment_id = row["assignment_id"]
+    new_submission.submitted_at = row["submitted_at"]
+    new_submission.pr_url = row["pr_url"] # need to change
+    new_submission.student_id = row["student_id"]
+    new_submission.students << sub_stu
+
+    if new_submission.save!
+      puts "Created assignment ##{new_submission.id}"
+      # else
+      #   assignment_failures << assignment
+      #   puts "Failed to save assignment: #{assignment.inspect}"
+    end
   end
+# end
+
+
+##############
+# Dir.foreach('db/.capstone_seed_data/seeeeds/') do |per_file|
+#   next if per_file == "." || per_file == ".."
+#   urll = "./.capstone_seed_data/seeeeds/#{per_file}"
+#   submission_file = Rails.root.join('db', urll)
+#   CSV.foreach(submission_file, :headers => true) do |row|
+#     new_submission = Submission.new
 #
-#   CSV.open("assignment_seed_data.csv", "wb") do |csv|
-#     csv << Assignment.attribute_names
-#     Assignment.all.each do |assignment|
-#       csv << assignment.attributes.values
+#     sub_stu = Student.find_by(id: row["student_id"])
+#     new_submission.assignment_id = row["assignment_id"]
+#     new_submission.submitted_at = row["submitted_at"]
+#     new_submission.pr_url = row["pr_url"] # need to change
+#     new_submission.student_id = row["student_id"]
+#     new_submission.students << sub_stu
+#
+#     if new_submission.save!
+#       puts "Created assignment"
+#       # else
+#       #   assignment_failures << assignment
+#       #   puts "Failed to save assignment: #{assignment.inspect}"
 #     end
 #   end
 # end
+
+
+####################################################
+
+# curr_sub_id = 36
+#
+# # Assignment.inf.all.each do |assignment|
+#   # puts assignment.repo_url.inspect
+# curr_assignment = Assignment.find(curr_sub_id)
+# all_students = Student.all.collect {|stu| stu.github_name}
+#
+# url = "https://api.github.com/repos/Ada-C9/#{curr_assignment.repo_url}/pulls"
+# pull_responses = HTTParty.get(url, query: { "page" => 1, "per_page" => 100 },
+#                               headers: {"user-agent" => "rails", "Authorization" => "token ade923f3c84d7548fe436999faf6452aa03c3f1d"})
+# # puts pull_responses.inspect
+# pull_responses.each do |pr|
+#   # puts pr["user"].inspect
+#   pr_user_uid = pr["user"]["id"]
+#   next if Instructor.find_by(uid: pr_user_uid) # Thanks Dan
+#   # next if Submission.find_by(uid: pr_user_uid) # Thanks Adies
+#   # puts pr_user_uid
+#   # new_group = SubmissionGroup.new
+#   new_submission = Submission.new
+#
+#   # group_stu = Student.where(uid: pr_user_uid)
+#   all_students.include?(pr["user"]["login"]) ? all_students.delete(pr["user"]["login"]) : next
+#   # all_students.delete_if { |stuu| stuu == pr["user"]["login"]}
+#   sub_stu = Student.find_by(uid: pr_user_uid)
+#   # puts sub_stu.github_name
+#   new_submission.assignment_id = curr_assignment.id
+#   new_submission.submitted_at = pr["updated_at"]
+#   new_submission.pr_url = pr["url"] # need to change
+#   new_submission.student_id = sub_stu.id
+#   new_submission.students << sub_stu
+#
+#   # new_submission.feedback_url =
+#   #
+#   # new_group.save!
+#   # new_submission.submission_group = new_group
+#   new_submission.save!
+#   # puts Submission.last.inspect
+# end
+
+# new_file_name = "all_submissions_seed.csv"
+# CSV.open(new_file_name, "wb") do |csv|
+#   csv << Submission.attribute_names
+#   Submission.all.each do |submission|
+#     csv << submission.attributes.values
+#   end
+#   # csv << all_students
+# end
+# puts all_students
