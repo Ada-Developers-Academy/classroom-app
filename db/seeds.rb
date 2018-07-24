@@ -18,11 +18,11 @@ CSV.foreach(INSTRUCTOR_FILE, :headers => true) do |row|
   instructor.github_name = row['github_name']
   # instructor.role = row['role']
 
-  if instructor.save
+  if instructor.save!
     puts "Created instructor: #{instructor.inspect}"
-  else
-    instructor_failures << user
-    puts "Failed to save instructor: #{instructor.inspect}"
+  # else
+  #   instructor_failures << user
+  #   puts "Failed to save instructor: #{instructor.inspect}"
   end
 end
 
@@ -48,11 +48,11 @@ CSV.foreach(USER_FILE, :headers => true) do |row|
   user.github_name = row['github_name']
   user.role = row['role']
 
-  if user.save
+  if user.save!
     puts "Created user: #{user.inspect}"
-  else
-    user_failures << user
-    puts "Failed to save user: #{user.inspect}"
+  # else
+  #   user_failures << user
+  #   puts "Failed to save user: #{user.inspect}"
   end
 end
 
@@ -110,9 +110,9 @@ CSV.foreach(STUDENT_FILE, :headers => true) do |row|
 
   if student.save!
     puts "Created student: #{student.inspect}"
-  else
-    student_failures << student
-    puts "Failed to save student: #{student.inspect}"
+  # else
+  #   student_failures << student
+  #   puts "Failed to save student: #{student.inspect}"
   end
 end
 
@@ -146,9 +146,9 @@ assignment_failures = []
 
     if assignment.save!
       puts "Created assignment: #{assignment.inspect}"
-    else
-      assignment_failures << assignment
-      puts "Failed to save assignment: #{assignment.inspect}"
+    # else
+    #   assignment_failures << assignment
+    #   puts "Failed to save assignment: #{assignment.inspect}"
     end
   end
 end
@@ -201,22 +201,46 @@ puts "Against all odds, nothing broke! 👏😄"
 # t.index ["instructor_id"], name: "index_submissions_on_instructor_id"
 # t.index ["student_id", "assignment_id"], name: "index_submissions_on_student_id_and_assignment_id", unique: true
 #
-# Assignment.all.each do |assignment|
-#   # ASSIGNMENTS
-#   responses = HTTParty.get(`https://api.github.com/repos/Ada-C9/#{assignment.repo_url}/pulls`)
-#   responses.each do |response|
-#     new_submission = Submission.new
-#     new_group = SubmissionGroup.new
-#
-#     new_submission.sav
-#     responses = HTTParty.get(`https://api.github.com/repos/mgraonic/TaskList/contributors`)
-#
-#     "url": "https://api.github.com/repos/Ada-C9/TaskList/pulls/46",
-#     new_submission.assignment_id << Classroom.find(1)
-#     new_submission.classrooms << Classroom.find(2)
-#     new_submission.repo_url = response['name']
-#     new_submission.save!
-#   end
+Assignment.all.each do |assignment|
+  # puts assignment.repo_url.inspect
+  all_students = Student.all.collect {|stu| stu.github_name}
+  pull_responses = HTTParty.get("https://api.github.com/repos/Ada-C9/#{assignment.repo_url}/pulls")
+  puts pull_responses.inspect
+  pull_responses.each do |pr|
+    # puts pr.inspect
+    pr_user_uid = pr["user"]["id"]
+
+    new_group = SubmissionGroup.new
+    new_submission = Submission.new
+
+    group_stu = Student.where(uid: pr_user_uid)
+
+    all_students.delete_if { |stuu| stuu.github_name == pr["user"]["username"]}
+
+    new_submission.assignment_id = assignment.id
+    new_submission.submitted_at = pr["updated_at"]
+    new_submission.pr_url = pr["url"] # need to change
+    # new_submission.feedback_url =
+    #
+    new_group.save!
+    new_submission.submission_group = new_group
+    new_submission.save!
+    break if Submission.all.count > 3
+  end
+  print all_students
+  # responses.each do |response|
+  #   new_submission = Submission.new
+  #   new_group = SubmissionGroup.new
+  #
+  #   contributors_response = HTTParty.get(`https://api.github.com/repos/mgraonic/TaskList/contributors`)
+  #
+  #   # "url": "https://api.github.com/repos/Ada-C9/TaskList/pulls/46",
+  #   new_submission.assignment_id << Classroom.find(1)
+  #   new_submission.classrooms << Classroom.find(2)
+  #   new_submission.repo_url = response['name']
+  #   new_submission.save!
+
+  end
 #
 #   CSV.open("assignment_seed_data.csv", "wb") do |csv|
 #     csv << Assignment.attribute_names
