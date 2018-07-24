@@ -19,7 +19,27 @@ class SubmissionsController < ApplicationController
   # @param must contain key :github_name, whose value is is a valid GitHub username
   # @return {'id', 'name', 'github_name', 'active'} if a new Submission is created. Otherwise returns {'error'}.
   def create
-   NotImplementedError
+    uid_from_gh = GitHubUserInfo.get_uid_from_gh(params[:github_name])
+    existing = Instructor.find_by(uid: uid_from_gh)
+
+    if existing
+      render json: {ok: false, errors: "Instructor already exists"}, status: :bad_request
+      return
+    else
+      @instructor = Instructor.new(
+          name: params[:name] || params[:github_name],
+          github_name: params[:github_name],
+          uid: uid_from_gh,
+          active: true
+      )
+
+      if  @instructor.save
+        return info_as_json("Instructor #{@instructor.name} created")
+      else
+        render status: :bad_request, json: { errors: "Instructor not created"}
+        return
+      end
+    end
   end
 
   def update
@@ -50,15 +70,11 @@ class SubmissionsController < ApplicationController
     @submission = Submission.find_by(id: params[:id])
   end
 
-  # QUESTION: can we refactor this out? Most/all controllers use this
-  rescue_from ActiveRecord::RecordNotFound do |ex|
-    render(status: :bad_request, json: { error: "#{ex}" })
-  end
 
   def info_as_json(message = "")
     return render(
         status: :ok,
-        json: @submission.as_json(only: [:id, :name, :github_name, :active]),
+        json: @submission.as_json(only: [:id, :assignment_id, :submitted_at, :pr_url, :feedback_url, :grade, :instructor_id]),
         message: message
     )
   end

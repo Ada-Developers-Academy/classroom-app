@@ -19,10 +19,7 @@ CSV.foreach(INSTRUCTOR_FILE, :headers => true) do |row|
   # instructor.role = row['role']
 
   if instructor.save!
-    puts "Created instructor: #{instructor.inspect}"
-  # else
-  #   instructor_failures << user
-  #   puts "Failed to save instructor: #{instructor.inspect}"
+    puts "Created instructor ##{instructor.id}"
   end
 end
 
@@ -49,10 +46,7 @@ CSV.foreach(USER_FILE, :headers => true) do |row|
   user.role = row['role']
 
   if user.save!
-    puts "Created user: #{user.inspect}"
-  # else
-  #   user_failures << user
-  #   puts "Failed to save user: #{user.inspect}"
+    puts "Created user: ##{user.inspect}"
   end
 end
 
@@ -109,10 +103,7 @@ CSV.foreach(STUDENT_FILE, :headers => true) do |row|
   # Classroom.find(row['classroom_id'])
 
   if student.save!
-    puts "Created student: #{student.inspect}"
-  # else
-  #   student_failures << student
-  #   puts "Failed to save student: #{student.inspect}"
+    puts "Created student ##{student.id}"
   end
 end
 
@@ -144,13 +135,9 @@ assignment_failures = []
     assignment.classrooms << Classroom.find(1)
     assignment.classrooms << Classroom.find(2)
     assignment.repo_url = row['repo_url']
-    # assignment.id = row['id']
 
     if assignment.save!
-      puts "Created assignment: #{assignment.inspect}"
-    # else
-    #   assignment_failures << assignment
-    #   puts "Failed to save assignment: #{assignment.inspect}"
+      puts "Created assignment ##{assignment.id}"
     end
   end
 # end
@@ -159,9 +146,7 @@ puts "Added #{Assignment.count} assignment records"
 puts "#{assignment_failures.length} assignment failed to save"
 puts "done"
 
-puts "*" * 30
 
-puts "Against all odds, nothing broke! 👏😄"
 
 # assignments.each do |assignment|
 #   new_assignment = Assignment.new(assignment)
@@ -208,22 +193,23 @@ SUBMISSION_FILE = Rails.root.join('db', './.capstone_seed_data/all_submissions_s
 puts "Loading raw works data from #{SUBMISSION_FILE}"
 
 CSV.foreach(SUBMISSION_FILE, :headers => true) do |row|
-    new_submission = Submission.new(id: row["id"])
+  new_submission = Submission.new(id: row["id"])
 
-    sub_stu = Student.find_by(id: row["student_id"])
-    new_submission.assignment_id = row["assignment_id"]
-    new_submission.submitted_at = row["submitted_at"]
-    new_submission.pr_url = row["pr_url"] # need to change
-    new_submission.student_id = row["student_id"]
-    new_submission.students << sub_stu
+  sub_stu = Student.find_by(id: row["student_id"])
+  new_submission.assignment_id = row["assignment_id"]
+  new_submission.submitted_at = row["submitted_at"]
+  new_submission.pr_url = row["pr_url"] # TODO: need to change
+  new_submission.student_id = row["student_id"]
+  new_submission.students << sub_stu
 
-    if new_submission.save!
-      puts "Created assignment ##{new_submission.id}"
-      # else
-      #   assignment_failures << assignment
-      #   puts "Failed to save assignment: #{assignment.inspect}"
-    end
+  if new_submission.save!
+    puts "Created assignment ##{new_submission.id}"
   end
+end
+
+puts "*" * 30
+
+puts "Against all odds, nothing broke! 👏😄"
 # end
 
 

@@ -42,9 +42,9 @@ class StudentsController < ApplicationController
     @student = Student.find_by(id: params[:id])
   end
 
-  rescue_from ActiveRecord::RecordNotFound do |ex|
-    render(status: :bad_request, json: { error: "#{ex}" })
-  end
+  # rescue_from ActiveRecord::RecordNotFound do |ex|
+  #   render(status: :bad_request, json: { error: "#{ex}" })
+  # end
 
   def student_params
    params.permit(:name, :classroom_id, :github_name, :email)

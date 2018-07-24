@@ -56,15 +56,8 @@ class CohortsController < ApplicationController
 
   private
   def cohort_params
-    params.require(:cohort).permit(:number,
-                                   :name,
-                                   :repo_name,
-                                   :class_start_date,
-                                   :class_end_date,
-                                   :internship_start_date,
-                                   :internship_end_date,
-                                   :graduation_date
-    )
+    params.require(:cohort).permit(:id, :number, :name, :repo_name, :class_start_date, :class_end_date,
+                                   :internship_start_date, :internship_end_date, :graduation_date)
   end
 
   def find_cohort
@@ -72,26 +65,17 @@ class CohortsController < ApplicationController
   end
 
   # QUESTION: can we refactor this out? Most/all controllers use this
-  rescue_from ActiveRecord::RecordNotFound do |ex|
-    render(status: :bad_request,
-           json: { error: "#{ex}" }
-    )
-  end
+  # rescue_from ActiveRecord::RecordNotFound do |ex|
+  #   render(status: :bad_request,
+  #          json: { error: "#{ex}" }
+  #   )
+  # end
 
   def info_as_json(message = "")
     return render(
         status: :ok,
-        json: @cohort.as_json(only: [
-                                    :id,
-                                    :number,
-                                    :name,
-                                    :repo_name,
-                                    :class_start_date,
-                                    :class_end_date,
-                                    :internship_start_date,
-                                    :internship_end_date,
-                                    :graduation_date
-        ]),
+        json: @cohort.as_json(only: [:id, :number, :name, :repo_name, :class_start_date, :class_end_date,
+                                     :internship_start_date, :internship_end_date, :graduation_date]),
         message: message
     )
   end

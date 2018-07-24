@@ -30,4 +30,10 @@ class ApplicationController < ActionController::Base
     flash[:error] = "You are not authorized to do that."
     redirect_to root_path
   end
+
+  rescue_from ActiveRecord::RecordNotFound do |ex|
+    render(status: :bad_request,
+           json: { error: "#{ex}" }
+    )
+  end
 end
