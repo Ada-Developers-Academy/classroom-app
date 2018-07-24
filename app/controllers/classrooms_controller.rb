@@ -1,6 +1,6 @@
 class ClassroomsController < ApplicationController
   load_and_authorize_resource
-  before_action :find_classroom, only: [:create, :show, :edit, :update, :destroy]
+  before_action :find_classroom, only: [:create, :show, :update]
 
   def index
     data = Classroom.all
@@ -15,22 +15,17 @@ class ClassroomsController < ApplicationController
 
   def create
     if @classroom
-      render json: { errors: "Classroom #{existing.name} already exists" }, status: :bad_request
-      return
+      error_as_json("Classroom #{existing.name} already exists")
     else
-      classroom = Classroom.new(
+      # TODO: Figure out what to do with instructor email. Current plan is to add instructors to classrooms, use the
+      # relationship to get emails, and remove the instructor_emails column from Students
+      @classroom = Classroom.new(
         number: params[:number],
         name: params[:name],
-        instructor_emails: params[:instructor_emails], #|| "fake_email_because_we_havent_decided_on_the_instructors_and_classroom_issue@ada.org",
+        instructor_emails: params[:instructor_emails] || "fake_temp_email@ada.org",
         cohort_id: params[:cohort_id]
       )
-
-      if classroom.save
-        info_as_json("New classroom #{classroom.name} created")
-      else
-        render json: { errors: "New cohort not created"}, status: :bad_request
-      end
-
+      @classroom.save ? info_as_json("New classroom #{@classroom.name} created") : error_as_json(@classroom.errors)
     end
   end
 
@@ -38,11 +33,11 @@ class ClassroomsController < ApplicationController
     if @classroom.update(classroom_params)
       info_as_json("New classroom #{@classroom.name} updated")
     else
-      render json: {errors: "Classroom could not be updated"}, status: :bad_request
+      error_as_json(@classroom.errors)
     end
   end
 
-  def delete
+  def destroy
     NotImplementedError
   end
 
@@ -55,13 +50,6 @@ class ClassroomsController < ApplicationController
   def find_classroom
     @classroom = Classroom.find_by(id: params[:id])
   end
-
-  # # QUESTION: can we refactor this out? Most/all controllers use this
-  # rescue_from ActiveRecord::RecordNotFound do |ex|
-  #   render(status: :bad_request,
-  #          json: { error: "#{ex}" }
-  #   )
-  # end
 
   def info_as_json(message = "")
     return render(

@@ -37,10 +37,8 @@ class UserInvitesController < ApplicationController
   def create_student
     github_names = params[:github_names].split(/[ \t\r\n]+/).map(&:strip).uniq
     classroom = Classroom.find_by(id: params[:classroom_id])
-    if !classroom.present?
-      render json: { errors: "Could not find classroom with ID #{params[:classroom_id]}" }, status: bad_request
-      return
-    end
+
+    return error_as_json("Could not find classroom with ID #{params[:classroom_id]}") if !classroom.present?
 
     msgs = github_names.map do |name|
       github_uid = GitHubUserInfo.get_uid_from_gh(name)
@@ -59,6 +57,7 @@ class UserInvitesController < ApplicationController
       end
     end
 
+    # TODO: love how clean this is but make this consistent with the formatting of the rest of the messages
     render json: {
       notice: msgs.select(&:first).map(&:second),
       alert:  msgs.reject(&:first).map(&:second),
@@ -79,7 +78,7 @@ class UserInvitesController < ApplicationController
     if invite.save
       render json: { message: "Successfully invited Github account #{invite.github_name}" }, status: :ok
     else
-      render json: { errors: "Could not invited Github account #{invite.github_name}" }, status: bad_request
+      error_as_json(invite.errors)
     end
   end
 end

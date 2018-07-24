@@ -19,35 +19,24 @@ class SubmissionsController < ApplicationController
   # @param must contain key :github_name, whose value is is a valid GitHub username
   # @return {'id', 'name', 'github_name', 'active'} if a new Submission is created. Otherwise returns {'error'}.
   def create
-    uid_from_gh = GitHubUserInfo.get_uid_from_gh(params[:github_name])
-    existing = Instructor.find_by(uid: uid_from_gh)
+    # uid_from_gh = GitHubUserInfo.get_uid_from_gh(params[:github_name])
+    # existing = Submission.find_by(uid: uid_from_gh)
 
     if existing
-      render json: {ok: false, errors: "Instructor already exists"}, status: :bad_request
-      return
+      error_as_json("Submission already exists")
     else
-      @instructor = Instructor.new(
+      @submission = Submission.new(
           name: params[:name] || params[:github_name],
           github_name: params[:github_name],
           uid: uid_from_gh,
           active: true
       )
-
-      if  @instructor.save
-        return info_as_json("Instructor #{@instructor.name} created")
-      else
-        render status: :bad_request, json: { errors: "Instructor not created"}
-        return
-      end
+      @submission.save ? info_as_json("Submission ##{@submission.id} created") : error_as_json(@submission.errors)
     end
   end
 
   def update
-    if @submission.update(submission_params)
-      info_as_json
-    else
-      render json: {errors: "Submission not created"}, status: :bad_request
-    end
+    @submission.update(submission_params) ? info_as_json("Updated submission") :  error_as_json(@submission.errors)
   end
 
   private

@@ -23,7 +23,15 @@ class ApplicationController < ActionController::Base
     { file: Rails.root.join('public', '404.html'), status: 404 }
   end
 
+  def error_as_json(message = "")
+    render status: :bad_request, json: { errors: message }
+  end
+
   private
+
+  def existing?
+    return
+  end
 
   rescue_from CanCan::AccessDenied do |ex|
     # If we "accidentally" locked ourselves out, would we have to complete our capstone? 🤔

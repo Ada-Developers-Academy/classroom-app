@@ -23,8 +23,7 @@ class InstructorsController < ApplicationController
     existing = Instructor.find_by(uid: uid_from_gh)
 
     if existing
-      render json: {ok: false, errors: "Instructor already exists"}, status: :bad_request
-      return
+      return render json: {ok: false, errors: "Instructor already exists"}, status: :bad_request
     else
       @instructor = Instructor.new(
         name: params[:name] || params[:github_name],
@@ -36,7 +35,7 @@ class InstructorsController < ApplicationController
       if  @instructor.save
         return info_as_json("Instructor #{@instructor.name} created")
       else
-        render status: :bad_request, json: { errors: "Instructor not created"}
+        render status: :bad_request, json: @instructor.errors
         return
       end
     end
@@ -59,13 +58,6 @@ class InstructorsController < ApplicationController
   def find_instructor
     @instructor = Instructor.find_by(id: params[:id])
   end
-
-  # # QUESTION: can we refactor this out? Most/all controllers use this
-  # rescue_from ActiveRecord::RecordNotFound do |ex|
-  #   render(status: :bad_request,
-  #          json: { error: "#{ex}" }
-  #   )
-  # end
 
   def info_as_json(message = "")
     return render(

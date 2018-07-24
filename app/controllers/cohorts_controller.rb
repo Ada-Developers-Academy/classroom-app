@@ -20,12 +20,14 @@ class CohortsController < ApplicationController
   # @param :internship_end_date
   # @param :graduation_date
   def create
-    # Does not use find_cohort
+    # Does not use find_cohort.
+    # TODO: why am I doing this?
     existing = Cohort.find_by(id: params[:id])
 
     if existing
-      render json: { errors: "Cohort already exists"}, status: :bad_request
+      return error_as_json("Cohort already exists")
     else
+      # Need to set to @cohort for info_as_json to render
       @cohort = Cohort.new(
           number: params[:number],
           name: params[:name],
@@ -36,40 +38,24 @@ class CohortsController < ApplicationController
           internship_end_date: params[:internship_end_date],
           graduation_date: params[:graduation_date]
       )
-
-      if @cohort.save
-        info_as_json("New cohort #{@cohort.name} created")
-      else
-        render json: { errors: "New cohort not created"}, status: :bad_request
-      end
+      @cohort.save ? info_as_json("New cohort #{@cohort.name} created") : error_as_json(@cohort.errors)
 
     end
   end
 
   def update
-    if @cohort.update(cohort_params)
-      info_as_json("Cohort #{@cohort.name} updated")
-    else
-      render json: {errors: "Cohort not updated"}, status: :bad_request
-    end
+    @cohort.update(cohort_params) ? info_as_json("Cohort #{@cohort.name} updated") : error_as_json(@cohort.errors)
   end
 
   private
   def cohort_params
-    params.require(:cohort).permit(:id, :number, :name, :repo_name, :class_start_date, :class_end_date,
-                                   :internship_start_date, :internship_end_date, :graduation_date)
+    params.permit(:id, :number, :name, :repo_name, :class_start_date, :class_end_date,
+                  :internship_start_date, :internship_end_date, :graduation_date)
   end
 
   def find_cohort
     @cohort = Cohort.find_by(id: params[:id])
   end
-
-  # QUESTION: can we refactor this out? Most/all controllers use this
-  # rescue_from ActiveRecord::RecordNotFound do |ex|
-  #   render(status: :bad_request,
-  #          json: { error: "#{ex}" }
-  #   )
-  # end
 
   def info_as_json(message = "")
     return render(
