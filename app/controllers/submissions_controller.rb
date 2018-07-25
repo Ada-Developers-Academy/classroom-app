@@ -21,7 +21,7 @@ class SubmissionsController < ApplicationController
       error_as_json("Submission already exists")
     else
       @submission = Submission.new(
-          student_ids: params[:student_ids],
+          student_id: params[:student_id],
           assignment_id: params[:assignment_id],
           submitted_at: params[:submitted_at],
           pr_url: params[:pr_url],
@@ -40,7 +40,7 @@ class SubmissionsController < ApplicationController
   private
 
   def submission_params
-    params.permit(:assignment_id, :submitted_at, :pr_url, :feedback_url, :grade, :instructor_id)
+    params.permit(:assignment_id, :submitted_at, :pr_url, :feedback_url, :grade, :instructor_id, {:student_ids => []})
   end
 
   def find_submission

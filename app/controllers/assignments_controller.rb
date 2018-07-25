@@ -55,6 +55,7 @@ class AssignmentsController < ApplicationController
     params.permit(:repo_url, :individual, :name, :classroom_id)
   end
 
+  # BUG: None of these messages are rendering
   def info_as_json(message = "")
     return render(
         status: :ok,
