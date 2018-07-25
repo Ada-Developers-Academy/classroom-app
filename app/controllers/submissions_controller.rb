@@ -21,6 +21,7 @@ class SubmissionsController < ApplicationController
       error_as_json("Submission already exists")
     else
       @submission = Submission.new(
+          student_ids: params[:student_ids],
           assignment_id: params[:assignment_id],
           submitted_at: params[:submitted_at],
           pr_url: params[:pr_url],

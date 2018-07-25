@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_25_001913) do
+ActiveRecord::Schema.define(version: 2018_07_25_185737) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,12 +21,8 @@ ActiveRecord::Schema.define(version: 2018_07_25_001913) do
     t.datetime "updated_at", null: false
     t.boolean "individual", default: true
     t.string "name"
-  end
-
-  create_table "assignments_classrooms", force: :cascade do |t|
-    t.integer "classroom_id", null: false
-    t.string "assignment_id", null: false
-    t.index ["classroom_id", "assignment_id"], name: "index_assignments_classrooms_on_classroom_id_and_assignment_id", unique: true
+    t.bigint "classroom_id"
+    t.index ["classroom_id"], name: "index_assignments_on_classroom_id"
   end
 
   create_table "classrooms", force: :cascade do |t|

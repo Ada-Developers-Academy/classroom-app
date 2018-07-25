@@ -1,9 +1,9 @@
 require 'github'
 
 class AssignmentsController < ApplicationController
-  load_and_authorize_resource except: [:show] # TODO: Original site used this for logged-in students' "homepage". Remove?
-  load_and_authorize_resource :assignment, parent: true, only: [:show] # QUESTION: ...what?
-  load_and_authorize_resource :classroom, parent: false, only: [:show] # QUESTION: ...what?
+  load_and_authorize_resource #except: [:show] # TODO: Original site used this for logged-in students' "homepage". Remove?
+  # load_and_authorize_resource :assignment, parent: true, only: [:show] # QUESTION: ...what?
+  # load_and_authorize_resource :classroom, parent: false, only: [:show] # QUESTION: ...what?
 
   # TODO: figure this out and possibly clean up
   def index
@@ -22,17 +22,17 @@ class AssignmentsController < ApplicationController
   # TODO: make sure classroom_id, repo_url, and name are actually required
   def create
     existing = Assignment.where(classroom_id: params[:classroom_id], repo_url: params[:repo_url])
-    if !existing.empty?
-      return error_as_json("Assignment #{params[:repo_url]} already exists for classroom #{params[:classroom_id]}")
-    end
+    # if !existing.first.nil?
+    #   return error_as_json("Assignment #{params[:repo_url]} already exists for classroom #{params[:classroom_id]}")
+    # end
 
     @assignment = Assignment.new(
-        name: param[:name],
-        classroom_id: param[:classroom_id],
-        repo_url: param[:repo_url],
-        individual: param[:individual], # TODO: check this. Original program set default to true (and still should)
+        name: params[:name],
+        classroom_id: params[:classroom_id],
+        repo_url: params[:repo_url],
+        individual: params[:individual], # TODO: check this. Original program set default to true (and still should)
     )
-    @assignment.save ? info_as_json("Saved assignment #{@assignment.name}") : error_as_json(@assignment.errors)
+    @assignment.save ? info_as_json("Created assignment #{@assignment.name}") : error_as_json(@assignment.errors)
   end
 
   def edit
@@ -52,13 +52,13 @@ class AssignmentsController < ApplicationController
   end
 
   def assignment_params
-    params.permit(:repo_url, :individual, :individual, :classroom_ids => [] ) # QUESTION: What's up with `=> []`
+    params.permit(:repo_url, :individual, :name, :classroom_id)
   end
 
   def info_as_json(message = "")
     return render(
         status: :ok,
-        json: @assignment.as_json(only: [:id, :repo_url, :classroom_ids, :individual]),
+        json: @assignment.as_json(only: [:id, :repo_url, :individual, :classroom_id]),
         message: message
     )
   end
