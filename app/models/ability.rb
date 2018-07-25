@@ -3,6 +3,7 @@ class Ability
 include CanCan::Ability
 
   def initialize(user)
+    puts "helllopooooooooooooo"
     return guest_rules unless user
     unauthorized_rules unless user.authorized?
 

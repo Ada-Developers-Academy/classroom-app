@@ -12,6 +12,7 @@ class ApplicationController < ActionController::Base
     @user ||= User.find(1)
   end
 
+  # TODO: Fix when you have the login situation sorted
   def require_login
     if current_user.nil?
       flash[:error] = "You must be logged in to view this section"
@@ -28,7 +29,7 @@ class ApplicationController < ActionController::Base
   end
 
   def find_by_params_id
-    return self.find_by(id: params[:id])
+    self.find_by(id: params[:id])
   end
 
   private
@@ -40,8 +41,6 @@ class ApplicationController < ActionController::Base
   end
 
   rescue_from ActiveRecord::RecordNotFound do |ex|
-    render(status: :bad_request,
-           json: { error: "#{ex}" }
-    )
+    render(status: :bad_request, json: { error: "#{ex}" })
   end
 end

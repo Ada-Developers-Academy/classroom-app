@@ -1,7 +1,7 @@
-# require 'github_user_info'
-
 class SubmissionsController < ApplicationController
-  load_and_authorize_resource
+  load_and_authorize_resource only: [:create, :update]
+  load_and_authorize_resource :student
+
   before_action :find_submission, only: [:show, :update]
 
   def index
@@ -10,27 +10,21 @@ class SubmissionsController < ApplicationController
   end
 
   def show
-    info_as_json
+    info_as_json("Found it")
   end
 
-  def create
-    # uid_from_gh = GitHubUserInfo.get_uid_from_gh(params[:github_name])
-    existing = Submission.find_by(student_id: params[:student_id], assignment_id: params[:assignment_id])
 
-    if existing
-      error_as_json("Submission already exists")
-    else
-      @submission = Submission.new(
-          student_id: params[:student_id],
-          assignment_id: params[:assignment_id],
-          submitted_at: params[:submitted_at],
-          pr_url: params[:pr_url],
-          feedback_url: params[:feedback_url],
-          grade: params[:grade],
-          instructor_id: params[:instructor_id]
-      )
-      @submission.save ? info_as_json("Submission ##{@submission.id} created") : error_as_json(@submission.errors)
-    end
+  def create
+    # existing = Submission.find_by(...)
+
+    # if existing
+    #   error_as_json("Submission already exists")
+    # else
+
+      @submission = Submission.new(submission_params)
+
+      return @submission.save ? info_as_json("Submission ##{@submission.id} created") : error_as_json(@submission.errors)
+    # end
   end
 
   def update
@@ -40,7 +34,7 @@ class SubmissionsController < ApplicationController
   private
 
   def submission_params
-    params.permit(:assignment_id, :submitted_at, :pr_url, :feedback_url, :grade, :instructor_id, {:student_ids => []})
+    params.permit(:assignment_id, :submitted_at, :pr_url, :feedback_url, :grade, :instructor_id, :student_ids)
   end
 
   def find_submission
@@ -48,11 +42,20 @@ class SubmissionsController < ApplicationController
   end
 
   def info_as_json(message = "")
-    return render(
-        status: :ok,
-        json: @submission.as_json(only: [:id, :assignment_id, :submitted_at, :pr_url, :feedback_url, :grade, :instructor_id]),
-        message: message
+    render(
+      status: :ok,
+      json: @submission.as_json(only: [:id, :assignment_id, :submitted_at, :pr_url, :feedback_url, :grade, :instructor_id, :student_ids]),
+      message: message
     )
-  end
 
+    # TODO: Change info_as_json this after the presentation. The frontend will have to change too to respond correctly
+    # def info_as_json(message = "")
+    #   render :json => {
+    #     status: :ok,
+    #     data: @submission.as_json(only: [:id, :assignment_id, :submitted_at, :pr_url, :feedback_url, :grade, :instructor_id, :student_ids]),
+    #     message: message
+    #   }
+    # end
+
+  end
 end

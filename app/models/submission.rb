@@ -5,6 +5,7 @@ class Submission < ApplicationRecord
   belongs_to :assignment
   # TODO: had to make optional due to model test failing. See: models/submission_test.rb:12
   belongs_to :feedback_provider, class_name: 'Instructor', foreign_key: 'instructor_id', optional: true
+  # validates :student_ids, presence: true
 
   GRADES = [
     :meet_standard,
