@@ -4,7 +4,7 @@ class Classroom < ApplicationRecord
   # http://guides.rubyonrails.org/upgrading_ruby_on_rails.html#active-record-belongs-to-required-by-default-option
   has_and_belongs_to_many :assignments
   belongs_to :cohort
-  has_many :students
+  has_and_belongs_to_many :students
   
   def display_name
     "#{number}: #{name}"

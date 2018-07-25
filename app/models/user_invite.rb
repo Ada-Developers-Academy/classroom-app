@@ -3,7 +3,8 @@ class UserInvite < ApplicationRecord
   # http://guides.rubyonrails.org/upgrading_ruby_on_rails.html#active-record-belongs-to-required-by-default-option
   belongs_to :inviter, class_name: 'User'
   # TODO: why dependent: destroy
-  belongs_to :classroom, optional: true # NOTE: had to make optional make model test work.
+  # belongs_to :classroom, optional: true # NOTE: had to make optional make model test work.
+
   # belongs_to :classroom, dependent: :destroy, optional: true # NOTE: had to make optional make model test work.
 
   validates_with UserRoleValidator

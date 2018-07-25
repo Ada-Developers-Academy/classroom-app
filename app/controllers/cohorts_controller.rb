@@ -11,14 +11,6 @@ class CohortsController < ApplicationController
     info_as_json
   end
 
-  # @param :number
-  # @param :name
-  # @param :repo_name *required*
-  # @param :class_start_date
-  # @param :class_end_date
-  # @param :internship_start_date
-  # @param :internship_end_date
-  # @param :graduation_date
   def create
     # Does not use find_cohort.
     # TODO: why am I doing this?

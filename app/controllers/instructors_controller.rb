@@ -2,7 +2,7 @@ require 'github_user_info'
 
 class InstructorsController < ApplicationController
   load_and_authorize_resource
-  before_action :find_instructor, only: [:show, :update, :destory]
+  before_action :find_instructor, only: [:show, :update]
 
   def index
     instructors_data = params[:active] ? Instructor.where(active: params[:active]) : Instructor.all

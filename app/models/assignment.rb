@@ -3,7 +3,7 @@ class Assignment < ApplicationRecord
   # changed to optional?
   # http://guides.rubyonrails.org/upgrading_ruby_on_rails.html#active-record-belongs-to-required-by-default-option
   has_and_belongs_to_many :classrooms
-  has_many :submission_groups, dependent: :destroy
+  has_many :submissions, dependent: :destroy
   validates :repo_url, presence: true
 
   BASE_GITHUB_URL = "http://github.com/"
