@@ -5,6 +5,8 @@ class Assignment < ApplicationRecord
   has_and_belongs_to_many :classrooms
   has_many :submissions, dependent: :destroy
   validates :repo_url, presence: true
+  validates :classroom_id, presence: true
+
 
   BASE_GITHUB_URL = "http://github.com/"
 

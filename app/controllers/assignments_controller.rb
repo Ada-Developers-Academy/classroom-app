@@ -1,10 +1,11 @@
 require 'github'
 
 class AssignmentsController < ApplicationController
-  load_and_authorize_resource except: [:show]
-  load_and_authorize_resource :assignment, parent: true, only: [:show]
-  load_and_authorize_resource :classroom, parent: false, only: [:show]
+  load_and_authorize_resource except: [:show] # TODO: Original site used this for logged-in students' "homepage". Remove?
+  load_and_authorize_resource :assignment, parent: true, only: [:show] # QUESTION: ...what?
+  load_and_authorize_resource :classroom, parent: false, only: [:show] # QUESTION: ...what?
 
+  # TODO: figure this out and possibly clean up
   def index
     if params[:query]
       data = RepoWrapper.search(params[:query]) # QUESTION: ...what?
@@ -15,26 +16,23 @@ class AssignmentsController < ApplicationController
   end
 
   def show
-    # original code for views:
-    gh = GitHub.new(session[:token])
-
-    @all_data = gh.retrieve_student_info(@assignment, @cohort)
-
-    render(
-      status: :ok,
-      json: @assignment.as_json(
-        only: [:id, :repo_url]
-      )
-    )
-    # Should we change this?
+    info_as_json
   end
 
+  # TODO: make sure classroom_id, repo_url, and name are actually required
   def create
-    if @assignment.save
-      info_as_json("Saved assignment #{@assignment.name}")
-    else
-      render status: :bad_request, json: { errors: "Assignment not created"}
+    existing = Assignment.where(classroom_id: params[:classroom_id], repo_url: params[:repo_url])
+    if !existing.empty?
+      return error_as_json("Assignment #{params[:repo_url]} already exists for classroom #{params[:classroom_id]}")
     end
+
+    @assignment = Assignment.new(
+        name: param[:name],
+        classroom_id: param[:classroom_id],
+        repo_url: param[:repo_url],
+        individual: param[:individual], # TODO: check this. Original program set default to true (and still should)
+    )
+    @assignment.save ? info_as_json("Saved assignment #{@assignment.name}") : error_as_json(@assignment.errors)
   end
 
   def edit
@@ -42,18 +40,9 @@ class AssignmentsController < ApplicationController
   end
 
   def update
-    if @assignment.update_attributes(assignment_params)
-      @assignment.classrooms.build # QUESTION: ...what?? 😩
-      redirect_to assignments_path
-    else
-      render status: :bad_request, json: { errors: "Assignment not updated"}
-    end
-  end
-
-  def destroy
-    NotImplementedError
-    # @assignment.destroy
-    # render status: :ok, json: { errors: "Assignment deleted"}
+    # QUESTION: what's the difference between update_attributes and update?
+    @assignment.update_attributes(assignment_params) ? info_as_json("Assignment not updated") :
+        error_as_json(@assignment.errors)
   end
 
   private
@@ -63,13 +52,13 @@ class AssignmentsController < ApplicationController
   end
 
   def assignment_params
-    params.require(:assignment).permit(:repo_url, :individual, :classroom_ids => [] ) # QUESTION: What's up with `=> []`
+    params.permit(:repo_url, :individual, :individual, :classroom_ids => [] ) # QUESTION: What's up with `=> []`
   end
 
   def info_as_json(message = "")
     return render(
         status: :ok,
-        json: @instructor.as_json(only: [:id, :repo_url, :classroom_ids]),
+        json: @instructor.as_json(only: [:id, :repo_url, :classroom_ids, :individual]),
         message: message
     )
   end

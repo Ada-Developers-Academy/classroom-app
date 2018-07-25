@@ -129,18 +129,17 @@ ASSIGNMENT_FILE = Rails.root.join('db', './.capstone_seed_data/assignment_seed_d
 puts "Loading raw works data from #{ASSIGNMENT_FILE}"
 
 assignment_failures = []
-# (1..2).each do |curr_classroom_id|
+(1..2).each do |curr_classroom_id|
   CSV.foreach(ASSIGNMENT_FILE, :headers => true) do |row|
     assignment = Assignment.new(id: row['id'])
-    assignment.classrooms << Classroom.find(1)
-    assignment.classrooms << Classroom.find(2)
+    assignment.name = row['name']
     assignment.repo_url = row['repo_url']
+    assignment.classroom_id = curr_classroom_id
+    # assignment.classrooms << Classroom.find(2)
 
-    if assignment.save!
-      puts "Created assignment ##{assignment.id}"
-    end
+    puts "Created assignment ##{assignment.id}" if assignment.save!
   end
-# end
+end
 
 puts "Added #{Assignment.count} assignment records"
 puts "#{assignment_failures.length} assignment failed to save"
