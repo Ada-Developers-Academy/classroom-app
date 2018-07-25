@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(version: 2018_07_25_185737) do
     t.datetime "updated_at", null: false
     t.boolean "individual", default: true
     t.string "name"
+    t.date "due_date"
     t.bigint "classroom_id"
     t.index ["classroom_id"], name: "index_assignments_on_classroom_id"
   end
@@ -73,15 +74,15 @@ ActiveRecord::Schema.define(version: 2018_07_25_185737) do
   end
 
   create_table "students_submissions", force: :cascade do |t|
-    t.integer "submission_id", null: false
-    t.string "student_id", null: false
+    t.bigint "student_id"
+    t.bigint "submission_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["submission_id", "student_id"], name: "index_submission_id_and_student_id", unique: true
+    t.index ["student_id"], name: "index_students_submissions_on_student_id"
+    t.index ["submission_id"], name: "index_students_submissions_on_submission_id"
   end
 
   create_table "submissions", force: :cascade do |t|
-    t.integer "student_id", null: false
     t.integer "assignment_id", null: false
     t.datetime "submitted_at"
     t.datetime "created_at", null: false
@@ -91,7 +92,6 @@ ActiveRecord::Schema.define(version: 2018_07_25_185737) do
     t.integer "grade"
     t.bigint "instructor_id"
     t.index ["instructor_id"], name: "index_submissions_on_instructor_id"
-    t.index ["student_id", "assignment_id"], name: "index_submissions_on_student_id_and_assignment_id", unique: true
   end
 
   create_table "user_invites", force: :cascade do |t|

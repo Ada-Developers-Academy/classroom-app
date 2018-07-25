@@ -9,7 +9,7 @@ class RenameRepoToAssignmet < ActiveRecord::Migration[5.2]
     rename_column :cohorts_assignments, :repo_id, :assignment_id
     rename_column :submissions, :repo_id, :assignment_id
 
-    add_index :submissions, [:student_id, :assignment_id], unique: true
+    # add_index :submissions, [:student_id, :assignment_id], unique: true
     add_index :cohorts_assignments, [:cohort_id, :assignment_id], unique: true
   end
 end

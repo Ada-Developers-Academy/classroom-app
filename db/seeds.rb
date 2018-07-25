@@ -200,8 +200,8 @@ CSV.foreach(SUBMISSION_FILE, :headers => true) do |row|
   new_submission.assignment_id = row["assignment_id"]
   new_submission.submitted_at = row["submitted_at"]
   new_submission.pr_url = row["pr_url"] # TODO: need to change
-  new_submission.student_id = row["student_id"]
-  new_submission.students << sub_stu
+  new_submission.student_ids = row["student_id"]
+  # new_submission.students << sub_stu
 
   if new_submission.save!
     puts "Created assignment ##{new_submission.id}"
