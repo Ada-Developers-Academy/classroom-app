@@ -58,7 +58,7 @@ class AssignmentsController < ApplicationController
   def info_as_json(message = "")
     return render(
         status: :ok,
-        json: @instructor.as_json(only: [:id, :repo_url, :classroom_ids, :individual]),
+        json: @assignment.as_json(only: [:id, :repo_url, :classroom_ids, :individual]),
         message: message
     )
   end
