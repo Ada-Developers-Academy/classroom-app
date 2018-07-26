@@ -3,6 +3,7 @@ require 'csv'
 require 'faker'
 require 'httparty'
 
+DEMO = true
 
 # CREATE USERS
 INSTRUCTOR_FILE = Rails.root.join('db', './.capstone_seed_data/instructors_seed_data.csv')
@@ -71,14 +72,24 @@ Cohort.create!(
 
 ########################################################################################################################
 # CREATE CLASSROOMS
-classrooms = [
-  { number: 9, name: "Ampers", instructor_emails: "charles+classroom-local-pb-instructor@adadev.org", cohort_id: 1 },
-  { number: 9, name: "Octos", instructor_emails: "charles+classroom-local-jelly-instructor@adadev.org", cohort_id: 1 }
-]
+[
+  {
+    number: 9,
+    name: "Ampers",
+    instructor_emails: "charles+classroom-local-pb-instructor@adadev.org",
+    cohort_id: 1
+  },
+  {
+    number: 9,
+    name: "Octos",
+    instructor_emails: "charles+classroom-local-jelly-instructor@adadev.org",
+    cohort_id: 1
+  }
+].each { |c| Classroom.create!(c) }
 
-classrooms.each do |c|
-  Classroom.create!(c)
-end
+# classrooms.each do |c|
+#   Classroom.create!(c)
+# end
 
 puts Classroom.all.inspect
 puts "******** #{Classroom.count} CLASSROOMS CREATED*********\n\n"
@@ -93,8 +104,10 @@ student_failures = []
 CSV.foreach(STUDENT_FILE, :headers => true) do |row|
   student = Student.new
 #   student.id = row['id']
-  student.name = row['name']
-  student.preferred_name = row['preferred_name']
+  demo_name = DEMO ? Faker::HarryPotter.character : nil
+
+  student.name = demo_name || row['name']
+  student.preferred_name = demo_name || row['preferred_name']
   student.email = row['email'].nil? ? Faker::Internet.email : row['email']
   student.github_name = row['github_name']
   student.uid = row['uid']
@@ -129,19 +142,20 @@ ASSIGNMENT_FILE = Rails.root.join('db', './.capstone_seed_data/assignment_seed_d
 puts "Loading raw works data from #{ASSIGNMENT_FILE}"
 
 assignment_failures = []
-(1..2).each do |curr_classroom_id|
+# (1..2).each do |curr_classroom_id|
   CSV.foreach(ASSIGNMENT_FILE, :headers => true) do |row|
     assignment = Assignment.new
     assignment.name = row['name']
     assignment.repo_url = row['repo_url']
-    # assignment.classroom_id = curr_classroom_id
-    curr_classroom = Classroom.find(row['classroom_id'])
-    curr_classroom.assignments << assignment
+    assignment.due_date = row['due_date']
+    assignment.classroom_id = row['classroom_id']
+    # curr_classroom = Classroom.find(row['classroom_id'])
+    # curr_classroom.assignments << assignment
 
     puts "Created assignment ##{assignment.id}" if assignment.save!
     # curr_classroom << assignment
   end
-end
+# end
 
 puts "Added #{Assignment.count} assignment records"
 puts "#{assignment_failures.length} assignment failed to save"
@@ -189,6 +203,12 @@ puts "done"
 # t.index ["instructor_id"], name: "index_submissions_on_instructor_id"
 # t.index ["student_id", "assignment_id"], name: "index_submissions_on_student_id_and_assignment_id", unique: true
 
+AMPERS_INSTRUCTORS = ["CheezItMan", "tildeee"]
+OCTOS_INSTRUCTORS = ["droberts-ada", "kariabancroft"]
+
+students_ids = (1..48).to_a
+
+grade_standards = [:not_standard, :approach_standard, :meet_standard, :meet_standard]
 
 SUBMISSION_FILE = Rails.root.join('db', './.capstone_seed_data/all_submissions_seed.csv')
 puts "Loading raw works data from #{SUBMISSION_FILE}"
@@ -196,15 +216,29 @@ puts "Loading raw works data from #{SUBMISSION_FILE}"
 CSV.foreach(SUBMISSION_FILE, :headers => true) do |row|
   new_submission = Submission.new
 
-  sub_stu = Student.find_by(id: row["student_id"])
+  # sub_stu = Student.find_by(id: row["student_id"])
   new_submission.assignment_id = row["assignment_id"]
   new_submission.submitted_at = row["submitted_at"]
   new_submission.pr_url = row["pr_url"] # TODO: need to change
   new_submission.student_ids = row["student_id"]
+  new_submission.grade = grade_standards[rand(grade_standards.length)]
+
+  # Sandy Metz would not be pleased
+  new_submission.feedback_provider =
+  if new_submission.assignment.name.match(/.(\(CS Fun\))$/)
+    Instructor.find_by(github_name: "shrutivanw")
+  elsif new_submission.assignment.classroom.name == "Ampers"
+    Instructor.find_by(github_name: AMPERS_INSTRUCTORS[rand(0..1)])
+  else
+    Instructor.find_by(github_name: OCTOS_INSTRUCTORS[rand(0..1)])
+  end
+
   # new_submission.students << sub_stu
 
   if new_submission.save!
     puts "Created assignment ##{new_submission.id}"
+    # students_ids.delete(row["student_id"]) # will have to change
+
   end
 end
 
