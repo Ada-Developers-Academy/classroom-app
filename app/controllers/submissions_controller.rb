@@ -1,6 +1,6 @@
 class SubmissionsController < ApplicationController
-  load_and_authorize_resource only: [:create, :update]
-  load_and_authorize_resource :student
+  load_and_authorize_resource
+  load_and_authorize_resource :student#, only: [:create, :update] # need due to many-to-many relationship
 
   before_action :find_submission, only: [:show, :update]
 
@@ -34,7 +34,9 @@ class SubmissionsController < ApplicationController
   private
 
   def submission_params
-    params.permit(:assignment_id, :submitted_at, :pr_url, :feedback_url, :grade, :instructor_id, :student_ids)
+    # params[:student_ids] =
+    # puts params[:student_ids].inspect
+    params.permit(:assignment_id, :submitted_at, :pr_url, :feedback_url, :grade, :instructor_id, student_ids: [])
   end
 
   def find_submission

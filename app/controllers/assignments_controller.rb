@@ -40,7 +40,8 @@ class AssignmentsController < ApplicationController
   end
 
   def update
-    # QUESTION: what's the difference between update_attributes and update?
+    # NOTE: update_attributes is supposed be depreciate in Rails 6.
+    # https://github.com/rails/rails/blob/d162188dd662a7d9f62ba8431474f50bc35e3e93/activerecord/CHANGELOG.md
     @assignment.update_attributes(assignment_params) ? info_as_json("Assignment not updated") :
         error_as_json(@assignment.errors)
   end

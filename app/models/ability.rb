@@ -3,11 +3,12 @@ class Ability
 include CanCan::Ability
 
   def initialize(user)
-    puts "helllopooooooooooooo"
+    puts "11111111"
     return guest_rules unless user
     unauthorized_rules unless user.authorized?
-
+    puts "2222222222"
     instructor_rules if user.instructor?
+    puts "333333333333"
     student_rules(user) if user.student?
   end
 

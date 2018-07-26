@@ -8,12 +8,12 @@ class ApplicationController < ActionController::Base
 
   def current_user
     # HACK: get right of this before turing in enable this for admin permission:
-    # @user ||= User.find_by(id: 1)
     @user ||= User.find(1)
   end
 
   # TODO: Fix when you have the login situation sorted
   def require_login
+    puts @self.inspect
     if current_user.nil?
       flash[:error] = "You must be logged in to view this section"
       redirect_to root_path
