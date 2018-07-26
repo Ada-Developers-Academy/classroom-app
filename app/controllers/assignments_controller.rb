@@ -47,13 +47,13 @@ class AssignmentsController < ApplicationController
   end
 
   def assignment_params
-    params.permit(:repo_url, :individual, :name, :classroom_id)
+    params.permit(:repo_url, :individual, :name, :classroom_id, :due_date)
   end
 
   def info_as_json(message = "")
     return render(
         status: :ok,
-        json: @assignment.as_json(only: [:id, :repo_url, :individual, :classroom_id]),
+        json: @assignment.as_json(only: [:id, :repo_url, :individual, :classroom_id, :due_date]),
         message: message
     )
   end

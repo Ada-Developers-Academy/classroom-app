@@ -3,6 +3,7 @@ require 'csv'
 require 'faker'
 require 'httparty'
 
+# W
 DEMO = true
 
 # CREATE USERS
@@ -103,7 +104,7 @@ puts "Loading raw works data from #{STUDENT_FILE}"
 student_failures = []
 CSV.foreach(STUDENT_FILE, :headers => true) do |row|
   student = Student.new
-#   student.id = row['id']
+
   demo_name = DEMO ? Faker::HarryPotter.character : nil
 
   student.name = demo_name || row['name']
@@ -113,7 +114,6 @@ CSV.foreach(STUDENT_FILE, :headers => true) do |row|
   student.uid = row['uid']
   puts row['classroom_id']
   student.classroom = Classroom.find(row['classroom_id'])
-  # Classroom.find(row['classroom_id'])
 
   if student.save!
     puts "Created student ##{student.id}"
@@ -147,7 +147,9 @@ assignment_failures = []
     assignment = Assignment.new
     assignment.name = row['name']
     assignment.repo_url = row['repo_url']
-    assignment.due_date = row['due_date']
+    assignment.due_date = Date.parse(row['due_date'])
+    # puts row['due_date'].inspect
+
     assignment.classroom_id = row['classroom_id']
     # curr_classroom = Classroom.find(row['classroom_id'])
     # curr_classroom.assignments << assignment

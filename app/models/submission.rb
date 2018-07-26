@@ -1,3 +1,5 @@
+require 'httparty'
+
 class Submission < ApplicationRecord
   # TODO: belongs_to now is required by default. Should these be changed to optional?
   # http://guides.rubyonrails.org/upgrading_ruby_on_rails.html#active-record-belongs-to-required-by-default-option
@@ -40,8 +42,17 @@ class Submission < ApplicationRecord
     end
   end
 
+  def get_pr_feedback
+    if is_graded?
+      response = "https://api.github.com/repos/#{ self.assignment.repo_url }/issues/#{ self.feedback_url }/comments"
+      return response["body"]
+    else
+      return "https://raw.githubusercontent.com/#{ self.assignment.repo_url }/master/feedback.md"
+    end
+  end
+
   def is_graded?
-    return self.grade.nil?
+    return !self.grade.nil?
   end
 
   def is_turned_in?
