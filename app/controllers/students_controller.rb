@@ -1,7 +1,7 @@
 require 'github_user_info'
 
 class StudentsController < ApplicationController
-  load_and_authorize_resource # QUESTION: what does this actually do?
+  load_and_authorize_resource
   before_action :find_student, only: [:show, :update]
 
   def index
@@ -9,7 +9,6 @@ class StudentsController < ApplicationController
     render status: :ok, json: students_data
   end
 
-  # :name, :classroom_id, :preferred_name, :github_name, :email, :active
   # TODO: Clean this ugly ass method up
   # TODO: Actually learn how to write throws errors comments in non-Java. It's been 6 months. It's time.
   # @param :name student's full name. If not provided, set to :github_name
@@ -88,4 +87,13 @@ class StudentsController < ApplicationController
         message: message
     )
   end
+
+  # TODO: Change info_as_json this after the presentation. The frontend will have to change too to respond correctly
+  # def info_as_json(message = "")
+  #   render :json => {
+  #     status: :ok,
+  #     data: @student.as_json(only: [:id, :name, :classroom_id, :preferred_name, :github_name, :active, :email]),
+  #     message: message
+  #   }
+  # end
 end

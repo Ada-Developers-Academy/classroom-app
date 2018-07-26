@@ -23,6 +23,7 @@ include CanCan::Ability
     [Classroom, Assignment, Student, Submission, User, UserInvite, Instructor, Cohort].each do |model|
       can :manage, model
     end
+    # can :manage, @submission.students.build
   end
 
   def student_rules(user)

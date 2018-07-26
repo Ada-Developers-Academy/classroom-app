@@ -21,17 +21,11 @@ class AssignmentsController < ApplicationController
 
   # TODO: make sure classroom_id, repo_url, and name are actually required
   def create
-    existing = Assignment.where(classroom_id: params[:classroom_id], repo_url: params[:repo_url])
+    # existing = Assignment.where(classroom_id: params[:classroom_id], repo_url: params[:repo_url])
     # if !existing.first.nil?
     #   return error_as_json("Assignment #{params[:repo_url]} already exists for classroom #{params[:classroom_id]}")
     # end
-
-    @assignment = Assignment.new(
-        name: params[:name],
-        classroom_id: params[:classroom_id],
-        repo_url: params[:repo_url],
-        individual: params[:individual], # TODO: check this. Original program set default to true (and still should)
-    )
+    @assignment = Assignment.new(assignment_params)
     @assignment.save ? info_as_json("Created assignment #{@assignment.name}") : error_as_json(@assignment.errors)
   end
 
@@ -56,7 +50,6 @@ class AssignmentsController < ApplicationController
     params.permit(:repo_url, :individual, :name, :classroom_id)
   end
 
-  # BUG: None of these messages are rendering
   def info_as_json(message = "")
     return render(
         status: :ok,

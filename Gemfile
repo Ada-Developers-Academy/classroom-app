@@ -93,7 +93,7 @@ gem 'font-awesome-sass', '~> 4.5.0'
 gem "omniauth", "~> 1.8.1"
 gem "omniauth-github"
 
-# # Authorization framework
+# Authorization framework
 gem "cancancan"
 
 gem "schema_plus_core"

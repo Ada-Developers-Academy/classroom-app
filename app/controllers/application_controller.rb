@@ -13,7 +13,6 @@ class ApplicationController < ActionController::Base
 
   # TODO: Fix when you have the login situation sorted
   def require_login
-    puts @self.inspect
     if current_user.nil?
       flash[:error] = "You must be logged in to view this section"
       redirect_to root_path
@@ -36,11 +35,13 @@ class ApplicationController < ActionController::Base
 
   rescue_from CanCan::AccessDenied do |ex|
     # If we "accidentally" locked ourselves out, would we have to complete our capstone? 🤔
+    puts "You are not authorized to do that."
     flash[:error] = "You are not authorized to do that."
     redirect_to root_path
   end
 
   rescue_from ActiveRecord::RecordNotFound do |ex|
+    puts "you dun broke it!"
     render(status: :bad_request, json: { error: "#{ex}" })
   end
 end

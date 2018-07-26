@@ -1,7 +1,6 @@
 class SubmissionsController < ApplicationController
-  load_and_authorize_resource
+  load_and_authorize_resource :except => :create
   load_and_authorize_resource :student#, only: [:create, :update] # need due to many-to-many relationship
-
   before_action :find_submission, only: [:show, :update]
 
   def index
@@ -10,9 +9,8 @@ class SubmissionsController < ApplicationController
   end
 
   def show
-    info_as_json("Found it")
+    info_as_json
   end
-
 
   def create
     # existing = Submission.find_by(...)
@@ -20,10 +18,8 @@ class SubmissionsController < ApplicationController
     # if existing
     #   error_as_json("Submission already exists")
     # else
-
-      @submission = Submission.new(submission_params)
-
-      return @submission.save ? info_as_json("Submission ##{@submission.id} created") : error_as_json(@submission.errors)
+    @submission = Submission.new(submission_params)
+    @submission.save ? info_as_json("Submission ##{@submission.id} created") : error_as_json(@submission.errors)
     # end
   end
 
@@ -34,8 +30,6 @@ class SubmissionsController < ApplicationController
   private
 
   def submission_params
-    # params[:student_ids] =
-    # puts params[:student_ids].inspect
     params.permit(:assignment_id, :submitted_at, :pr_url, :feedback_url, :grade, :instructor_id, student_ids: [])
   end
 

@@ -12,26 +12,12 @@ class CohortsController < ApplicationController
   end
 
   def create
-    # Does not use find_cohort.
-    # TODO: why am I doing this?
-    existing = Cohort.find_by(id: params[:id])
-
+    existing = Cohort.find_by(id: params[:id]) # TODO: why am I doing this?
     if existing
       return error_as_json("Cohort already exists")
     else
-      # Need to set to @cohort for info_as_json to render
-      @cohort = Cohort.new(
-          number: params[:number],
-          name: params[:name],
-          repo_name: params[:repo_name],
-          class_start_date: params[:class_start_date],
-          class_end_date: params[:class_end_date],
-          internship_start_date: params[:internship_start_date],
-          internship_end_date: params[:internship_end_date],
-          graduation_date: params[:graduation_date]
-      )
+      @cohort = Cohort.new(cohort_params)
       @cohort.save ? info_as_json("New cohort #{@cohort.name} created") : error_as_json(@cohort.errors)
-
     end
   end
 
@@ -40,6 +26,7 @@ class CohortsController < ApplicationController
   end
 
   private
+
   def cohort_params
     params.permit(:id, :number, :name, :repo_name, :class_start_date, :class_end_date,
                   :internship_start_date, :internship_end_date, :graduation_date)
@@ -57,5 +44,15 @@ class CohortsController < ApplicationController
         message: message
     )
   end
+
+  # TODO: Change info_as_json this after the presentation. The frontend will have to change too to respond correctly
+  # def info_as_json(message = "")
+  #   render :json => {
+  #     status: :ok,
+  #     data: @cohort.as_json(only: [:id, :number, :name, :repo_name, :class_start_date, :class_end_date,
+  #                                      :internship_start_date, :internship_end_date, :graduation_date]),
+  #     message: message
+  #   }
+  # end
 
 end
