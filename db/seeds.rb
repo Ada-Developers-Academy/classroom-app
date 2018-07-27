@@ -212,7 +212,7 @@ students_ids = (1..48).to_a
 
 grade_standards = [:not_standard, :approach_standard, :meet_standard, :meet_standard]
 
-SUBMISSION_FILE = Rails.root.join('db', './.capstone_seed_data/all_submissions_seed.csv')
+SUBMISSION_FILE = Rails.root.join('db', './.capstone_seed_data/all_submissions_seed_2.csv')
 puts "Loading raw works data from #{SUBMISSION_FILE}"
 
 CSV.foreach(SUBMISSION_FILE, :headers => true) do |row|

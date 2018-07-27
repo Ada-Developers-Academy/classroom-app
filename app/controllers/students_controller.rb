@@ -5,7 +5,7 @@ class StudentsController < ApplicationController
   before_action :find_student, only: [:show, :update]
 
   def index
-    students_data = params[:active] ? Student.where(active: params[:active]) : Student.all
+    students_data = params[:active] ? Student.where(active: params[:active]) : Student.order(:name)
     render status: :ok, json: students_data
   end
 
@@ -88,12 +88,5 @@ class StudentsController < ApplicationController
     )
   end
 
-  # TODO: Change info_as_json this after the presentation. The frontend will have to change too to respond correctly
-  # def info_as_json(message = "")
-  #   render :json => {
-  #     status: :ok,
-  #     data: @student.as_json(only: [:id, :name, :classroom_id, :preferred_name, :github_name, :active, :email]),
-  #     message: message
-  #   }
-  # end
+
 end
