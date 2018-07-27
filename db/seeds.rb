@@ -6,6 +6,11 @@ require 'httparty'
 # W
 DEMO = true
 
+def is_kirsten_or_leti?(student_name)
+  student_name == "Kirsten Schumy" || student_name == "Leti Tran"
+end
+
+
 # CREATE USERS
 INSTRUCTOR_FILE = Rails.root.join('db', './.capstone_seed_data/instructors_seed_data.csv')
 puts "Loading raw works data from #{INSTRUCTOR_FILE}"
@@ -105,7 +110,11 @@ student_failures = []
 CSV.foreach(STUDENT_FILE, :headers => true) do |row|
   student = Student.new
 
-  demo_name = DEMO ? Faker::HarryPotter.character : nil
+  # If in DEMO mode and if student is not Kirsten or Leti, sets a demo_name to a random Harry Potter name. In DEMO mode,
+  # the program assigns all student sames to this random name (except for Kirsten and Leti).
+  # The rationalle for this is to: 1) ensure student privacy and 2) allow for the program to display Leti and Kirsten's
+  # names for the grades, which are of course perfect scores.
+  demo_name = DEMO && !is_kirsten_or_leti?(row['name']) ? Faker::HarryPotter.character : nil
 
   student.name = demo_name || row['name']
   student.preferred_name = demo_name || row['preferred_name']
@@ -208,8 +217,6 @@ puts "done"
 AMPERS_INSTRUCTORS = ["CheezItMan", "tildeee"]
 OCTOS_INSTRUCTORS = ["droberts-ada", "kariabancroft"]
 
-students_ids = (1..48).to_a
-
 grade_standards = [:not_standard, :approach_standard, :meet_standard, :meet_standard]
 
 SUBMISSION_FILE = Rails.root.join('db', './.capstone_seed_data/all_submissions_seed_2.csv')
@@ -223,17 +230,18 @@ CSV.foreach(SUBMISSION_FILE, :headers => true) do |row|
   new_submission.submitted_at = row["submitted_at"]
   new_submission.pr_url = row["pr_url"] # TODO: need to change
   new_submission.student_ids = row["student_id"]
-  new_submission.grade = grade_standards[rand(grade_standards.length)]
+  new_submission.grade =
+      is_kirsten_or_leti?(new_submission.student.name) ? :meet_standard : grade_standards[rand(grade_standards.length)]
 
   # Sandy Metz would not be pleased
   new_submission.feedback_provider =
-  if new_submission.assignment.name.match(/.(\(CS Fun\))$/)
-    Instructor.find_by(github_name: "shrutivanw")
-  elsif new_submission.assignment.classroom.name == "Ampers"
-    Instructor.find_by(github_name: AMPERS_INSTRUCTORS[rand(0..1)])
-  else
-    Instructor.find_by(github_name: OCTOS_INSTRUCTORS[rand(0..1)])
-  end
+    if new_submission.assignment.name.match(/.(\(CS Fun\))$/)
+      Instructor.find_by(github_name: "shrutivanw")
+    elsif new_submission.assignment.classroom.name == "Ampers"
+      Instructor.find_by(github_name: AMPERS_INSTRUCTORS[rand(0..1)])
+    else
+      Instructor.find_by(github_name: OCTOS_INSTRUCTORS[rand(0..1)])
+    end
 
   # new_submission.students << sub_stu
 
