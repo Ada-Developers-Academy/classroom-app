@@ -17,7 +17,7 @@
       <td><%= s.cohort.number %></td>
       <td><%= s.cohort.name %></td>
       <td><%= s.github_name %></td>
-      <td><%= s.email %></td>
+      <td><%= mail_to s.email %></td>
       <td>
         <%= link_to icon('pencil'), { controller: "students", action: "edit", id: s.id } %>
         <%= link_to icon('trash'), { controller: "students", action: "destroy", id: s.id }, method: :delete, data: { confirm: "Are you sure? "} %>
