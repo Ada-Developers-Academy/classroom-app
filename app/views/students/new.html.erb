@@ -1,1 +1,13 @@
 <%= render partial: "form" %>
+<br>
+<br>
+<%= form_tag create_batch_students_path, multipart: true do |f| %>
+  <legend>Batch Creation</legend>
+  <small>Upload a CSV file with the following columns:
+    cohort number, cohort name, student name, student github name, student email
+  </small>
+  <fieldset>
+    <%= file_field_tag :students_csv, accept: 'text/csv' %>
+  </fieldset>
+  <%= submit_tag 'Upload CSV', class: "button" %>
+<% end %>
