@@ -8,7 +8,13 @@ Rails.application.routes.draw do
       resources :feedback, only: [:new, :create]
     end
   end
-  resources :students
+
+  resources :students do
+    collection do
+      post :create_batch
+    end
+  end
+
   resources :pull_requests
   resources :user_invites, only: [:index, :create], path: 'invites' do
     collection do
