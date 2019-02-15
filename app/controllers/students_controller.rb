@@ -12,6 +12,40 @@ class StudentsController < ApplicationController
     end
   end
 
+  def create_batch
+    students_file = params[:students_csv]
+    raise IOError.new('No students CSV file uploaded') unless students_file
+    students_csv = CSV.parse(students_file.read).reject(&:empty?)
+
+    Student.transaction do
+      students_attrs = students_csv.map do |row|
+        {
+          cohort: Cohort.find_by(number: row[0], name: row[1]),
+          name: row[2],
+          github_name: row[3],
+          email: row[4],
+        }
+      end
+
+      students_attrs.each do |attrs|
+        student = Student.create(attrs)
+        raise ActiveRecord::RecordInvalid.new(student) unless student.persisted?
+      end
+    end
+
+    flash[:error] = nil
+    flash[:notice] = "Successfully created #{students_csv.count} students."
+    redirect_to students_path
+  rescue ActiveRecord::RecordInvalid => ex
+    flash[:error] = "could not create all students (#{ex.message})"
+    @student = Student.new
+    render :new, status: :bad_request
+  rescue IOError, CSV::MalformedCSVError => ex
+    flash[:error] = "could not use students CSV file (#{ex.message})"
+    @student = Student.new
+    render :new, status: :bad_request
+  end
+
   def edit
     if !@student
       flash[:error] = "Student not found."

@@ -20,6 +20,14 @@ class StudentsControllerTest < ActionController::TestCase
     create_params.deep_merge(student: { github_name: nil, email: nil, cohort_id: nil })
   end
 
+  def create_batch_params
+    { students_csv: fixture_file_upload('files/students_good.csv', 'text/csv') }
+  end
+
+  def create_batch_params_invalid
+    { students_csv: fixture_file_upload('files/students_malformed.csv', 'text/csv') }
+  end
+
   def update_params
     {
       id: @student.id,
@@ -58,12 +66,24 @@ class StudentsControllerTest < ActionController::TestCase
       assert_redirected_to students_path
     end
 
+    test "should not create students without a valid CSV" do
+      post :create_batch, create_batch_params_invalid
+
+      assert_response :bad_request
+      assert_template :new
+    end
+
+    test "should redirect when students are created successfully from CSV" do
+      post :create_batch, create_batch_params
+
+      assert_redirected_to students_path
+    end
+
     test "should redirect when attempting to edit student that doesn't exist" do
       get :edit, { id: 9999 }
 
       assert_redirected_to students_path
     end
-
 
     test "should get the edit form" do
       get :edit, { id: @student.id }
@@ -151,6 +171,13 @@ class StudentsControllerTest < ActionController::TestCase
         assert_redirected_to students_path
       end
 
+      test "should batch create new students" do
+        post :create_batch, create_batch_params
+
+        assert_response :redirect
+        assert_redirected_to students_path
+      end
+
       test "should get edit student form" do
         get :edit, id: @student.id
 
@@ -210,6 +237,16 @@ class StudentsControllerTest < ActionController::TestCase
       test "should not create new student" do
         assert_no_difference(lambda { ::Student.count }) do
           post :create, create_params
+
+          assert_response :redirect
+          assert_redirected_to root_path
+          assert_not_empty flash[:error]
+        end
+      end
+
+      test "should not batch create new students" do
+        assert_no_difference(lambda { ::Student.count }) do
+          post :create_batch, create_batch_params
 
           assert_response :redirect
           assert_redirected_to root_path
@@ -284,6 +321,16 @@ class StudentsControllerTest < ActionController::TestCase
         end
       end
 
+      test "should not batch create new students" do
+        assert_no_difference(lambda { ::Student.count }) do
+          post :create_batch, create_batch_params
+
+          assert_response :redirect
+          assert_redirected_to root_path
+          assert_not_empty flash[:error]
+        end
+      end
+
       test "should not get edit student form" do
         get :edit, id: @student.id
 
@@ -344,6 +391,16 @@ class StudentsControllerTest < ActionController::TestCase
       test "should not create new student" do
         assert_no_difference(lambda { ::Student.count }) do
           post :create, create_params
+
+          assert_response :redirect
+          assert_redirected_to root_path
+          assert_not_empty flash[:error]
+        end
+      end
+
+      test "should not batch create new students" do
+        assert_no_difference(lambda { ::Student.count }) do
+          post :create_batch, create_batch_params
 
           assert_response :redirect
           assert_redirected_to root_path
