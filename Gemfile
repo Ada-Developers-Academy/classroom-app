@@ -2,7 +2,13 @@ source 'https://rubygems.org'
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 4.2.7'
+gem 'rails', '~> 4.2.11'
+
+# Require up to date versions of the following.
+gem "rack", ">= 1.6.11"
+gem "rails-html-sanitizer", ">= 1.0.4"
+gem "ffi", ">= 1.9.24"
+gem "nokogiri", ">= 1.8.5"
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
@@ -28,14 +34,14 @@ gem 'jbuilder', '~> 2.0'
 gem 'sdoc', '~> 0.4.0', group: :doc
 
 # Use Postgres as the database for Active Record
-gem 'pg'
+gem 'pg', '~> 0.21'
 
 gem 'httparty'
 
-gem 'bootstrap-sass', '~> 3.3.6'
+gem 'bootstrap-sass', '~> 3.4'
 gem 'font-awesome-sass', '~> 4.5.0'
 
-gem "omniauth", "~> 1.8.1"
+gem "omniauth", "~> 1.9.0"
 gem "omniauth-github"
 
 # Authorization framework
@@ -45,7 +51,7 @@ gem "cancancan"
 gem "epic-editor-rails"
 
 # For using Postgres-specific DB features
-gem "schema_plus_core", "~> 0.6.2"
+gem "schema_plus_core", "~> 1.0.2"
 gem "schema_plus_enums"
 
 group :production do
@@ -65,7 +71,7 @@ end
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> in views
-  gem 'web-console', '~> 2.0'
+  gem 'web-console', '>= 3.3.0'
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'

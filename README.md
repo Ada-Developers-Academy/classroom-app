@@ -14,8 +14,8 @@ Ideally this application has configuration for two different roles, **Instructor
 ## Development Setup
 
 1. Clone this repo
-1. `rvm install ruby-2.2.1`
-1. `gem install bundle`
+1. `rvm install ruby-2.6.3`
+1. `gem install bundler -v 1.7.3`
 1. `bundle install`
 1. Email Charles to get the `lib/seeds/students.csv` file, and add it to the project. It will be ignored by git.
 1. `bin/rake db:migrate`
