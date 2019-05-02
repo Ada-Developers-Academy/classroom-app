@@ -10,6 +10,8 @@ gem "rack", ">= 1.6.11"
 gem "rails-html-sanitizer", ">= 1.0.4"
 gem "ffi", ">= 1.9.24"
 gem "nokogiri", ">= 1.8.5"
+gem "sprockets", "< 3.0"
+gem "sprockets-rails", "< 3.0"
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
