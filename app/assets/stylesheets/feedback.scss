@@ -7,6 +7,12 @@
   border-width: 1px;
 }
 
+#epiceditor textarea {
+  width: 100%;
+  margin-bottom: -2px;
+  border: 0;
+}
+
 .btn-grades .active {
   text-decoration: underline;
 }
