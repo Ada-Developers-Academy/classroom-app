@@ -2,7 +2,7 @@
 // All this logic will automatically be available in application.js.
 // You can use CoffeeScript in this file: http://coffeescript.org/
 
-$(document).ready(function() {
+$(document).on('turbolinks:load', function() {
   // Make table of student submissions on the repo show page sortable
   $('#submission-table').DataTable({
     paging: false,

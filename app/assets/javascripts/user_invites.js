@@ -1,7 +1,7 @@
 // Place all the behaviors and hooks related to the matching controller here.
 // All this logic will automatically be available in application.js.
 
-$(document).ready(function() {
+$(document).on('turbolinks:load', function() {
   // Make table of students sortable
   $('#invites-table').DataTable({
     paging: false,
