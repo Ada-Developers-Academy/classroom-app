@@ -18,9 +18,13 @@ class StudentsController < ApplicationController
     students_csv = CSV.parse(students_file.read).reject(&:empty?)
 
     Student.transaction do
+      
       students_attrs = students_csv.map do |row|
+        cohort = Cohort.find_by(number: row[0], name: row[1])
+        cohort = Cohort.create(number: row[0], name: row[1]) if !cohort
+
         {
-          cohort: Cohort.find_by(number: row[0], name: row[1]),
+          cohort: cohort,
           name: row[2],
           github_name: row[3],
           email: row[4],
