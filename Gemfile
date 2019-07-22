@@ -45,6 +45,7 @@ gem 'bootstrap-sass', '~> 3.4'
 gem 'font-awesome-sass', '~> 4.5.0'
 
 gem "omniauth", "~> 1.9.0"
+gem "omniauth-rails_csrf_protection"
 gem "omniauth-github"
 
 # Authorization framework
