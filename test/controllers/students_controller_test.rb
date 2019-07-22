@@ -28,6 +28,10 @@ class StudentsControllerTest < ActionController::TestCase
     { students_csv: fixture_file_upload('files/students_malformed.csv', 'text/csv') }
   end
 
+  def create_batch_params_new_cohort
+    { students_csv: fixture_file_upload('files/students_good_new_cohort.csv', 'text/csv') }
+  end
+
   def update_params
     {
       id: @student.id,
@@ -75,6 +79,21 @@ class StudentsControllerTest < ActionController::TestCase
 
     test "should redirect when students are created successfully from CSV" do
       post :create_batch, create_batch_params
+
+      assert_redirected_to students_path
+    end
+
+    test "should redirect and create a new cohort when students are created successfully from CSV" do
+
+      student_count = Student.count
+      cohort_count = Cohort.count
+
+
+      post :create_batch, create_batch_params_new_cohort
+
+      assert_operator Student.count, :>, student_count
+
+      assert_operator Cohort.count, :>, cohort_count
 
       assert_redirected_to students_path
     end
