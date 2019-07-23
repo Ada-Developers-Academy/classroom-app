@@ -21,7 +21,7 @@ class StudentsController < ApplicationController
       
       students_attrs = students_csv.map do |row|
         cohort = Cohort.find_by(number: row[0], name: row[1])
-        cohort = Cohort.create(number: row[0], name: row[1]) if !cohort
+        cohort = Cohort.create(number: row[0], name: row[1]) unless cohort
 
         {
           cohort: cohort,
