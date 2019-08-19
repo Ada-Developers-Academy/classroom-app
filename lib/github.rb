@@ -111,11 +111,16 @@ class GitHub
       name_title = pr_title
                      .sub(/[[:punct:]\s]*(?:#{cohort_name})[[:punct:]\s]*/i, '')
                      .sub(/[[:punct:]\s]*(?:#{repo_name})[[:punct:]\s]*/i, '')
-      names = name_title.split(/\s?(?:(?:[&+,;]+)|(?: and ))\s?/)
+      names = name_title.split(/\s?(?:(?:[&+,;]+)|(?: and )|(?: - ))\s?/)
 
       names.each do |name|
         # Get all the students that have this name as part of their name.
         matches = cohort_students.select { |s| s.name =~ /#{name}/i }
+
+        # Do a word-match if we got multiple matches.
+        if matches.length > 1
+          matches = cohort_students.select { |s| s.name.downcase.split(/\s/).include?(name.downcase) }
+        end
 
         # Add the user if the name was unambiguous.
         contributor_usernames << matches.first.github_name if matches.length == 1
