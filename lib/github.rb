@@ -17,14 +17,14 @@ class GitHub
     cohort_students = Student.where(cohort_id: cohort.id).sort
 
     # Use the PR data to construct the list of students submitted
-    pr_students = pr_student_submissions(repo, pr_info, cohort_students)
+    pr_students = pr_student_submissions(repo, pr_info, cohort_students, cohort.name)
 
     # Add te student info for those who haven't submitted
     pr_students = add_missing_students(pr_students, cohort_students, repo)
     return pr_students
   end
 
-  def pr_student_submissions(repo, pr_data, students)
+  def pr_student_submissions(repo, pr_data, students, cohort_name)
     # Catalog the list of students who have submitted
     pr_student_list = []
     pr_data.parsed_response.each do |pull_request|
@@ -33,7 +33,7 @@ class GitHub
         submission = individual_student(students, repo, pull_request)
         pr_student_list << submission if submission != nil
       else # Group project
-        pr_student_list.concat(group_project(students, pull_request, repo))
+        pr_student_list.concat(group_project(students, pull_request, repo, cohort_name))
       end
     end
 
@@ -88,7 +88,7 @@ class GitHub
     return pr_info
   end
 
-  def group_project(cohort_students, data, repo)
+  def group_project(cohort_students, data, repo, cohort_name)
     students = []
     url = contributors_url(data)
     return students unless url
@@ -99,9 +99,28 @@ class GitHub
     contributors = make_request(url)
     github_usernames = cohort_students.map{ |stud| stud.github_name.downcase }
 
-    contributor_usernames = contributors.map { |c| c['login'].downcase }
+    contributor_usernames = contributors.map { |c| c["login"].downcase }
     contributor_usernames << data["user"]["login"].downcase
     contributor_usernames.uniq!
+
+    _, repo_name = repo.repo_url.split("/")
+
+    # Only trigger if we don't have a full pair.
+    if repo_name && contributor_usernames.length < 2
+      pr_title = data["title"].strip
+      name_title = pr_title
+                     .sub(/[[:punct:]\s]*(?:#{cohort_name})[[:punct:]\s]*/i, '')
+                     .sub(/[[:punct:]\s]*(?:#{repo_name})[[:punct:]\s]*/i, '')
+      names = name_title.split(/\s?(?:(?:[&+,;]+)|(?: and ))\s?/)
+
+      names.each do |name|
+        # Get all the students that have this name as part of their name.
+        matches = cohort_students.select { |s| s.name =~ /#{name}/i }
+
+        # Add the user if the name was unambiguous.
+        contributor_usernames << matches.first.github_name if matches.length == 1
+      end
+    end
 
     contributor_usernames.each do |contributor|
       # If the contributor is in the student list, add it!
@@ -116,7 +135,7 @@ class GitHub
 
   def make_request(url)
     response = HTTParty.get(url, query: { "page" => 1, "per_page" => 100 },
-      headers: {"user-agent" => "rails", "Authorization" => "token #{ token }"})
+                            headers: {"user-agent" => "rails", "Authorization" => "token #{ token }"})
     return response
   end
 
