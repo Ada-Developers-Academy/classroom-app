@@ -99,12 +99,14 @@ class GitHub
     contributors = make_request(url)
     github_usernames = cohort_students.map{ |stud| stud.github_name.downcase }
 
-    contributors.each do |contributor|
-      curr_github_username = contributor["login"].downcase
+    contributor_usernames = contributors.map { |c| c['login'].downcase }
+    contributor_usernames << data["user"]["login"].downcase
+    contributor_usernames.uniq!
 
+    contributor_usernames.each do |contributor|
       # If the contributor is in the student list, add it!
-      if github_usernames.include?(curr_github_username)
-        student = create_student(cohort_students, curr_github_username, repo_created, repo, pr_url)
+      if github_usernames.include?(contributor)
+        student = create_student(cohort_students, contributor, repo_created, repo, pr_url)
         students << student if student
       end
     end
