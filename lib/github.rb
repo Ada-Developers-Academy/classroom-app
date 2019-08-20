@@ -100,7 +100,7 @@ class GitHub
     github_usernames = cohort_students.map{ |stud| stud.github_name }
 
     contributor_usernames = contributors.map { |c| c['login'] }
-    contributor_usernames << data["user"]["login"]
+    contributor_usernames << pull_request["user"]["login"]
     contributor_usernames.uniq!
 
     _, repo_name = repo.repo_url.split("/")
