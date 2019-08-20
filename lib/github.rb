@@ -97,10 +97,10 @@ class GitHub
     pr_url = pull_request["html_url"]
 
     contributors = make_request(url)
-    github_usernames = cohort_students.map{ |stud| stud.github_name.downcase }
+    github_usernames = cohort_students.map{ |stud| stud.github_name }
 
-    contributor_usernames = contributors.map { |c| c["login"].downcase }
-    contributor_usernames << pull_request["user"]["login"].downcase
+    contributor_usernames = contributors.map { |c| c['login'] }
+    contributor_usernames << data["user"]["login"]
     contributor_usernames.uniq!
 
     _, repo_name = repo.repo_url.split("/")
