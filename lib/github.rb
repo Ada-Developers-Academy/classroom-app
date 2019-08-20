@@ -107,19 +107,28 @@ class GitHub
 
     # Only trigger if we don't have a full pair.
     if repo_name && contributor_usernames.length < 2
+      logger = Rails.logger
+
       pr_title = data["title"].strip
+
+      logger.debug("pr_title: #{pr_title}")
+
       name_title = pr_title
                      .sub(/[[:punct:]\s]*(?:#{cohort_name})[[:punct:]\s]*/i, '')
                      .sub(/[[:punct:]\s]*(?:#{repo_name})[[:punct:]\s]*/i, '')
       names = name_title.split(/\s?(?:(?:[&+,;]+)|(?: and )|(?: - ))\s?/)
 
+      logger.debug("names: #{names}")
+
       names.each do |name|
         # Get all the students that have this name as part of their name.
         matches = cohort_students.select { |s| s.name =~ /#{name}/i }
+        logger.debug("name: '#{name}', matches: #{matches}")
 
         # Do a word-match if we got multiple matches.
         if matches.length > 1
           matches = cohort_students.select { |s| s.name.downcase.split(/\s/).include?(name.downcase) }
+          logger.debug("Had multiple matches.  name: '#{name}', matches: #{matches}")
         end
 
         # Add the user if the name was unambiguous.
