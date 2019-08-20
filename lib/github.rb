@@ -10,13 +10,13 @@ class GitHub
 
   # Overall method that will pull together all pieces
   def retrieve_student_info(repo, cohort)
-    # First, call the API to get the PR data
+    # First, call the API to get the PR pull_request
     pr_info = get_prs(repo.repo_url)
 
     # Get the students in the cohort
     cohort_students = Student.where(cohort_id: cohort.id).sort
 
-    # Use the PR data to construct the list of students submitted
+    # Use the PR pull_request to construct the list of students submitted
     pr_students = pr_student_submissions(repo, pr_info, cohort_students, cohort.name)
 
     # Add te student info for those who haven't submitted
@@ -53,8 +53,8 @@ class GitHub
     return submissions
   end
 
-  def individual_student(students, repo, data)
-    return create_student(students, data["user"]["login"].downcase, data["created_at"], repo, data["html_url"])
+  def individual_student(students, repo, pull_request)
+    return create_student(students, pull_request["user"]["login"].downcase, pull_request["created_at"], repo, pull_request["html_url"])
   end
 
   def create_student(students, user, created_at, repo, pr_url)
@@ -88,19 +88,19 @@ class GitHub
     return pr_info
   end
 
-  def group_project(cohort_students, data, repo, cohort_name)
+  def group_project(cohort_students, pull_request, repo, cohort_name)
     students = []
-    url = contributors_url(data)
+    url = contributors_url(pull_request)
     return students unless url
 
-    repo_created = data["created_at"]
-    pr_url = data["html_url"]
+    repo_created = pull_request["created_at"]
+    pr_url = pull_request["html_url"]
 
     contributors = make_request(url)
     github_usernames = cohort_students.map{ |stud| stud.github_name.downcase }
 
     contributor_usernames = contributors.map { |c| c["login"].downcase }
-    contributor_usernames << data["user"]["login"].downcase
+    contributor_usernames << pull_request["user"]["login"].downcase
     contributor_usernames.uniq!
 
     _, repo_name = repo.repo_url.split("/")
@@ -109,7 +109,7 @@ class GitHub
     if repo_name && contributor_usernames.length < 2
       logger = Rails.logger
 
-      pr_title = data["title"].strip
+      pr_title = pull_request["title"].strip
 
       logger.debug("pr_title: #{pr_title}")
 
