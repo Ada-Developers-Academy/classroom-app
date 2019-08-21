@@ -1,4 +1,6 @@
 require 'httparty'
+require 'set'
+
 require 'pr_student'
 
 class GitHub
@@ -97,11 +99,13 @@ class GitHub
     pr_url = pull_request["html_url"]
 
     contributors = make_request(url)
-    github_usernames = cohort_students.map{ |stud| stud.github_name }
+    github_usernames = Set.new(cohort_students.map{ |stud| stud.github_name })
 
     contributor_usernames = contributors.map { |c| c['login'] }
     contributor_usernames << pull_request["user"]["login"]
     contributor_usernames.uniq!
+
+    contributor_usernames = contributor_usernames.select { |name| github_usernames.include?(name) }
 
     _, repo_name = repo.repo_url.split("/")
 
