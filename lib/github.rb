@@ -139,8 +139,11 @@ class GitHub
         matches if matches.length == 1
       end
 
+      logger.debug("name_matches: #{name_matches}")
+
       unless name_matches.include?(nil)
         name_matches.each do |matches|
+          logger.debug("matches.first.github_name: #{matches.first.github_name}")
           contributor_usernames << matches.first.github_name
         end
       end
