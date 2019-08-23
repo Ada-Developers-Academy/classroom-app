@@ -148,7 +148,7 @@ class GitHub
       end
     end
 
-    return students
+    return students.uniq { |s| s.student_id }
   end
 
   def make_request(url)
