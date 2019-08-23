@@ -91,6 +91,8 @@ class GitHub
   end
 
   def group_project(cohort_students, pull_request, repo, cohort_name)
+    logger = Rails.logger
+
     students = []
     url = contributors_url(pull_request)
     return students unless url
@@ -111,8 +113,6 @@ class GitHub
 
     # Only trigger if we don't have a full pair.
     if repo_name && contributor_usernames.length < 2
-      logger = Rails.logger
-
       pr_title = pull_request["title"].strip
 
       logger.debug("pr_title: #{pr_title}")
