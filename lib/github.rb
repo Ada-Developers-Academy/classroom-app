@@ -56,11 +56,11 @@ class GitHub
   end
 
   def individual_student(students, repo, pull_request)
-    return create_student(students, pull_request["user"]["login"].downcase, pull_request["created_at"], repo, pull_request["html_url"])
+    return create_student(students, pull_request["user"]["login"], pull_request["created_at"], repo, pull_request["html_url"])
   end
 
   def create_student(students, user, created_at, repo, pr_url)
-    student_model = students.find{ |s| s.github_name.downcase == user }
+    student_model = students.find{ |s| s.github_name == user }
 
     if student_model
       # Do we already have a submission for this student?
