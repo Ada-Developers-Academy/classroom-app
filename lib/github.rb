@@ -149,6 +149,9 @@ class GitHub
       end
     end
 
+    logger.debug("github_usernames: #{github_usernames}")
+    logger.debug("contributor_usernames: #{contributor_usernames}")
+
     contributor_usernames.each do |contributor|
       # If the contributor is in the student list, add it!
       if github_usernames.include?(contributor)
