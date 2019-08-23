@@ -148,11 +148,13 @@ class GitHub
         end
       end
     end
+    contributor_usernames.uniq!
 
     logger.debug("github_usernames: #{github_usernames}")
     logger.debug("contributor_usernames: #{contributor_usernames}")
 
     contributor_usernames.each do |contributor|
+      logger.debug("github_usernames.include?('#{contributor}') #{github_usernames.include?(contributor)}")
       # If the contributor is in the student list, add it!
       if github_usernames.include?(contributor)
         student = create_student(cohort_students, contributor, repo_created, repo, pr_url)
