@@ -1,4 +1,6 @@
 require 'httparty'
+require 'set'
+
 require 'pr_student'
 
 class GitHub
@@ -10,21 +12,21 @@ class GitHub
 
   # Overall method that will pull together all pieces
   def retrieve_student_info(repo, cohort)
-    # First, call the API to get the PR data
+    # First, call the API to get the PR pull_request
     pr_info = get_prs(repo.repo_url)
 
     # Get the students in the cohort
     cohort_students = Student.where(cohort_id: cohort.id).sort
 
-    # Use the PR data to construct the list of students submitted
-    pr_students = pr_student_submissions(repo, pr_info, cohort_students)
+    # Use the PR pull_request to construct the list of students submitted
+    pr_students = pr_student_submissions(repo, pr_info, cohort_students, cohort.name)
 
     # Add te student info for those who haven't submitted
     pr_students = add_missing_students(pr_students, cohort_students, repo)
     return pr_students
   end
 
-  def pr_student_submissions(repo, pr_data, students)
+  def pr_student_submissions(repo, pr_data, students, cohort_name)
     # Catalog the list of students who have submitted
     pr_student_list = []
     pr_data.parsed_response.each do |pull_request|
@@ -33,7 +35,7 @@ class GitHub
         submission = individual_student(students, repo, pull_request)
         pr_student_list << submission if submission != nil
       else # Group project
-        pr_student_list.concat(group_project(students, pull_request, repo))
+        pr_student_list.concat(group_project(students, pull_request, repo, cohort_name))
       end
     end
 
@@ -53,8 +55,8 @@ class GitHub
     return submissions
   end
 
-  def individual_student(students, repo, data)
-    return create_student(students, data["user"]["login"].downcase, data["created_at"], repo, data["html_url"])
+  def individual_student(students, repo, pull_request)
+    return create_student(students, pull_request["user"]["login"].downcase, pull_request["created_at"], repo, pull_request["html_url"])
   end
 
   def create_student(students, user, created_at, repo, pr_url)
@@ -88,20 +90,55 @@ class GitHub
     return pr_info
   end
 
-  def group_project(cohort_students, data, repo)
+  def group_project(cohort_students, pull_request, repo, cohort_name)
     students = []
-    url = contributors_url(data)
+    url = contributors_url(pull_request)
     return students unless url
 
-    repo_created = data["created_at"]
-    pr_url = data["html_url"]
+    repo_created = pull_request["created_at"]
+    pr_url = pull_request["html_url"]
 
     contributors = make_request(url)
-    github_usernames = cohort_students.map{ |stud| stud.github_name }
+    github_usernames = Set.new(cohort_students.map{ |stud| stud.github_name })
 
     contributor_usernames = contributors.map { |c| c['login'] }
-    contributor_usernames << data["user"]["login"].downcase
+    contributor_usernames << pull_request["user"]["login"]
     contributor_usernames.uniq!
+
+    contributor_usernames = contributor_usernames.select { |name| github_usernames.include?(name) }
+
+    _, repo_name = repo.repo_url.split("/")
+
+    # Only trigger if we don't have a full pair.
+    if repo_name && contributor_usernames.length < 2
+      logger = Rails.logger
+
+      pr_title = pull_request["title"].strip
+
+      logger.debug("pr_title: #{pr_title}")
+
+      name_title = pr_title
+                     .sub(/[[:punct:]\s]*(?:#{cohort_name})[[:punct:]\s]*/i, '')
+                     .sub(/[[:punct:]\s]*(?:#{repo_name})[[:punct:]\s]*/i, '')
+      names = name_title.split(/\s?(?:(?:[&+,;]+)|(?: and )|(?: - ))\s?/)
+
+      logger.debug("names: #{names}")
+
+      names.each do |name|
+        # Get all the students that have this name as part of their name.
+        matches = cohort_students.select { |s| s.name =~ /#{name}/i }
+        logger.debug("name: '#{name}', matches: #{matches}")
+
+        # Do a word-match if we got multiple matches.
+        if matches.length > 1
+          matches = cohort_students.select { |s| s.name.downcase.split(/\s/).include?(name.downcase) }
+          logger.debug("Had multiple matches.  name: '#{name}', matches: #{matches}")
+        end
+
+        # Add the user if the name was unambiguous.
+        contributor_usernames << matches.first.github_name if matches.length == 1
+      end
+    end
 
     contributor_usernames.each do |contributor|
       # If the contributor is in the student list, add it!
@@ -116,7 +153,7 @@ class GitHub
 
   def make_request(url)
     response = HTTParty.get(url, query: { "page" => 1, "per_page" => 100 },
-      headers: {"user-agent" => "rails", "Authorization" => "token #{ token }"})
+                            headers: {"user-agent" => "rails", "Authorization" => "token #{ token }"})
     return response
   end
 
