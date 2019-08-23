@@ -124,7 +124,7 @@ class GitHub
 
       logger.debug("names: #{names}")
 
-      names.each do |name|
+      name_matches = names.map do |name|
         # Get all the students that have this name as part of their name.
         matches = cohort_students.select { |s| s.name =~ /#{name}/i }
         logger.debug("name: '#{name}', matches: #{matches}")
@@ -136,7 +136,13 @@ class GitHub
         end
 
         # Add the user if the name was unambiguous.
-        contributor_usernames << matches.first.github_name if matches.length == 1
+        matches if matches.length == 1
+      end
+
+      unless name_matches.include?(nil)
+        name_matches.each do |matches|
+          contributor_usernames << matches.first.github_name
+        end
       end
     end
 
