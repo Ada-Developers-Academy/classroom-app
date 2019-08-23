@@ -166,7 +166,7 @@ class GitHub
 
     logger.debug("students: #{students}, students.uniq {...}: #{students.uniq { |s| s.student_id }}")
 
-    return students.uniq { |s| s.student_id }
+    return students
   end
 
   def make_request(url)
