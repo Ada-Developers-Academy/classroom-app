@@ -153,9 +153,13 @@ class GitHub
       # If the contributor is in the student list, add it!
       if github_usernames.include?(contributor)
         student = create_student(cohort_students, contributor, repo_created, repo, pr_url)
+        logger.debug("Created student: #{student}")
+
         students << student if student
       end
     end
+
+    logger.debug("students: #{students}, students.uniq {...}: #{students.uniq { |s| s.student_id }}")
 
     return students.uniq { |s| s.student_id }
   end
