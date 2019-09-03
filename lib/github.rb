@@ -120,6 +120,7 @@ class GitHub
       name_title = pr_title
                      .sub(/[[:punct:]\s]*(?:#{cohort_name})[[:punct:]\s]*/i, '')
                      .sub(/[[:punct:]\s]*(?:#{repo_name})[[:punct:]\s]*/i, '')
+                     .sub(/[()]/, '')
       names = name_title.split(/\s?(?:(?:[&+,;\/]+)|(?: and )|(?: - ))\s?/)
 
       logger.debug("names: #{names}")
