@@ -120,13 +120,13 @@ class GitHub
       name_title = pr_title
                      .sub(/[[:punct:]\s]*(?:#{cohort_name})[[:punct:]\s]*/i, '')
                      .sub(/[[:punct:]\s]*(?:#{repo_name})[[:punct:]\s]*/i, '')
-      names = name_title.split(/\s?(?:(?:[&+,;]+)|(?: and )|(?: - ))\s?/)
+      names = name_title.split(/\s?(?:(?:[&+,;\/]+)|(?: and )|(?: - ))\s?/)
 
       logger.debug("names: #{names}")
 
       name_matches = names.map do |name|
         # Get all the students that have this name as part of their name.
-        matches = cohort_students.select { |s| s.name =~ /#{name}/i }
+        matches = cohort_students.select { |s| s.name =~ /#{Regexp.quote(name)}/i }
         logger.debug("name: '#{name}', matches: #{matches}")
 
         # Do a word-match if we got multiple matches.
