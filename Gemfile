@@ -32,7 +32,7 @@ gem 'jquery-turbolinks'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
-gem 'sdoc', '~> 0.4.0', group: :doc
+gem 'sdoc', '~> 2.6.1', group: :doc
 
 # Use Postgres as the database for Active Record
 gem 'pg', '~> 0.21'
@@ -58,7 +58,7 @@ gem "schema_plus_enums"
 
 group :production do
   gem 'rails_12factor'
-  gem 'rdoc', '~> 4.3'
+  gem 'rdoc', '~> 6.5'
 end
 
 group :development, :test do
